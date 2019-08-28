@@ -6,28 +6,31 @@ Created on Aug 27, 2019
 import pygame
 from pygame.locals import *
 from sys import exit
+from src.main.pydev.com.ftd.wow.const.materials_constant import materials_constant
 
 # initialize pygame for hardware
 pygame.init()
 
 # create a window
-screen = pygame.display.set_mode((740, 370), 0, 32)
+screen = pygame.display.set_mode((770, 470), 0, 32)
 # set window title
 pygame.display.set_caption("Hello, World!")
 
-background_image_filename = 'main\\resource\\com\\ftd\\wow\\pic\\wow-classic-740x370.jpg'
-mouse_image_filename = 'main\\resource\\com\\ftd\\wow\\pic\\cursor.png'
-character_image_filename = 'main\\resource\\com\\ftd\\wow\\pic\\warlock.png'
-background = pygame.image.load(background_image_filename).convert()
-mouse_cursor = pygame.image.load(mouse_image_filename).convert_alpha()
-character = pygame.image.load(character_image_filename).convert_alpha()
+background = pygame.image.load(materials_constant.background_image_filename).convert()
+mouse_cursor = pygame.image.load(materials_constant.mouse_image_filename).convert_alpha()
+character = pygame.image.load(materials_constant.character_image_filename).convert_alpha()
+chaos_bolt = pygame.image.load(materials_constant.chaos_bolt_image_filename).convert_alpha()
 
-arr_x, arr_y = 0, 0
+char_x, char_y = 0, 50
 move_x, move_y = 0, 0
+bolt_x = 0
 
 # main loop
 while True:
 
+    # render the background
+    screen.blit(background, (0, 0))
+    
     for event in pygame.event.get():
         # leave event
         if event.type == QUIT:
@@ -46,12 +49,11 @@ while True:
         elif event.type == KEYUP:
             move_x = 0
             move_y = 0
-        
-        arr_x += move_x
-        arr_y += move_y
-        
-    # render the background
-    screen.blit(background, (0, 0))
+    
+    char_x += move_x
+    char_y += move_y
+    # render the character
+    screen.blit(character, (char_x, char_y))
 
     # get the cursor position
     x, y = pygame.mouse.get_pos()
@@ -61,8 +63,14 @@ while True:
     # render the cursor
     screen.blit(mouse_cursor, (x, y))
     
-    # render the character
-    screen.blit(character, (arr_x, arr_y))
+    # clipping
+    screen.set_clip(0, 50, 770, 380)
+    
+    # chaos blot
+    screen.blit(chaos_bolt, (bolt_x, 100))
+    bolt_x += 2
+    if bolt_x > 770:
+        bolt_x = 0
 
     # render the screen
     pygame.display.update()
