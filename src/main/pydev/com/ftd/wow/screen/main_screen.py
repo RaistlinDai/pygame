@@ -26,9 +26,14 @@ class main_screen(object):
         # set window title
         pygame.display.set_caption("Hello, World!")
         
-        background = pygame.image.load(materials_constant.background_image_filename).convert()
+        background = pygame.image.load(materials_constant.mainframe_image_filename).convert()
+        background = pygame.transform.scale(background, (self._width, self._height))
+        
         mouse_cursor = pygame.image.load(materials_constant.mouse_image_filename).convert_alpha()
+        
         character = pygame.image.load(materials_constant.character_image_filename).convert_alpha()
+        character = pygame.transform.scale(character, (120, 150))
+        
         chaos_bolt = pygame.image.load(materials_constant.chaos_bolt_image_filename).convert_alpha()
         
         char_x, char_y = 0, 50
@@ -45,7 +50,7 @@ class main_screen(object):
         while True:
         
             # render the background
-            screen.blit(background, (10, 10))
+            screen.blit(background, (0, 0))
             
             for event in pygame.event.get():
                 # leave event
@@ -99,7 +104,7 @@ class main_screen(object):
             screen.blit(mouse_cursor, (x, y))
             
             # clipping in middle
-            screen.set_clip(0, 50, 770, 380)
+            #screen.set_clip(0, 50, 770, 380)
                 
             # render the screen
             pygame.display.update()
