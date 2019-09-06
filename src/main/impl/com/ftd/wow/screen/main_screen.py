@@ -72,7 +72,7 @@ class main_screen(object):
                     screen.blit(horde_start_button.show_button_cover(), horde_start_button.get_position())
             elif (is_horde_button_click and horde_button_click_timer > 0 and current_timer - horde_button_click_timer < 2000):
                 screen.blit(horde_start_button.show_button_click(), horde_start_button.get_position())
-            else:
+            elif (is_horde_button_click):
                 # re-load the background
                 sce01 = scene_01(0, 0, self._width, self._height)
                 background = sce01.get_background()
@@ -108,8 +108,9 @@ class main_screen(object):
             
             if pressed_mouse[0]:
                 # horde button click
-                is_horde_button_click = True
-                horde_button_click_timer = time.time()*1000.0
+                if (horde_start_button.is_over()):
+                    is_horde_button_click = True
+                    horde_button_click_timer = time.time()*1000.0
                 
                 # chaos blot flying
                 bolt_x = char_x + 20

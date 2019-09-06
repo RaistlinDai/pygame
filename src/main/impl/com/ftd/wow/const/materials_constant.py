@@ -11,6 +11,6 @@ class materials_constant:
     
     character_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-t1-01.png'
     
-    scene01_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scenes\\Cathedral_Ward.png'
+    scene01_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scenes\\WoW_Classic_Molten_Core.png'
     
     chaos_bolt_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\chaos_bolt.png'
