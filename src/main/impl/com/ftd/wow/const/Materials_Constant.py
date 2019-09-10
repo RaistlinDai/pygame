@@ -1,4 +1,4 @@
-class materials_constant:
+class Materials_Constant:
     
     background_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\wow-classic-770x470.png'
     mainframe_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\main_frame.png'

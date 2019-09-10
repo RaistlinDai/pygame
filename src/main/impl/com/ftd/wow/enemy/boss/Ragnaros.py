@@ -5,10 +5,10 @@ Created on Sep 04, 2019
 '''
 
 import pygame
-from src.main.impl.com.ftd.wow.const.materials_constant import materials_constant
+from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 from src.main.api.com.ftd.wow.character.ICharacter import ICharacter
 
-class rogue_character (ICharacter):
+class Ragnaros (ICharacter):
     '''
     
     '''
@@ -18,7 +18,7 @@ class rogue_character (ICharacter):
         self.__pos_y = pos_y
         self.__size_w = size_w
         self.__size_h = size_h
-        self.__stand_image = pygame.image.load(materials_constant.character_rogue_image_filename).convert_alpha()
+        self.__stand_image = pygame.image.load(Materials_Constant.boss_ragnaros_image_filename).convert_alpha()
         self.__stand_image = pygame.transform.scale(self.__stand_image, (size_w, size_h))
         
     def show_stand_image(self):

@@ -5,17 +5,17 @@ Created on Sep 04, 2019
 '''
 
 import pygame
-from src.main.impl.com.ftd.wow.const.materials_constant import materials_constant
+from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 
-class horde_button (object):
+class Horde_Button (object):
     '''
     
     '''
     
     def __init__(self, pos_x, pos_y, size_w, size_h):
-        self._image_up = pygame.image.load(materials_constant.button_horde_image_filename).convert_alpha()
-        self._image_cover = pygame.image.load(materials_constant.button_horde_cover_image_filename).convert_alpha()
-        self._image_click = pygame.image.load(materials_constant.button_horde_click_image_filename).convert_alpha()
+        self._image_up = pygame.image.load(Materials_Constant.button_horde_image_filename).convert_alpha()
+        self._image_cover = pygame.image.load(Materials_Constant.button_horde_cover_image_filename).convert_alpha()
+        self._image_click = pygame.image.load(Materials_Constant.button_horde_click_image_filename).convert_alpha()
         if (size_w and size_h):
             self._image_up = pygame.transform.scale(self._image_up, (size_w, size_h))
             self._image_cover = pygame.transform.scale(self._image_cover, (size_w, size_h))

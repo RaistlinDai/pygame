@@ -6,14 +6,15 @@ Created on Aug 27, 2019
 import pygame
 from pygame.locals import *
 from sys import exit
-from src.main.impl.com.ftd.wow.const.materials_constant import materials_constant
-from src.main.impl.com.ftd.wow.button.horde_button import horde_button
+from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
+from src.main.impl.com.ftd.wow.button.Horde_Button import Horde_Button
 import time; 
-from src.main.impl.com.ftd.wow.scene.scene_login import scene_login
-from src.main.impl.com.ftd.wow.character.rogue.rogue_character import rogue_character
-from src.main.impl.com.ftd.wow.character.boss.ragnaros_character import ragnaros_character
+from src.main.impl.com.ftd.wow.scene.Scene_Login import Scene_Login
+from src.main.impl.com.ftd.wow.character.Character import Character
+from src.main.impl.com.ftd.wow.enemy.boss.Ragnaros import Ragnaros
+from src.main.impl.com.ftd.wow.profession.Profession_Enum import Profession_Enum
 
-class main_screen(object):
+class Main_Screen(object):
     '''
     
     '''
@@ -30,25 +31,25 @@ class main_screen(object):
         pygame.display.set_caption("Hello, World!")
         
         # screen background
-        self._background = scene_login(self._width, self._height)
+        self._background = Scene_Login(self._width, self._height)
         self._background_prop = (0, 0, self._width, self._height)
         
     
     def execute(self):
         
         # load image
-        mouse_cursor = pygame.image.load(materials_constant.mouse_image_filename).convert_alpha()
+        mouse_cursor = pygame.image.load(Materials_Constant.mouse_image_filename).convert_alpha()
         
         # background
-        scene_MC = pygame.image.load(materials_constant.background_Molten_Core_filename).convert()
+        scene_MC = pygame.image.load(Materials_Constant.background_Molten_Core_filename).convert()
         # character
-        character_rogue = rogue_character(950,420,120,150)
-        cahracter_ragnaros = ragnaros_character(100,70,550,550)
+        character_rogue = Character(Profession_Enum.PROF_ROGUE, 950,420,120,150)
+        cahracter_ragnaros = Ragnaros(70,70,550,550)
         
         temp_scene = self._background.show_background()
         
         # horde button
-        horde_start_button = horde_button(200, 100, 200, 200)
+        horde_start_button = Horde_Button(200, 100, 200, 200)
         is_horde_button_click = False
         horde_button_click_timer = 0
                 
