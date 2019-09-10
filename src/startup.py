@@ -5,5 +5,5 @@ Created on Aug 27, 2019
 '''
 from src.main.impl.com.ftd.wow.screen.main_screen import main_screen
 
-game_screen = main_screen(1280, 760)
+game_screen = main_screen(1280, 720)
 game_screen.execute()
