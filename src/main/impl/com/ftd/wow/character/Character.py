@@ -6,7 +6,6 @@ Created on Sep 04, 2019
 
 import pygame
 from src.main.api.com.ftd.wow.character.ICharacter import ICharacter
-from src.main.api.com.ftd.wow.profession.IProfession import IProfession
 from src.main.impl.com.ftd.wow.profession.Profession_Enum import Profession_Enum
 
 class Character (ICharacter):
@@ -14,41 +13,96 @@ class Character (ICharacter):
     
     '''
     
-    def __init__(self, prof, pos_x, pos_y, size_w, size_h):
+    def __init__(self, prof, char_pos_x=None, char_pos_y=None, size_w=None, size_h=None):
         
-        # position
-        self.__pos_x = pos_x
-        self.__pos_y = pos_y
+        # super class constructor
+        super().__init__()
+        # character images
+        self.__fight_skills_images = []
+        self.__camp_skills_images = []
+        self.__profession_images = []
         
-        # size
-        self.__size_w = size_w
-        self.__size_h = size_h
+        # character position
+        self.__character_char_pos_x = char_pos_x
+        self.__character_char_pos_y = char_pos_y
+        
+        # character size
+        self.__character_size_w = size_w
+        self.__character_size_h = size_h
         
         # profession
         if isinstance(prof, Profession_Enum):
             self.__prof = prof.value()
         
         # images
-        self.__images = []
         self.load_profession_images()
+        
+        # skills
+        self.load_skills_images()
         
     
     def load_profession_images(self):
-        # load images into pygame
+        # load profession images into pygame
         temp_images = self.__prof.get_images()
         for img in temp_images:
             convert_image = pygame.image.load(img).convert_alpha()
-            convert_image = pygame.transform.scale(convert_image, (self.__size_w, self.__size_h))
-            self.__images.append(convert_image)
+            if (self.__character_size_w and self.__character_size_h):
+                convert_image = pygame.transform.scale(convert_image, (self.__character_size_w, self.__character_size_h))
+            self.__profession_images.append(convert_image)
+            
+    
+    def load_skills_images(self):
+        # load skill images into pygame
+        temp_skills = self.__prof.get_skills()
+        for skill in temp_skills:
+            convert_image = pygame.image.load(skill.get_skill_image()).convert_alpha()
+            if (self.__character_size_w and self.__character_size_h):
+                convert_image = pygame.transform.scale(convert_image, (self.__character_size_w, self.__character_size_h))
+            self.__fight_skills_images.append(convert_image)
     
         
-    def show_stand_image(self):
-        return self.__images[0]
+    def get_stand_image(self):
+        return self.__profession_images[0]
     
     
-    def get_character_properties(self):
-        return (0, 0, self.__size_w, self.__size_h)   
+    def get_position_and_size(self):
+        return (0, 0, self.__character_size_w, self.__character_size_h)
+    
+    
+    def set_position_and_size(self, char_pos_x, char_pos_y, size_w, size_h):
+        # position
+        self.__character_char_pos_x = char_pos_x
+        self.__character_char_pos_y = char_pos_y
+        # size
+        self.__character_size_w = size_w
+        self.__character_size_h = size_h
+    
+    
+    def resize_character_images(self, char_pos_x, char_pos_y, size_w, size_h):
+        # position
+        if char_pos_x and char_pos_y:
+            self.__character_char_pos_x = char_pos_x
+            self.__character_char_pos_y = char_pos_y
+        # size
+        if size_w and size_h:
+            self.__character_size_w = size_w
+            self.__character_size_h = size_h
+            
+        idx1 = 0
+        for img in self.__profession_images:
+            self.__profession_images[idx1] = pygame.transform.scale(img, (self.__character_size_w, self.__character_size_h))
+            idx1 = idx1 + 1
+        idx2 = 0
+        for img in self.__fight_skills_images:
+            self.__fight_skills_images[idx2] = pygame.transform.scale(img, (70, 70))
+            idx2 = idx2 + 1
     
     
     def get_position(self):
-        return (self.__pos_x, self.__pos_y)
+        return (self.__character_char_pos_x, self.__character_char_pos_y)
+    
+    
+    def get_active_skills(self):
+        # TODO: need to invoke special character properties later
+        return self.__fight_skills_images
+        

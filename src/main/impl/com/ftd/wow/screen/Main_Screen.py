@@ -13,6 +13,7 @@ from src.main.impl.com.ftd.wow.scene.Scene_Login import Scene_Login
 from src.main.impl.com.ftd.wow.character.Character import Character
 from src.main.impl.com.ftd.wow.enemy.boss.Ragnaros import Ragnaros
 from src.main.impl.com.ftd.wow.profession.Profession_Enum import Profession_Enum
+from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
 
 class Main_Screen(object):
     '''
@@ -42,8 +43,14 @@ class Main_Screen(object):
         
         # background
         scene_MC = pygame.image.load(Materials_Constant.background_Molten_Core_filename).convert()
+        # bottom bar
+        bottom_bar = pygame.image.load(Materials_Constant.bottom_bar_image_filename).convert_alpha()
         # character
-        character_rogue = Character(Profession_Enum.PROF_ROGUE, 950,420,120,150)
+        character_rogue = Character(Profession_Enum.PROF_ROGUE)
+        character_h = Image_Util.calculate_character_height_by_screen_size(self._height)
+        character_w = Image_Util.calculate_character_width_by_height(character_rogue.get_stand_image(), character_h)
+        character_rogue.resize_character_images(950, 420, character_w, character_h)
+        # enemy
         cahracter_ragnaros = Ragnaros(70,70,550,550)
         
         temp_scene = self._background.show_background()
@@ -75,8 +82,19 @@ class Main_Screen(object):
             elif (is_horde_button_click):
                 # re-load the background
                 temp_scene = scene_MC
-                self._screen.blit(character_rogue.show_stand_image(), character_rogue.get_position(), character_rogue.get_character_properties())
-                self._screen.blit(cahracter_ragnaros.show_stand_image(), cahracter_ragnaros.get_position(), cahracter_ragnaros.get_character_properties())
+                # render the bottom bar
+                self._screen.blit(bottom_bar, (0, 470), (0, 0, self._width, 250))
+                # render the character
+                self._screen.blit(character_rogue.get_stand_image(), character_rogue.get_position(), character_rogue.get_position_and_size())
+                # render the skill bar
+                idx = 0
+                for char_skill_image in character_rogue.get_active_skills():
+                    temp_pos_x = 800 + idx * 100
+                    idx = idx + 1
+                    self._screen.blit(char_skill_image, (temp_pos_x, 600), (0, 0, 70, 70))
+                    
+                # render the enemy
+                self._screen.blit(cahracter_ragnaros.get_stand_image(), cahracter_ragnaros.get_position(), cahracter_ragnaros.get_position_and_size())
             
             #==========================================#
             #               Event handler              #

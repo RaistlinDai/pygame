@@ -7,7 +7,7 @@ from src.main.api.com.ftd.wow.skill.ISkill import ISkill
 import pygame
 from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 
-class Backstab(ISkill):
+class Biting(ISkill):
     '''
     
     '''
@@ -15,9 +15,9 @@ class Backstab(ISkill):
     
     def __init__(self):
         # give a name
-        self.__name = 'Backstab'
+        self.__name = 'Biting'
         # images
-        self.__image = Materials_Constant.rogue_backstab_image_filename
+        self.__image = Materials_Constant.rogue_biting_image_filename
         
     
     def get_skill_image(self):

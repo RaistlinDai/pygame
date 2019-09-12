@@ -8,6 +8,12 @@ class Materials_Constant:
     background_Molten_Core_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\WoW_Classic_Molten_Core_Background.png'
     
     # ============================================= #
+    #                 Bar                           #
+    # ============================================= #
+    bottom_bar_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\layout\\bar\\bottom_bar.png'
+    
+    
+    # ============================================= #
     #                 Button                        #
     # ============================================= #
     button_horde_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\button\\horde\\horde.png'
@@ -33,5 +39,8 @@ class Materials_Constant:
     #                 Skill label                   #
     # ============================================= #
     rogue_backstab_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\backstab.png'
+    rogue_biting_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\biting.png'
+    rogue_disapper_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\disapper.png'
+    rogue_gouge_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\gouge.png'
 
     chaos_bolt_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warlock\\chaos_bolt.png'

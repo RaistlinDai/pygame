@@ -9,6 +9,11 @@ class IProfession(object):
     
     '''
     
+    DEFAULT_SKILLS = []
+    
+    def load_skills(self):
+        pass
+    
     def get_images(self):
         '''
         0: stand

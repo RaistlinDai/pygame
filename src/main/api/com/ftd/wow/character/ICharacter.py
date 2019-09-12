@@ -9,11 +9,19 @@ class ICharacter(object):
     
     '''
     
-    def show_stand_image(self):
+    def __init__(self):
         pass
+        
+    
+    def get_stand_image(self):
+        pass
+    
     
     def get_position(self):
         pass
     
-    def get_character_properties(self):
+    
+    def get_position_and_size(self):
         pass
+    
+    

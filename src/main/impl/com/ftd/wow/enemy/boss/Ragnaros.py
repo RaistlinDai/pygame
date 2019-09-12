@@ -21,10 +21,10 @@ class Ragnaros (ICharacter):
         self.__stand_image = pygame.image.load(Materials_Constant.boss_ragnaros_image_filename).convert_alpha()
         self.__stand_image = pygame.transform.scale(self.__stand_image, (size_w, size_h))
         
-    def show_stand_image(self):
+    def get_stand_image(self):
         return self.__stand_image
     
-    def get_character_properties(self):
+    def get_position_and_size(self):
         return (0, 0, self.__size_w, self.__size_h)   
     
     def get_position(self):
