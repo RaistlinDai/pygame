@@ -3,12 +3,47 @@ Created on Sep 11, 2019
 
 @author: ftd
 '''
-import pygame
 
 class Image_Util(object):
     '''
     
     '''
+    
+    @staticmethod
+    def calculate_bottom_bar_height_by_screen_size(screen_h):
+        '''
+        Calculate the standard bottom bar height according to the screen's height
+        The default value is 250 in 1280*720
+        @param screen_h: the height of screen
+        @return: the standard height of bottom bar 
+        '''
+        standard_h = 250 * screen_h / 720
+        return int(standard_h)
+    
+    
+    @staticmethod
+    def calculate_bottom_bar_positionY_by_screen_size(screen_h):
+        '''
+        Calculate the standard bottom bar position according to the screen's height
+        The default value is 470 in 1280*720
+        @param screen_h: the height of screen
+        @return: the standard positionY of bottom bar 
+        '''
+        standard_y = 470 * screen_h / 720
+        return int(standard_y)
+    
+    
+    @staticmethod
+    def calculate_top_bar_height_by_screen_size(screen_h):
+        '''
+        Calculate the standard top bar height according to the screen's height
+        The default value is 96 in 1280*720
+        @param screen_h: the height of screen
+        @return: the standard height of top bar 
+        '''
+        standard_h = 96 * screen_h / 720
+        return int(standard_h)
+
     
     @staticmethod
     def calculate_character_height_by_screen_size(screen_h):
@@ -34,6 +69,19 @@ class Image_Util(object):
     
     
     @staticmethod
+    def calculate_character_position_by_screen_size(screen_w, screen_y, team_position):
+        '''
+        Calculate the standard character position according to the screen's size
+        The default value is 1:50-420, 2:150-420, 3:250-420, 4:350-420 in 1280*720
+        @param screen_h: the height of screen
+        @return: the standard position of character 
+        '''
+        standard_x = (50 + 100 * (team_position - 1)) * screen_w / 1280
+        standard_y = 420 * screen_y / 720
+        return (int(standard_x), int(standard_y))
+    
+    
+    @staticmethod
     def calculate_skill_in_fight_height_by_screen_size(screen_h):
         '''
         Calculate the skill label height according to the screen's height
@@ -41,18 +89,45 @@ class Image_Util(object):
         @param skill_image: the height of skill label
         @return: standard_h: the standard height of skill 
         '''
-        standard_h = 70 * screen_h / 720
+        standard_h = 60 * screen_h / 720
         return int(standard_h)
     
     
     @staticmethod
-    def calculate_skill_in_fight_width_by_height(skill_label_image, standard_h):
+    def calculate_skill_in_fight_positionX_by_screen_size(screen_w, label_idx):
         '''
-        @param skill_label_image: the height of skill label
-        @param: standard_h: the standard height of label skill 
+        Calculate the skill label position X according to the screen's width
+        The default value is (400 + label_idx * 80) in 1280*720
+        @param screen_w: the width of screen
+        @param label_idx: the label index
+        @return: standard_X: the standard position X of skill 
         '''
-        w, h = skill_label_image.get_size()
-        standard_w = w * standard_h / h
-        return int(standard_w)
+        standard_X = 200 * screen_w / 1280 + label_idx * (60 * screen_w / 1280)
+        return int(standard_X)
+    
+     
+    @staticmethod
+    def calculate_skill_in_fight_positionY_by_screen_size(screen_h):
+        '''
+        Calculate the skill label position Y according to the screen's height
+        The default value is 600 in 1280*720
+        @param screen_h: the height of screen
+        @return: standard_Y: the standard position Y of skill 
+        '''
+        standard_Y = 600 * screen_h / 720
+        return int(standard_Y)
+    
+    
+    @staticmethod
+    def calculate_skill_in_fight_size_by_screen_size(screen_h):
+        '''
+        Calculate the skill label size according to the screen's height
+        The default value is 70 in 1280*720
+        @param screen_h: the height of screen
+        @return: standard_size: the standard size of skill 
+        '''
+        standard_size = 50 * screen_h / 720
+        return int(standard_size)
+    
     
     

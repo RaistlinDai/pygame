@@ -9,11 +9,14 @@ from sys import exit
 from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 from src.main.impl.com.ftd.wow.button.Horde_Button import Horde_Button
 import time; 
-from src.main.impl.com.ftd.wow.scene.Scene_Login import Scene_Login
+from src.main.impl.com.ftd.wow.scene.menu.Scene_Login import Scene_Login
 from src.main.impl.com.ftd.wow.character.Character import Character
 from src.main.impl.com.ftd.wow.enemy.boss.Ragnaros import Ragnaros
 from src.main.impl.com.ftd.wow.profession.Profession_Enum import Profession_Enum
-from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
+from src.main.impl.com.ftd.wow.scene.mc.MC_Boss_Scence import MC_Boss_Scene
+from src.main.impl.com.ftd.wow.layout.bar.Top_Bar import Top_Bar
+from src.main.impl.com.ftd.wow.layout.bar.Bottom_Bar import Bottom_Bar
+from src.main.impl.com.ftd.wow.team.Team import Team
 
 class Main_Screen(object):
     '''
@@ -21,6 +24,7 @@ class Main_Screen(object):
     '''
     
     def __init__(self, width=640, height=480):
+        # screen size
         self._width = width
         self._height = height
         
@@ -38,25 +42,29 @@ class Main_Screen(object):
     
     def execute(self):
         
-        # load image
+        # load mouse
         mouse_cursor = pygame.image.load(Materials_Constant.mouse_image_filename).convert_alpha()
         
-        # background
-        scene_MC = pygame.image.load(Materials_Constant.background_Molten_Core_filename).convert()
-        # bottom bar
-        bottom_bar = pygame.image.load(Materials_Constant.bottom_bar_image_filename).convert_alpha()
         # character
-        character_rogue = Character(Profession_Enum.PROF_ROGUE)
-        character_h = Image_Util.calculate_character_height_by_screen_size(self._height)
-        character_w = Image_Util.calculate_character_width_by_height(character_rogue.get_stand_image(), character_h)
-        character_rogue.resize_character_images(950, 420, character_w, character_h)
-        # enemy
-        cahracter_ragnaros = Ragnaros(70,70,550,550)
+        character_rogue1 = Character(Profession_Enum.PROF_ROGUE)
+        character_rogue2 = Character(Profession_Enum.PROF_ROGUE)
+        character_rogue3 = Character(Profession_Enum.PROF_ROGUE)
+        character_rogue4 = Character(Profession_Enum.PROF_ROGUE)
+        team = Team(character_rogue1, character_rogue2, character_rogue3, character_rogue4)
         
-        temp_scene = self._background.show_background()
+        # enemy
+        character_ragnaros = Ragnaros(650,70,550,550)
+        
+        # load scene
+        scene_login = Scene_Login(self._width, self._height)
+        temp_top_bar = Top_Bar(self._width, self._height)
+        temp_bottom_bar = Bottom_Bar(self._width, self._height, character_rogue1)
+        scene_MC = MC_Boss_Scene(self._width, self._height, team, temp_bottom_bar, temp_top_bar)
+        
+        self.__current_scene = scene_login
         
         # horde button
-        horde_start_button = Horde_Button(200, 100, 200, 200)
+        horde_start_button = Horde_Button(585, 270, 100, 100)
         is_horde_button_click = False
         horde_button_click_timer = 0
                 
@@ -69,7 +77,7 @@ class Main_Screen(object):
             current_timer = time.time()*1000.0
             
             # render the background
-            self._screen.blit(temp_scene, (0,0), self._background_prop)
+            self.render_scene(self.__current_scene)
             
             # render the button & determine the background
             if (not is_horde_button_click):
@@ -81,20 +89,10 @@ class Main_Screen(object):
                 self._screen.blit(horde_start_button.show_button_click(), horde_start_button.get_position())
             elif (is_horde_button_click):
                 # re-load the background
-                temp_scene = scene_MC
-                # render the bottom bar
-                self._screen.blit(bottom_bar, (0, 470), (0, 0, self._width, 250))
-                # render the character
-                self._screen.blit(character_rogue.get_stand_image(), character_rogue.get_position(), character_rogue.get_position_and_size())
-                # render the skill bar
-                idx = 0
-                for char_skill_image in character_rogue.get_active_skills():
-                    temp_pos_x = 800 + idx * 100
-                    idx = idx + 1
-                    self._screen.blit(char_skill_image, (temp_pos_x, 600), (0, 0, 70, 70))
+                self.__current_scene = scene_MC
                     
                 # render the enemy
-                self._screen.blit(cahracter_ragnaros.get_stand_image(), cahracter_ragnaros.get_position(), cahracter_ragnaros.get_position_and_size())
+                #self._screen.blit(character_ragnaros.get_stand_image(), character_ragnaros.get_position(), character_ragnaros.get_position_and_size())
             
             #==========================================#
             #               Event handler              #
@@ -144,3 +142,12 @@ class Main_Screen(object):
                 
             # render the screen
             pygame.display.update()
+            
+    
+    def render_scene(self, scene):
+        
+        if not scene.render_scene:
+            return False, 'Scene renderer is not valid!'
+        
+        renderer = self._screen
+        scene.render_scene(renderer)

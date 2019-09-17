@@ -11,7 +11,7 @@ class Materials_Constant:
     #                 Bar                           #
     # ============================================= #
     bottom_bar_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\layout\\bar\\bottom_bar.png'
-    
+    top_bar_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\layout\\bar\\top_bar.png'
     
     # ============================================= #
     #                 Button                        #
@@ -38,9 +38,14 @@ class Materials_Constant:
     # ============================================= #
     #                 Skill label                   #
     # ============================================= #
-    rogue_backstab_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\backstab.png'
-    rogue_biting_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\biting.png'
+    rogue_evilatt_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\evilatt.png'
     rogue_disapper_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\disapper.png'
     rogue_gouge_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\gouge.png'
-
+    rogue_poision_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\poision.png'
+    rogue_speedup_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\speedup.png'
+    rogue_backstab_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\backstab.png'
+    rogue_sworddance_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\sworddance.png'
+    rogue_blind_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\blind.png'
+    rogue_strangle_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\strangle.png'
+    
     chaos_bolt_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warlock\\chaos_bolt.png'

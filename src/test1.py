@@ -1,10 +1,19 @@
-from enum import Enum
 
-class Shake(Enum):
-    vanilla = 7
-    chocolate = 4
-    cookies = 9
-    mint = 3
+
+class ITest(object):
+    '''
+    '''
+    def test(self):
+        pass
     
-for s in Shake:
-    print(s.value)
+
+class ITestExtend(ITest):
+    def test(self):
+        pass
+
+
+abc = ITest()
+if isinstance(abc, ITestExtend):
+    print('aaa')
+else:
+    print('bbb')
