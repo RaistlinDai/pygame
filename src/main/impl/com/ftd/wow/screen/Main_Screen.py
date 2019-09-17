@@ -17,6 +17,7 @@ from src.main.impl.com.ftd.wow.scene.mc.MC_Boss_Scence import MC_Boss_Scene
 from src.main.impl.com.ftd.wow.layout.bar.Top_Bar import Top_Bar
 from src.main.impl.com.ftd.wow.layout.bar.Bottom_Bar import Bottom_Bar
 from src.main.impl.com.ftd.wow.team.Team import Team
+from src.main.impl.com.ftd.wow.frame.Resource_DTO import Resource_DTO
 
 class Main_Screen(object):
     '''
@@ -39,12 +40,15 @@ class Main_Screen(object):
         self._background = Scene_Login(self._width, self._height)
         self._background_prop = (0, 0, self._width, self._height)
         
+        # source loading
+        # load mouse
+        self.__mouse_cursor = pygame.image.load(Materials_Constant.mouse_image_filename).convert_alpha()
+        
+        self.__resource_DTO = Resource_DTO()
+        self.__resource_DTO.load_resources()
+        
     
     def execute(self):
-        
-        # load mouse
-        mouse_cursor = pygame.image.load(Materials_Constant.mouse_image_filename).convert_alpha()
-        
         # character
         character_rogue1 = Character(Profession_Enum.PROF_ROGUE)
         character_rogue2 = Character(Profession_Enum.PROF_ROGUE)
@@ -92,7 +96,7 @@ class Main_Screen(object):
                 self.__current_scene = scene_MC
                     
                 # render the enemy
-                #self._screen.blit(character_ragnaros.get_stand_image(), character_ragnaros.get_position(), character_ragnaros.get_position_and_size())
+                self._screen.blit(character_ragnaros.get_stand_image(), character_ragnaros.get_position(), character_ragnaros.get_position_and_size())
             
             #==========================================#
             #               Event handler              #
@@ -132,10 +136,10 @@ class Main_Screen(object):
             # get the cursor position
             x, y = pygame.mouse.get_pos()
             # calculate the cursor left-top position
-            x-= mouse_cursor.get_width() / 2
-            y-= mouse_cursor.get_height() / 2
+            x-= self.__mouse_cursor.get_width() / 2
+            y-= self.__mouse_cursor.get_height() / 2
             # render the cursor
-            self._screen.blit(mouse_cursor, (x, y))
+            self._screen.blit(self.__mouse_cursor, (x, y))
             
             # clipping in middle
             #screen.set_clip(0, 50, 770, 380)
@@ -150,4 +154,8 @@ class Main_Screen(object):
             return False, 'Scene renderer is not valid!'
         
         renderer = self._screen
-        scene.render_scene(renderer)
+        scene.render_scene(renderer, self._width, self._height)
+        
+    
+    def load_resources(self):
+        pass

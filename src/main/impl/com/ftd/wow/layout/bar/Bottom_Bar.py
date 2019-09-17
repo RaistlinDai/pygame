@@ -13,7 +13,7 @@ class Bottom_Bar(object):
     
     '''
     
-    def __init__(self, size_w, size_h, character):
+    def __init__(self, size_w=None, size_h=None, character=None):
         # size
         self.__size_w = 1280
         self.__size_h = 250
@@ -21,9 +21,13 @@ class Bottom_Bar(object):
         self.__pos_x = 0
         self.__pos_y = 470
         # current character
-        self.__current_character = character
+        self.__current_character = None
         # active skills
-        self.__active_skills = self.__current_character.get_active_skills()
+        self.__active_skills = None
+        
+        if character:
+            self.__current_character = character
+            self.__active_skills = self.__current_character.get_active_skills()
         
         # images
         self.__image = pygame.image.load(Materials_Constant.bottom_bar_image_filename).convert_alpha()
@@ -34,7 +38,14 @@ class Bottom_Bar(object):
             self.__image = pygame.transform.scale(self.__image, (self.__size_w, self.__size_h))
             
     
-    def render_image(self, screen_ins):
+    def render_image(self, screen_ins, screen_w, screen_h):
+        
+        if screen_w and screen_h:
+            self.__size_w = screen_w
+            self.__size_h = Image_Util.calculate_bottom_bar_height_by_screen_size(screen_h)
+            self.__pos_y = Image_Util.calculate_bottom_bar_positionY_by_screen_size(screen_h)
+            self.__image = pygame.transform.scale(self.__image, (self.__size_w, self.__size_h))
+        
         screen_ins.blit(self.__image, (0, self.__pos_y), (0,0,self.__size_w,self.__size_h))
         self.render_skills(screen_ins)
         

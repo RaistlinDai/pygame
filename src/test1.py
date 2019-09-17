@@ -1,19 +1,8 @@
+import json
 
 
-class ITest(object):
-    '''
-    '''
-    def test(self):
-        pass
-    
+with open('savedata01.json', 'r') as f:
+    distros_dict = json.load(f)
 
-class ITestExtend(ITest):
-    def test(self):
-        pass
-
-
-abc = ITest()
-if isinstance(abc, ITestExtend):
-    print('aaa')
-else:
-    print('bbb')
+for distro in distros_dict:
+    print(distro['Name'])

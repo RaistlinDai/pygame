@@ -14,4 +14,5 @@ class Profession_Enum(Enum):
     @attention: the value structure: profession constructor
     '''
 
+    PROF_WARROIR = None
     PROF_ROGUE = Rogue

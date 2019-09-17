@@ -5,7 +5,7 @@ Created on Aug 27, 2019
 '''
 import pygame
 from src.main.impl.com.ftd.wow.scene.base.IFightScene import IFightScene
-from src.main.impl.com.ftd.wow.scene.Scene_Enum import Scene_Enum
+from src.main.impl.com.ftd.wow.scene.FightScene_Enum import FightScene_Enum
 
 class MC_Boss_Scene(IFightScene):
     '''
@@ -14,7 +14,7 @@ class MC_Boss_Scene(IFightScene):
     
     def __init__(self, size_w, size_h, active_team, bottom_bar, top_bar):
         # super class constructor
-        super().__init__(Scene_Enum.MC_BOSS_10, size_w, size_h, active_team, bottom_bar, top_bar)
+        super().__init__(FightScene_Enum.MC_BOSS_10, size_w, size_h, active_team, bottom_bar, top_bar)
         
         
     def show_background(self):
@@ -25,5 +25,5 @@ class MC_Boss_Scene(IFightScene):
         return self.__bottom_bar
         
     
-    def render_scene(self, screen_ins):
-        super().render_scene(screen_ins)
+    def render_scene(self, screen_ins, screen_w=None, screen_h=None):
+        super().render_scene(screen_ins, screen_w, screen_h)

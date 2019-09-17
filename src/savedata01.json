@@ -1,0 +1,32 @@
+[
+	{
+		"Name": "Kos",
+		"Profession": "Rogue",
+		"Level": "6",
+		"Weapon": "5",
+		"Amour": "4",
+		"Accessory01": "",
+		"Accessory02": "",
+		"Active_Skill": [{"Disapper":5},{"Poision":4},{"Evilatt":5},{"Gouge":5}],
+		"World_View": [],
+		"Nature": [],
+		"Pressure": "10",
+		"IsActive": "True",
+		"IsDead": "False"
+	},
+	{
+		"Name": "Tannies",
+		"Profession": "Warrior",
+		"Level": "6",
+		"Weapon": "5",
+		"Amour": "5",
+		"Accessory01": "",
+		"Accessory02": "",
+		"Active_Skill": [],
+		"World_View": [],
+		"Nature": [],
+		"Pressure": "0",
+		"IsActive": "True",
+		"IsDead": "False"
+	}
+]

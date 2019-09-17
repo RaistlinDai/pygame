@@ -4,8 +4,6 @@ Created on Jul 14, 2019
 @author: ftd
 '''
 import pygame
-from src.main.impl.com.ftd.wow.layout.bar.Bottom_Bar import Bottom_Bar
-from src.main.impl.com.ftd.wow.layout.bar.Top_Bar import Top_Bar
 from src.main.api.com.ftd.wow.scene.IScene import IScene
 from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
 
@@ -14,7 +12,7 @@ class IFightScene(IScene):
     
     '''
     
-    def __init__(self, scene_image, size_w, size_h, active_team, bottom_bar, top_bar):
+    def __init__(self, scene_image, size_w=None, size_h=None, active_team=None, bottom_bar=None, top_bar=None):
         
         self.__background = None
         # size
@@ -42,16 +40,24 @@ class IFightScene(IScene):
         self.__top_bar = top_bar
     
     
-    def render_scene(self, screen_ins):
+    def render_scene(self, screen_ins, screen_w=None, screen_h=None):
+        if (screen_w and screen_h):
+            self.__size_w = screen_w
+            self.__size_h = screen_h
+            self.__background = pygame.transform.scale(self.__background, (screen_w, screen_h))
+            
         screen_ins.blit(self.__background, (0,0), (0,0,self.__size_w,self.__size_h))
-        self.__bottom_bar.render_image(screen_ins)
-        self.__top_bar.render_image(screen_ins)
+        self.__bottom_bar.render_image(screen_ins, self.__size_w, self.__size_h)
+        self.__top_bar.render_image(screen_ins, self.__size_w, self.__size_h)
         self.render_characters(screen_ins)
         
              
     def render_characters(self, screen_ins):             
         # render the character
+        if not self.__team:
+            return
         characters = self.__team.get_teammembers()
+        
         idx = 0
         for temp_char in characters:
             idx = idx + 1
