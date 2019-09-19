@@ -5,9 +5,9 @@ Created on Sep 04, 2019
 '''
 
 import pygame
-from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 from src.main.api.com.ftd.wow.profession.IProfession import IProfession
 from src.main.impl.com.ftd.wow.skill.rogue.Rogue_Skill_Enum import Rogue_Skill_Enum
+from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 
 class Rogue (IProfession):
     '''
@@ -15,9 +15,7 @@ class Rogue (IProfession):
     '''
     
     def __init__(self):
-        # image
-        self.__images = []
-        self.__images.append(Materials_Constant.character_rogue_image_filename)
+        super().__init__(Materials_Constant.character_rogue_image_filenames, Rogue_Skill_Enum)
         
         # basic properties
         # healthy
@@ -32,24 +30,6 @@ class Rogue (IProfession):
         self.__basic_critical = 8
         # dodge
         self.__basic_dodge = 10
-        # fight skills
-        self.load_skills()
-        
-        # camping skills
-        
-    
-    def load_skills(self):
-        for temp_skill in Rogue_Skill_Enum:
-            rogue_skill = temp_skill.value()
-            self.DEFAULT_SKILLS.append(rogue_skill)
-    
-    
-    def get_skills(self):
-        return self.DEFAULT_SKILLS
-        
-        
-    def get_images(self):
-        return self.__images
     
 
     def get_basic_healthy(self):

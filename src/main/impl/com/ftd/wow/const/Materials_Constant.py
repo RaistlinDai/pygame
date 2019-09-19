@@ -26,9 +26,10 @@ class Materials_Constant:
     mouse_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\mouse\\cursor.png'
     
     # ============================================= #
-    #                 Character                     #
+    #                 Profession                    #
     # ============================================= #
-    character_rogue_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-t1-01.png'
+    character_rogue_image_filenames = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-t1-01.png',
+                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-t1-01-select.png']
     
     # ============================================= #
     #                 Enemy                         #
@@ -47,5 +48,6 @@ class Materials_Constant:
     rogue_sworddance_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\sworddance.png'
     rogue_blind_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\blind.png'
     rogue_strangle_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\strangle.png'
+    rogue_impulsion_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\impulsion.png'
     
     chaos_bolt_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warlock\\chaos_bolt.png'

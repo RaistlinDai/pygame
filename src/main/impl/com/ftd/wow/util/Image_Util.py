@@ -49,11 +49,11 @@ class Image_Util(object):
     def calculate_character_height_by_screen_size(screen_h):
         '''
         Calculate the standard character height according to the screen's height
-        The default value is 150 in 1280*720
+        The default value is 100 in 1280*720
         @param screen_h: the height of screen
         @return: the standard height of character 
         '''
-        standard_h = 150 * screen_h / 720
+        standard_h = 100 * screen_h / 720
         return int(standard_h)
     
     
@@ -77,7 +77,7 @@ class Image_Util(object):
         @return: the standard position of character 
         '''
         standard_x = (50 + 100 * (team_position - 1)) * screen_w / 1280
-        standard_y = 420 * screen_y / 720
+        standard_y = 450 * screen_y / 720
         return (int(standard_x), int(standard_y))
     
     

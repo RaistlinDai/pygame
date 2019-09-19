@@ -13,6 +13,7 @@ from src.main.impl.com.ftd.wow.skill.rogue.Poision import Poision
 from src.main.impl.com.ftd.wow.skill.rogue.Speedup import Speedup
 from src.main.impl.com.ftd.wow.skill.rogue.Strangle import Strangle
 from src.main.impl.com.ftd.wow.skill.rogue.Sworddance import Sworddance
+from src.main.impl.com.ftd.wow.skill.rogue.Impulsion import Impulsion
 
 
 @unique
@@ -30,5 +31,6 @@ class Rogue_Skill_Enum(Enum):
     
     BACKSTAB = Backstab
     SWORDDANCE = Sworddance
+    IMPULSION = Impulsion
     BLIND = Blind
     STRANGLE = Strangle

@@ -6,7 +6,6 @@ Created on Sep 04, 2019
 
 import pygame
 from src.main.api.com.ftd.wow.character.ICharacter import ICharacter
-from src.main.impl.com.ftd.wow.profession.Profession_Enum import Profession_Enum
 
 class Team (object):
     '''

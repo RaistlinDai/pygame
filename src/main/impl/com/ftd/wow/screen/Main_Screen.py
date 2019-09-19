@@ -5,67 +5,58 @@ Created on Aug 27, 2019
 '''
 import pygame
 from pygame.locals import *
-from sys import exit
-from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 from src.main.impl.com.ftd.wow.button.Horde_Button import Horde_Button
 import time; 
 from src.main.impl.com.ftd.wow.scene.menu.Scene_Login import Scene_Login
 from src.main.impl.com.ftd.wow.character.Character import Character
 from src.main.impl.com.ftd.wow.enemy.boss.Ragnaros import Ragnaros
-from src.main.impl.com.ftd.wow.profession.Profession_Enum import Profession_Enum
-from src.main.impl.com.ftd.wow.scene.mc.MC_Boss_Scence import MC_Boss_Scene
-from src.main.impl.com.ftd.wow.layout.bar.Top_Bar import Top_Bar
-from src.main.impl.com.ftd.wow.layout.bar.Bottom_Bar import Bottom_Bar
+from src.main.impl.com.ftd.wow.profession.base.Profession_Enum import Profession_Enum
 from src.main.impl.com.ftd.wow.team.Team import Team
 from src.main.impl.com.ftd.wow.frame.Resource_DTO import Resource_DTO
+from src.main.impl.com.ftd.wow.scene.MenuScene_Enum import MenuScene_Enum
+from src.main.impl.com.ftd.wow.scene.FightScene_Enum import FightScene_Enum
+from src.main.impl.com.ftd.wow.frame.Context_DTO import Context_DTO
 
 class Main_Screen(object):
     '''
     
     '''
     
-    def __init__(self, width=640, height=480):
-        # screen size
-        self._width = width
-        self._height = height
+    def __init__(self, width, height):
+        # initialize context
+        self.__context_DTO = Context_DTO()
+        self.__context_DTO.set_screen_width(width)
+        self.__context_DTO.set_screen_height(height)
         
         # initialize pygame for hardware
         pygame.init()
         # create a window
-        self._screen = pygame.display.set_mode((self._width, self._height), 0, 32)
+        self._screen = pygame.display.set_mode((self.__context_DTO.get_screen_width(), self.__context_DTO.get_screen_height()), 0, 32)
         # set window title
         pygame.display.set_caption("Hello, World!")
         
         # screen background
-        self._background = Scene_Login(self._width, self._height)
-        self._background_prop = (0, 0, self._width, self._height)
+        self._background = Scene_Login(self.__context_DTO.get_screen_width(), self.__context_DTO.get_screen_height())
+        self._background_prop = (0, 0, self.__context_DTO.get_screen_width(), self.__context_DTO.get_screen_height())
         
         # source loading
-        # load mouse
-        self.__mouse_cursor = pygame.image.load(Materials_Constant.mouse_image_filename).convert_alpha()
-        
         self.__resource_DTO = Resource_DTO()
         self.__resource_DTO.load_resources()
         
     
     def execute(self):
         # character
-        character_rogue1 = Character(Profession_Enum.PROF_ROGUE)
-        character_rogue2 = Character(Profession_Enum.PROF_ROGUE)
-        character_rogue3 = Character(Profession_Enum.PROF_ROGUE)
-        character_rogue4 = Character(Profession_Enum.PROF_ROGUE)
+        character_rogue1 = Character("Raistlin", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name))
+        character_rogue2 = Character("Caramon", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name))
+        character_rogue3 = Character("Tanis", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name))
+        character_rogue4 = Character("Flint", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name))
         team = Team(character_rogue1, character_rogue2, character_rogue3, character_rogue4)
         
         # enemy
         character_ragnaros = Ragnaros(650,70,550,550)
         
-        # load scene
-        scene_login = Scene_Login(self._width, self._height)
-        temp_top_bar = Top_Bar(self._width, self._height)
-        temp_bottom_bar = Bottom_Bar(self._width, self._height, character_rogue1)
-        scene_MC = MC_Boss_Scene(self._width, self._height, team, temp_bottom_bar, temp_top_bar)
-        
-        self.__current_scene = scene_login
+        # login scene
+        self.__context_DTO.set_current_scene(self.__resource_DTO.get_scene(MenuScene_Enum.HORDE_LOGIN.name))
         
         # horde button
         horde_start_button = Horde_Button(585, 270, 100, 100)
@@ -79,9 +70,11 @@ class Main_Screen(object):
         while True:
             # clocker
             current_timer = time.time()*1000.0
+            # mouse cursor position
+            cursor_x, cursor_y = pygame.mouse.get_pos()
             
             # render the background
-            self.render_scene(self.__current_scene)
+            self.render_scene(self.__context_DTO.get_current_scene())
             
             # render the button & determine the background
             if (not is_horde_button_click):
@@ -93,8 +86,11 @@ class Main_Screen(object):
                 self._screen.blit(horde_start_button.show_button_click(), horde_start_button.get_position())
             elif (is_horde_button_click):
                 # re-load the background
-                self.__current_scene = scene_MC
-                    
+                self.__context_DTO.set_current_scene(self.__resource_DTO.get_scene(FightScene_Enum.MC_BOSS_10.name))
+                self.__context_DTO.get_current_scene().add_active_team(team)
+                self.__context_DTO.get_current_scene().set_current_character(character_rogue1)
+                self.__context_DTO.get_current_scene().get_cover_character(cursor_x, cursor_y)
+                
                 # render the enemy
                 self._screen.blit(character_ragnaros.get_stand_image(), character_ragnaros.get_position(), character_ragnaros.get_position_and_size())
             
@@ -133,13 +129,11 @@ class Main_Screen(object):
                     is_horde_button_click = True
                     horde_button_click_timer = time.time()*1000.0
                     
-            # get the cursor position
-            x, y = pygame.mouse.get_pos()
             # calculate the cursor left-top position
-            x-= self.__mouse_cursor.get_width() / 2
-            y-= self.__mouse_cursor.get_height() / 2
+            cursor_x-= self.__resource_DTO.get_mouse_cursor().get_width() / 2
+            cursor_y-= self.__resource_DTO.get_mouse_cursor().get_height() / 2
             # render the cursor
-            self._screen.blit(self.__mouse_cursor, (x, y))
+            self._screen.blit(self.__resource_DTO.get_mouse_cursor(), (cursor_x, cursor_y))
             
             # clipping in middle
             #screen.set_clip(0, 50, 770, 380)
@@ -154,7 +148,7 @@ class Main_Screen(object):
             return False, 'Scene renderer is not valid!'
         
         renderer = self._screen
-        scene.render_scene(renderer, self._width, self._height)
+        scene.render_scene(renderer, self.__context_DTO.get_screen_width(), self.__context_DTO.get_screen_height())
         
     
     def load_resources(self):

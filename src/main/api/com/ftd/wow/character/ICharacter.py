@@ -17,11 +17,3 @@ class ICharacter(object):
         pass
     
     
-    def get_position(self):
-        pass
-    
-    
-    def get_position_and_size(self):
-        pass
-    
-    

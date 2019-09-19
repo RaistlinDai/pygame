@@ -13,7 +13,7 @@ class Bottom_Bar(object):
     
     '''
     
-    def __init__(self, size_w=None, size_h=None, character=None):
+    def __init__(self, size_w=None, size_h=None, current_character=None):
         # size
         self.__size_w = 1280
         self.__size_h = 250
@@ -25,8 +25,8 @@ class Bottom_Bar(object):
         # active skills
         self.__active_skills = None
         
-        if character:
-            self.__current_character = character
+        if current_character:
+            self.__current_character = current_character
             self.__active_skills = self.__current_character.get_active_skills()
         
         # images
@@ -72,4 +72,6 @@ class Bottom_Bar(object):
             screen_ins.blit(char_skill_image, (temp_pos_x, temp_pos_y), (0, 0, temp_size, temp_size))
             
             
+    def set_current_character(self, current_character):
+        self.__current_character = current_character
             
