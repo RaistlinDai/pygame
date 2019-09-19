@@ -17,17 +17,23 @@ class Blind(ISkill):
         # give a name
         self.__name = 'Blind'
         # images
-        self.__image = Materials_Constant.rogue_blind_image_filename
+        self.__image = pygame.image.load(Materials_Constant.rogue_blind_image_filename).convert_alpha()
+        self.__image_select = pygame.image.load(Materials_Constant.rogue_blind_select_image_filename).convert_alpha()
+        self.__image_inactive = pygame.image.load(Materials_Constant.rogue_blind_inactive_image_filename).convert_alpha()
         
     
     def get_skill_image(self):
         return self.__image
 
+
+    def get_skill_image_select(self):
+        return self.__image_select
+    
+    
+    def get_skill_image_inactive(self):
+        return self.__image_inactive
+
     
     def get_skill_name(self):
         return self.__name
-    
-    
-    def get_size(self):
-        return (self.__size_w, self.__size_h)
     

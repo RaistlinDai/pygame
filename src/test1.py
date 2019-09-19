@@ -4,5 +4,8 @@ import json
 with open('savedata01.json', 'r') as f:
     distros_dict = json.load(f)
 
-for distro in distros_dict:
-    print(distro['Name'])
+characters = distros_dict["Characters"]
+for temp_char in characters:
+    for skill in temp_char['Skills']:
+        for item in skill:
+            print(skill[item])

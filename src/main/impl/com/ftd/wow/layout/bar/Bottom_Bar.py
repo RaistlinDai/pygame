@@ -61,15 +61,16 @@ class Bottom_Bar(object):
         self.__active_skills = self.__current_character.get_active_skills()
         # render the skill bar
         idx = 0
-        for char_skill_image in self.__current_character.get_active_skills():
+        for active_skill in self.__current_character.get_active_skills():
             temp_pos_x = Image_Util.calculate_skill_in_fight_positionX_by_screen_size(self.__size_w, idx)
             temp_pos_y = Image_Util.calculate_skill_in_fight_positionY_by_screen_size(self.__size_h + self.__pos_y)
             temp_size = Image_Util.calculate_skill_in_fight_size_by_screen_size(self.__size_h + self.__pos_y)
             
-            char_skill_image = pygame.transform.scale(char_skill_image, (temp_size, temp_size))
+            active_skill_image = active_skill.get_skill_image()
+            active_skill_image = pygame.transform.scale(active_skill_image, (temp_size, temp_size))
             
             idx = idx + 1
-            screen_ins.blit(char_skill_image, (temp_pos_x, temp_pos_y), (0, 0, temp_size, temp_size))
+            screen_ins.blit(active_skill_image, (temp_pos_x, temp_pos_y), (0, 0, temp_size, temp_size))
             
             
     def set_current_character(self, current_character):

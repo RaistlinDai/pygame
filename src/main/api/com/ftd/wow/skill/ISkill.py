@@ -15,5 +15,8 @@ class ISkill(object):
     def get_skill_image(self):
         pass
     
-    def get_size(self):
+    def get_skill_image_select(self):
+        pass
+    
+    def get_skill_image_inactive(self):
         pass

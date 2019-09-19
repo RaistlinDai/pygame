@@ -12,8 +12,21 @@ class Context_DTO(object):
     def __init__(self):
         self.__active_team = {}          # position : character name
         self.__current_scene = None
+        self.__current_scene_mode = None
         self.__screen_width = 1280
         self.__screen_height = 720
+
+    def get_current_scene_mode(self):
+        return self.__current_scene_mode
+
+
+    def set_current_scene_mode(self, value):
+        self.__current_scene_mode = value
+
+
+    def del_current_scene_mode(self):
+        del self.__current_scene_mode
+
 
 
     def get_screen_height(self):
@@ -68,5 +81,6 @@ class Context_DTO(object):
     current_scene = property(get_current_scene, set_current_scene, del_current_scene, "current_scene's docstring")
     screen_size = property(get_screen_width, set_screen_width, del_screen_width, "screen_width's docstring")
     screen_height = property(get_screen_height, set_screen_height, del_screen_height, "screen_height's docstring")
+    current_scene_mode = property(get_current_scene_mode, set_current_scene_mode, del_current_scene_mode, "current_scene_mode's docstring")
         
     

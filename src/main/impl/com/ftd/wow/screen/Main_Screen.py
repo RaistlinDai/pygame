@@ -16,6 +16,8 @@ from src.main.impl.com.ftd.wow.frame.Resource_DTO import Resource_DTO
 from src.main.impl.com.ftd.wow.scene.MenuScene_Enum import MenuScene_Enum
 from src.main.impl.com.ftd.wow.scene.FightScene_Enum import FightScene_Enum
 from src.main.impl.com.ftd.wow.frame.Context_DTO import Context_DTO
+from src.main.impl.com.ftd.wow.scene.base.SceneMode_Enum import SceneMode_Enum
+from src.main.impl.com.ftd.wow.savedata.Savedata_Analysis import Savedata_Analsis
 
 class Main_Screen(object):
     '''
@@ -45,25 +47,27 @@ class Main_Screen(object):
         
     
     def execute(self):
+        
+        load_character_skills = Savedata_Analsis.load_savedata()
+        
         # character
-        character_rogue1 = Character("Raistlin", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name))
-        character_rogue2 = Character("Caramon", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name))
-        character_rogue3 = Character("Tanis", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name))
-        character_rogue4 = Character("Flint", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name))
+        character_rogue1 = Character("Raistlin", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
+        character_rogue2 = Character("Caramon", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
+        character_rogue3 = Character("Tanis", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
+        character_rogue4 = Character("Flint", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
         team = Team(character_rogue1, character_rogue2, character_rogue3, character_rogue4)
         
         # enemy
         character_ragnaros = Ragnaros(650,70,550,550)
         
         # login scene
+        self.__context_DTO.set_current_scene_mode(SceneMode_Enum.MENU_SCENE)
         self.__context_DTO.set_current_scene(self.__resource_DTO.get_scene(MenuScene_Enum.HORDE_LOGIN.name))
         
         # horde button
         horde_start_button = Horde_Button(585, 270, 100, 100)
-        is_horde_button_click = False
         horde_button_click_timer = 0
                 
-        char_x, char_y = 0, 50
         move_x, move_y = 0, 0
         
         # main loop
@@ -73,19 +77,28 @@ class Main_Screen(object):
             # mouse cursor position
             cursor_x, cursor_y = pygame.mouse.get_pos()
             
+            #==========================================#
+            #               Scene maintain             #
+            #==========================================#
             # render the background
             self.render_scene(self.__context_DTO.get_current_scene())
             
             # render the button & determine the background
-            if (not is_horde_button_click):
+            if (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.MENU_SCENE):
                 if (not horde_start_button.is_over()):
                     self._screen.blit(horde_start_button.show_button(), horde_start_button.get_position())
                 else:
                     self._screen.blit(horde_start_button.show_button_cover(), horde_start_button.get_position())
-            elif (is_horde_button_click and horde_button_click_timer > 0 and current_timer - horde_button_click_timer < 2000):
-                self._screen.blit(horde_start_button.show_button_click(), horde_start_button.get_position())
-            elif (is_horde_button_click):
+                    
+            elif (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.LOAD_SCENE):
+                if (current_timer - horde_button_click_timer < 2000):
+                    self._screen.blit(horde_start_button.show_button_click(), horde_start_button.get_position())
+                elif (current_timer - horde_button_click_timer >= 2000):
+                    self.__context_DTO.set_current_scene_mode(SceneMode_Enum.FIGHT_SCENE)
+                    
+            elif (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.FIGHT_SCENE):
                 # re-load the background
+                self.__context_DTO.set_current_scene_mode(SceneMode_Enum.FIGHT_SCENE)
                 self.__context_DTO.set_current_scene(self.__resource_DTO.get_scene(FightScene_Enum.MC_BOSS_10.name))
                 self.__context_DTO.get_current_scene().add_active_team(team)
                 self.__context_DTO.get_current_scene().set_current_character(character_rogue1)
@@ -120,20 +133,20 @@ class Main_Screen(object):
             # get the keyboard and mouse click
             pressed_mouse = pygame.mouse.get_pressed()
         
-            char_x += move_x
-            char_y += move_y
-            
+            # mouse click event
             if pressed_mouse[0]:
-                # horde button click
-                if (horde_start_button.is_over()):
-                    is_horde_button_click = True
-                    horde_button_click_timer = time.time()*1000.0
-                    
-            # calculate the cursor left-top position
-            cursor_x-= self.__resource_DTO.get_mouse_cursor().get_width() / 2
-            cursor_y-= self.__resource_DTO.get_mouse_cursor().get_height() / 2
-            # render the cursor
-            self._screen.blit(self.__resource_DTO.get_mouse_cursor(), (cursor_x, cursor_y))
+                # menu scene
+                if (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.MENU_SCENE):
+                    # horde button click
+                    if (horde_start_button.is_over()):
+                        self.__context_DTO.set_current_scene_mode(SceneMode_Enum.LOAD_SCENE)
+                        horde_button_click_timer = time.time()*1000.0
+                
+                elif (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.FIGHT_SCENE):
+                    pass
+            
+            # render cursor
+            self.render_cursor(cursor_x, cursor_y)
             
             # clipping in middle
             #screen.set_clip(0, 50, 770, 380)
@@ -143,7 +156,6 @@ class Main_Screen(object):
             
     
     def render_scene(self, scene):
-        
         if not scene.render_scene:
             return False, 'Scene renderer is not valid!'
         
@@ -151,5 +163,9 @@ class Main_Screen(object):
         scene.render_scene(renderer, self.__context_DTO.get_screen_width(), self.__context_DTO.get_screen_height())
         
     
-    def load_resources(self):
-        pass
+    def render_cursor(self, cursor_x, cursor_y):
+        # calculate the cursor left-top position
+        cursor_x-= self.__resource_DTO.get_mouse_cursor().get_width() / 2
+        cursor_y-= self.__resource_DTO.get_mouse_cursor().get_height() / 2
+        # render the cursor
+        self._screen.blit(self.__resource_DTO.get_mouse_cursor(), (cursor_x, cursor_y))

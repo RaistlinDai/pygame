@@ -3,6 +3,7 @@ Created on Sep 10, 2019
 
 @author: ftd
 '''
+import pygame
 from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 
 class IProfession(object):
@@ -24,7 +25,8 @@ class IProfession(object):
         
     def _load_images(self, prof_images):
         for temp_image in prof_images:
-            self.__images.append(temp_image)
+            char_image = pygame.image.load(temp_image).convert_alpha()
+            self.__images.append(char_image)
             
     
     def _load_skills(self, skill_enum):
