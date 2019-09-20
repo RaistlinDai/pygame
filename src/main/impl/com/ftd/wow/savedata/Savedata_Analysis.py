@@ -26,6 +26,7 @@ class Savedata_Analsis (object):
         
         # load characters
         characters = distros_dict["Characters"]
+        
         for temp_char in characters:
             load_character_skills = {}    # {skill_name: Character_skill_obj}
             
@@ -47,7 +48,6 @@ class Savedata_Analsis (object):
             
             # create character
             load_character = Character(temp_char['Name'], resource_DTO.get_profession(temp_char['Profession']), load_character_skills)
-            
             load_characters.append(load_character)
             
         return load_characters

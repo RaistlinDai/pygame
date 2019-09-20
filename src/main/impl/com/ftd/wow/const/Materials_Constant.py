@@ -31,6 +31,9 @@ class Materials_Constant:
     character_rogue_image_filenames = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-t1-01.png',
                                        'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-t1-01-select.png']
     
+    character_warrior_image_filenames = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\warrior\\armorset_orc-male-warrior-t1-01.png',
+                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\warrior\\armorset_orc-male-warrior-t1-01-select.png']
+    
     # ============================================= #
     #                 Enemy                         #
     # ============================================= #
@@ -45,6 +48,12 @@ class Materials_Constant:
     warrior_gluten_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\gluten.png'
     warrior_gluten_select_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\gluten-select.png'
     warrior_gluten_inactive_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\gluten-inactive.png'
+    warrior_assault_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\assault.png'
+    warrior_assault_select_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\assault-select.png'
+    warrior_assault_inactive_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\assault-inactive.png'
+    warrior_herocistrike_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\herocistrike.png'
+    warrior_herocistrike_select_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\herocistrike-select.png'
+    warrior_herocistrike_inactive_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\herocistrike-inactive.png'
     
     rogue_evilatt_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\evilatt.png'
     rogue_evilatt_select_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\evilatt-select.png'

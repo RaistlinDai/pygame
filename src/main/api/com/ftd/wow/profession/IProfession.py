@@ -4,7 +4,6 @@ Created on Sep 10, 2019
 @author: ftd
 '''
 import pygame
-from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 
 class IProfession(object):
     '''

@@ -50,13 +50,7 @@ class Main_Screen(object):
     def execute(self):
         
         load_characters = Savedata_Analsis.load_savedata(self.__resource_DTO)
-        
-        # character
-#         character_rogue1 = Character("Raistlin", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
-#         character_rogue2 = Character("Caramon", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
-#         character_rogue3 = Character("Tanis", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
-#         character_rogue4 = Character("Flint", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
-        team = Team(load_characters[0])
+        team = Team(None, None, load_characters[0], load_characters[1])
         
         # enemy
         character_ragnaros = Ragnaros(650,70,550,550)

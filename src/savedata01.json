@@ -11,13 +11,13 @@
 			"Skills": [{"Disapper":[1,1,5]},
 					   {"Poision":[0,1,4]},
 					   {"Evilatt":[1,1,5]},
-					   {"Gouge":[1,1,5]},
+					   {"Gouge":[0,1,5]},
 					   {"Backstab":[0,1,5]},
 					   {"Blind":[0,1,5]},
 					   {"Impulsion":[0,0,0]},
 					   {"Speedup":[1,0,3]},
 					   {"Strangle":[0,1,1]},
-					   {"Sworddance":[0,1,2]}
+					   {"Sworddance":[1,1,2]}
 					   ],
 			"World_View": [],
 			"Nature": [],
@@ -27,7 +27,7 @@
 		},
 		{
 			"Name": "Caramon",
-			"Profession": "PROF_WARRIOR",
+			"Profession": "PROF_WARROIR",
 			"Level": "6",
 			"Weapon": "3",
 			"Amour": "5",
@@ -35,14 +35,8 @@
 			"Accessory02": "",
 			"Skills": [{"Demoralizing":[1,1,2]},
 					   {"Gluten":[1,1,5]},
-					   {"Evilatt":[1,1,5]},
-					   {"Gouge":[1,1,5]},
-					   {"Backstab":[0,1,5]},
-					   {"Blind":[0,1,5]},
-					   {"Impulsion":[0,0,0]},
-					   {"Speedup":[1,0,3]},
-					   {"Strangle":[0,1,1]},
-					   {"Sworddance":[0,1,2]}
+					   {"Assault":[1,1,4]},
+					   {"Herocistrike":[1,1,5]}
 					   ],
 			"World_View": [],
 			"Nature": [],

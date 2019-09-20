@@ -15,7 +15,7 @@ class Warrior (IProfession):
     '''
     
     def __init__(self):
-        super().__init__(Materials_Constant.character_rogue_image_filenames, Warrior_Skill_Enum)
+        super().__init__(Materials_Constant.character_warrior_image_filenames, Warrior_Skill_Enum)
         
         # basic properties
         # healthy
