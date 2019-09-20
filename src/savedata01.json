@@ -24,6 +24,31 @@
 			"Pressure": 10,
 			"IsActive": 1,
 			"IsDead": 0
+		},
+		{
+			"Name": "Caramon",
+			"Profession": "PROF_WARRIOR",
+			"Level": "6",
+			"Weapon": "3",
+			"Amour": "5",
+			"Accessory01": "",
+			"Accessory02": "",
+			"Skills": [{"Demoralizing":[1,1,2]},
+					   {"Gluten":[1,1,5]},
+					   {"Evilatt":[1,1,5]},
+					   {"Gouge":[1,1,5]},
+					   {"Backstab":[0,1,5]},
+					   {"Blind":[0,1,5]},
+					   {"Impulsion":[0,0,0]},
+					   {"Speedup":[1,0,3]},
+					   {"Strangle":[0,1,1]},
+					   {"Sworddance":[0,1,2]}
+					   ],
+			"World_View": [],
+			"Nature": [],
+			"Pressure": 60,
+			"IsActive": 1,
+			"IsDead": 0
 		}
 	]
 

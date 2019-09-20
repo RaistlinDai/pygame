@@ -5,6 +5,7 @@ Created on Sep 10, 2019
 '''
 from enum import Enum, unique
 from src.main.impl.com.ftd.wow.profession.Rogue import Rogue
+from src.main.impl.com.ftd.wow.profession.Warrior import Warrior
 
 
 @unique
@@ -14,5 +15,5 @@ class Profession_Enum(Enum):
     @attention: the value structure: profession constructor
     '''
 
-    #PROF_WARROIR = None
+    PROF_WARROIR = Warrior
     PROF_ROGUE = Rogue

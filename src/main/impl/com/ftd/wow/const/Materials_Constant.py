@@ -39,6 +39,13 @@ class Materials_Constant:
     # ============================================= #
     #                 Skill label                   #
     # ============================================= #
+    warrior_demoralizing_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\demoralizing.png'
+    warrior_demoralizing_select_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\demoralizing-select.png'
+    warrior_demoralizing_inactive_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\demoralizing-inactive.png'
+    warrior_gluten_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\gluten.png'
+    warrior_gluten_select_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\gluten-select.png'
+    warrior_gluten_inactive_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warrior\\gluten-inactive.png'
+    
     rogue_evilatt_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\evilatt.png'
     rogue_evilatt_select_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\evilatt-select.png'
     rogue_evilatt_inactive_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\evilatt-inactive.png'

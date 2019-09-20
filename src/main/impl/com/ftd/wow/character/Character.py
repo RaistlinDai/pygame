@@ -21,7 +21,7 @@ class Character (ICharacter):
         # character name
         self.__character_name = name
         # character images
-        self.__fight_skills = {}    # {name:{"Skill_obj":A, "isActive":B, "isLearned":C, "Level":D}}
+        self.__fight_skills = {}    # {name: Character_Skill}
         self.__camp_skills_images = []
         self.__profession_images = []
 

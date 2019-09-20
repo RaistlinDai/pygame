@@ -6,30 +6,30 @@ Created on Sep 04, 2019
 
 import pygame
 from src.main.api.com.ftd.wow.profession.IProfession import IProfession
-from src.main.impl.com.ftd.wow.skill.rogue.Rogue_Skill_Enum import Rogue_Skill_Enum
+from src.main.impl.com.ftd.wow.skill.warroir.Warrior_Skill_Enum import Warrior_Skill_Enum
 from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 
-class Rogue (IProfession):
+class Warrior (IProfession):
     '''
     
     '''
     
     def __init__(self):
-        super().__init__(Materials_Constant.character_rogue_image_filenames, Rogue_Skill_Enum)
+        super().__init__(Materials_Constant.character_rogue_image_filenames, Warrior_Skill_Enum)
         
         # basic properties
         # healthy
-        self.__basic_healthy = 10
+        self.__basic_healthy = 15
         # defence
-        self.__basic_defence = 5
+        self.__basic_defence = 7
         # speed
-        self.__basic_speed = 5
+        self.__basic_speed = 3
         # attack
-        self.__basic_attack = 4
+        self.__basic_attack = 5
         # critical
-        self.__basic_critical = 8
+        self.__basic_critical = 2
         # dodge
-        self.__basic_dodge = 10
+        self.__basic_dodge = 2
     
 
     def get_basic_healthy(self):

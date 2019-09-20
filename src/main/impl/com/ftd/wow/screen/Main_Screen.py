@@ -42,6 +42,7 @@ class Main_Screen(object):
         self._background_prop = (0, 0, self.__context_DTO.get_screen_width(), self.__context_DTO.get_screen_height())
         
         # source loading
+        # the range of loading: all scene backgrounds and framework images, all profession images, all skill images
         self.__resource_DTO = Resource_DTO()
         self.__resource_DTO.load_resources()
         
