@@ -42,7 +42,6 @@ class Savedata_Analsis (object):
             
             for skill in temp_char['Skills']:
                 for skill_name in skill:
-                    print(skill_name, skill[skill_name][0], skill[skill_name][1], skill[skill_name][2])
                     character_skill = Character_Skill(skill_name, skill[skill_name][0], skill[skill_name][1], skill[skill_name][2])
                     load_character_skills[skill_name] = character_skill
             
