@@ -2,43 +2,28 @@
 	"Characters": [
 		{
 			"Name": "Kos",
-			"Profession": "Rogue",
+			"Profession": "PROF_ROGUE",
 			"Level": "6",
 			"Weapon": "5",
 			"Amour": "4",
 			"Accessory01": "",
 			"Accessory02": "",
-			"Skills": [{"Disapper":["True","True",5]},
-					   {"Poision":["True","True",4]},
-					   {"Evilatt":["True","True",5]},
-					   {"Gouge":["True","True",5]},
-					   {"Backstab":["False","True",5]},
-					   {"Blind":["False","True",5]},
-					   {"Impulsion":["False","False",0]},
-					   {"Speedup":["False","True",3]},
-					   {"Strangle":["False","True",1]},
-					   {"Sworddance":["False","True",2]}
+			"Skills": [{"Disapper":[1,1,5]},
+					   {"Poision":[0,1,4]},
+					   {"Evilatt":[1,1,5]},
+					   {"Gouge":[1,1,5]},
+					   {"Backstab":[0,1,5]},
+					   {"Blind":[0,1,5]},
+					   {"Impulsion":[0,0,0]},
+					   {"Speedup":[1,0,3]},
+					   {"Strangle":[0,1,1]},
+					   {"Sworddance":[0,1,2]}
 					   ],
 			"World_View": [],
 			"Nature": [],
-			"Pressure": "10",
-			"IsActive": "True",
-			"IsDead": "False"
-		},
-		{
-			"Name": "Tannies",
-			"Profession": "Warrior",
-			"Level": "6",
-			"Weapon": "5",
-			"Amour": "5",
-			"Accessory01": "",
-			"Accessory02": "",
-			"Skills": [],
-			"World_View": [],
-			"Nature": [],
-			"Pressure": "0",
-			"IsActive": "True",
-			"IsDead": "False"
+			"Pressure": 10,
+			"IsActive": 1,
+			"IsDead": 0
 		}
 	]
 

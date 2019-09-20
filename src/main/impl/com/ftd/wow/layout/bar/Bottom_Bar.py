@@ -61,7 +61,7 @@ class Bottom_Bar(object):
         self.__active_skills = self.__current_character.get_active_skills()
         # render the skill bar
         idx = 0
-        for active_skill in self.__current_character.get_active_skills():
+        for active_skill in self.__active_skills:
             temp_pos_x = Image_Util.calculate_skill_in_fight_positionX_by_screen_size(self.__size_w, idx)
             temp_pos_y = Image_Util.calculate_skill_in_fight_positionY_by_screen_size(self.__size_h + self.__pos_y)
             temp_size = Image_Util.calculate_skill_in_fight_size_by_screen_size(self.__size_h + self.__pos_y)

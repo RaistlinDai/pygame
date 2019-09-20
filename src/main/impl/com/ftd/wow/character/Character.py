@@ -21,7 +21,7 @@ class Character (ICharacter):
         # character name
         self.__character_name = name
         # character images
-        self.__fight_skills = {}    # {name:{"skill_obj":A, "isActive":B, "isLearned":C, "Level":D}}
+        self.__fight_skills = {}    # {name:{"Skill_obj":A, "isActive":B, "isLearned":C, "Level":D}}
         self.__camp_skills_images = []
         self.__profession_images = []
 
@@ -46,6 +46,9 @@ class Character (ICharacter):
             
     
     def load_skills(self, character_skills):
+        '''
+        @param character_skills:  {skill_name: Character_skill_obj}
+        '''
         if not self.__prof:
             return
         # load skill images into pygame
@@ -54,15 +57,19 @@ class Character (ICharacter):
             load_character_skill = character_skills[skill.get_skill_name()]
             
             if load_character_skill and isinstance(load_character_skill, Character_Skill):
-                self.__fight_skills[skill.get_skill_name()] = {"skill_obj":skill, 
-                                                               "isActive": load_character_skill.get_is_active(), 
-                                                               "isLearned": load_character_skill.get_is_learned(), 
-                                                               "Level": load_character_skill.get_level()}
-            else:    
-                self.__fight_skills[skill.get_skill_name()] = {"skill_obj":skill, 
-                                                               "isActive": False, 
-                                                               "isLearned": False, 
-                                                               "Level": 0}
+                new_character_skill = Character_Skill(skill.get_skill_name(),
+                                                      load_character_skill.get_is_active(),
+                                                      load_character_skill.get_is_learned(),
+                                                      load_character_skill.get_level(),
+                                                      skill)
+                self.__fight_skills[skill.get_skill_name()] = new_character_skill
+            else:
+                new_character_skill = Character_Skill(skill.get_skill_name(),
+                                                      False,
+                                                      False,
+                                                      0,
+                                                      skill)    
+                self.__fight_skills[skill.get_skill_name()] = new_character_skill
     
         
     def get_stand_image(self):
@@ -87,8 +94,11 @@ class Character (ICharacter):
     def get_active_skills(self):
         active_skills = []
         for skill_name in self.__fight_skills:
-            if self.__fight_skills[skill_name]["isActive"] == True:
-                active_skills.append(self.__fight_skills[skill_name]["skill_obj"])
+            if not isinstance(self.__fight_skills[skill_name], Character_Skill):
+                continue
+            
+            if self.__fight_skills[skill_name].get_is_active() == 1:
+                active_skills.append(self.__fight_skills[skill_name].get_skill())
             
         return active_skills
         
@@ -100,8 +110,8 @@ class Character_Skill (object):
     
     def __init__(self, name=None, isActive=None, isLearned=None, level=None, skill=None):
         self.__name = None
-        self.__isActive = False
-        self.__isLearned = False
+        self.__isActive = 0
+        self.__isLearned = 0
         self.__level = 0
         self.__skill = None
         
@@ -115,6 +125,17 @@ class Character_Skill (object):
             self.__level = level
         if skill and isinstance(skill, ISkill):
             self.__skill = skill
+
+    def get_skill(self):
+        return self.__skill
+
+
+    def set_skill(self, value):
+        self.__skill = value
+
+
+    def del_skill(self):
+        del self.__skill
 
 
     def setup_skill(self, skill):
@@ -169,10 +190,11 @@ class Character_Skill (object):
     def del_level(self):
         del self.__level
 
-            
+    
     name = property(get_name, set_name, del_name, "name's docstring")
     isActive = property(get_is_active, set_is_active, del_is_active, "isActive's docstring")
     isLearned = property(get_is_learned, set_is_learned, del_is_learned, "isLearned's docstring")
     level = property(get_level, set_level, del_level, "level's docstring")
+    skill = property(get_skill, set_skill, del_skill, "skill's docstring")
             
     

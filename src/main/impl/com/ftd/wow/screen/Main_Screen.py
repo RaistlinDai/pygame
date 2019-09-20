@@ -48,14 +48,14 @@ class Main_Screen(object):
     
     def execute(self):
         
-        load_character_skills = Savedata_Analsis.load_savedata()
+        load_characters = Savedata_Analsis.load_savedata(self.__resource_DTO)
         
         # character
-        character_rogue1 = Character("Raistlin", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
-        character_rogue2 = Character("Caramon", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
-        character_rogue3 = Character("Tanis", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
-        character_rogue4 = Character("Flint", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
-        team = Team(character_rogue1, character_rogue2, character_rogue3, character_rogue4)
+#         character_rogue1 = Character("Raistlin", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
+#         character_rogue2 = Character("Caramon", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
+#         character_rogue3 = Character("Tanis", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
+#         character_rogue4 = Character("Flint", self.__resource_DTO.get_profession(Profession_Enum.PROF_ROGUE.name), None)
+        team = Team(load_characters[0])
         
         # enemy
         character_ragnaros = Ragnaros(650,70,550,550)
@@ -101,7 +101,7 @@ class Main_Screen(object):
                 self.__context_DTO.set_current_scene_mode(SceneMode_Enum.FIGHT_SCENE)
                 self.__context_DTO.set_current_scene(self.__resource_DTO.get_scene(FightScene_Enum.MC_BOSS_10.name))
                 self.__context_DTO.get_current_scene().add_active_team(team)
-                self.__context_DTO.get_current_scene().set_current_character(character_rogue1)
+                self.__context_DTO.get_current_scene().set_current_character(load_characters[0])
                 self.__context_DTO.get_current_scene().get_cover_character(cursor_x, cursor_y)
                 
                 # render the enemy
