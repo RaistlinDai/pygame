@@ -12,6 +12,7 @@ from src.main.impl.com.ftd.wow.layout.bar.Bottom_Bar import Bottom_Bar
 from src.main.impl.com.ftd.wow.profession.base.Profession_Enum import Profession_Enum
 import pygame
 from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
+from src.main.impl.com.ftd.wow.enemy.mc.Enemy_MC_Enum import Enemy_MC_Enum
 
 class Resource_DTO(object):
     '''
@@ -21,12 +22,14 @@ class Resource_DTO(object):
     def __init__(self):
         self.__backgrounds = {}
         self.__professions = {}
+        self.__enemies = {}
         self.__mouse_cursor = None
         
     
     def load_resources(self):
         self._load_backgrounds()
         self._load_professions()
+        self._load_enemies()
         self._load_mouse_cursor()
         
     
@@ -51,7 +54,16 @@ class Resource_DTO(object):
         load the professions into dict
         '''
         for pro in Profession_Enum:
-            self.__professions[pro.name] = pro.value()
+            self.__professions[pro.name] = pro.value[0]()
+    
+    
+    def _load_enemies(self):
+        
+        '''
+        load the enemies into dict
+        '''
+        for enemy in Enemy_MC_Enum:
+            self.__enemies[enemy.name] = enemy.value[0]()
     
     
     def _load_mouse_cursor(self):
@@ -74,6 +86,13 @@ class Resource_DTO(object):
         get the profession by name
         '''
         return self.__professions[profession_name]
+    
+    
+    def get_enemy(self, enemy_name):
+        '''
+        get the enemy by name
+        '''
+        return self.__enemies[enemy_name]
     
     
     def get_mouse_cursor(self):

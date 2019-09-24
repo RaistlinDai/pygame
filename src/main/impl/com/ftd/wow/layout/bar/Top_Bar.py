@@ -12,7 +12,7 @@ class Top_Bar(object):
     
     '''
     
-    def __init__(self, size_w=None, size_h=None):
+    def __init__(self, screen_w=None, screen_h=None):
         # size
         self.__size_w = 1280
         self.__size_h = 96
@@ -21,9 +21,9 @@ class Top_Bar(object):
         self.__pos_y = 0
         # images
         self.__image = pygame.image.load(Materials_Constant.top_bar_image_filename).convert_alpha()
-        if size_w and size_h:
-            self.__size_w = size_w
-            self.__size_h = Image_Util.calculate_top_bar_height_by_screen_size(size_h)
+        if screen_w and screen_h:
+            self.__size_w = screen_w
+            self.__size_h = Image_Util.calculate_top_bar_height_by_screen_size(screen_h)
             self.__image = pygame.transform.scale(self.__image, (self.__size_w, self.__size_h))
 
     

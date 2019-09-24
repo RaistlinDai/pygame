@@ -8,6 +8,7 @@ import pygame
 from src.main.api.com.ftd.wow.character.ICharacter import ICharacter
 from src.main.api.com.ftd.wow.profession.IProfession import IProfession
 from src.main.api.com.ftd.wow.skill.ISkill import ISkill
+from src.main.impl.com.ftd.wow.profession.base.Profession_Enum import Profession_Enum
 
 class Character (ICharacter):
     '''
@@ -82,9 +83,22 @@ class Character (ICharacter):
     
     def resize_character_images(self, size_w, size_h):            
         idx1 = 0
+        
+        # retrieve profession image rage
+        rate = self.get_character_profession_rate()
+        
         for img in self.__profession_images:
-            self.__profession_images[idx1] = pygame.transform.scale(img, (size_w, size_h))
+            self.__profession_images[idx1] = pygame.transform.scale(img, (int(size_w*rate), int(size_h*rate)))
             idx1 = idx1 + 1
+            
+            
+    def get_character_profession_rate(self):
+        # retrieve profession image rage
+        rate = 1
+        for prof in Profession_Enum:
+            if prof.value[0] == self.__prof.__class__ :
+                rate = prof.value[1]
+        return rate
     
     
     def get_character_name(self):

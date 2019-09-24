@@ -8,9 +8,6 @@ from pygame.locals import *
 from src.main.impl.com.ftd.wow.button.Horde_Button import Horde_Button
 import time; 
 from src.main.impl.com.ftd.wow.scene.menu.Scene_Login import Scene_Login
-from src.main.impl.com.ftd.wow.character.Character import Character
-from src.main.impl.com.ftd.wow.enemy.boss.Ragnaros import Ragnaros
-from src.main.impl.com.ftd.wow.profession.base.Profession_Enum import Profession_Enum
 from src.main.impl.com.ftd.wow.team.Team import Team
 from src.main.impl.com.ftd.wow.frame.Resource_DTO import Resource_DTO
 from src.main.impl.com.ftd.wow.scene.MenuScene_Enum import MenuScene_Enum
@@ -18,8 +15,9 @@ from src.main.impl.com.ftd.wow.scene.FightScene_Enum import FightScene_Enum
 from src.main.impl.com.ftd.wow.frame.Context_DTO import Context_DTO
 from src.main.impl.com.ftd.wow.scene.base.SceneMode_Enum import SceneMode_Enum
 from src.main.impl.com.ftd.wow.savedata.Savedata_Analysis import Savedata_Analsis
+from src.main.impl.com.ftd.wow.util.Enemy_Util import Enemy_Util
 
-class Main_Screen(object):
+class MainScreen(object):
     '''
     
     '''
@@ -48,14 +46,14 @@ class Main_Screen(object):
         
     
     def execute(self):
-        
+        # load savedata
         load_characters = Savedata_Analsis.load_savedata(self.__resource_DTO)
-        team = Team(None, None, load_characters[0], load_characters[1])
+        self.__context_DTO.set_active_team(Team(None, None, load_characters[0], load_characters[1]))
+        # generate enemy
+        generated_enemies = self.generate_enemy(self.__resource_DTO)
+        self.__context_DTO.set_active_enemies(Team(generated_enemies[0], generated_enemies[1], generated_enemies[2], None))
         
-        # enemy
-        character_ragnaros = Ragnaros(650,70,550,550)
-        
-        # login scene
+        # setup current scene
         self.__context_DTO.set_current_scene_mode(SceneMode_Enum.MENU_SCENE)
         self.__context_DTO.set_current_scene(self.__resource_DTO.get_scene(MenuScene_Enum.HORDE_LOGIN.name))
         
@@ -95,12 +93,15 @@ class Main_Screen(object):
                 # re-load the background
                 self.__context_DTO.set_current_scene_mode(SceneMode_Enum.FIGHT_SCENE)
                 self.__context_DTO.set_current_scene(self.__resource_DTO.get_scene(FightScene_Enum.MC_BOSS_10.name))
-                self.__context_DTO.get_current_scene().add_active_team(team)
-                self.__context_DTO.get_current_scene().set_current_character(load_characters[0])
-                self.__context_DTO.get_current_scene().get_cover_character(cursor_x, cursor_y)
+                self.__context_DTO.get_current_scene().add_active_team(self.__context_DTO.get_active_team())
+                self.__context_DTO.get_current_scene().set_current_character(load_characters[1])
                 
-                # render the enemy
-                self._screen.blit(character_ragnaros.get_stand_image(), character_ragnaros.get_position(), character_ragnaros.get_position_and_size())
+                self.__context_DTO.set_in_fight(True)
+                if self.__context_DTO.get_in_fight() == True:
+                    self.__context_DTO.get_current_scene().add_active_enemies(self.__context_DTO.get_active_enemies())
+                
+                # Mouse cursor event
+                self.__context_DTO.get_current_scene().cursor_event(cursor_x, cursor_y)
             
             #==========================================#
             #               Event handler              #
@@ -129,7 +130,7 @@ class Main_Screen(object):
             pressed_mouse = pygame.mouse.get_pressed()
         
             # mouse click event
-            if pressed_mouse[0]:
+            if pressed_mouse[0] or pressed_mouse[2]:
                 # menu scene
                 if (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.MENU_SCENE):
                     # horde button click
@@ -138,7 +139,7 @@ class Main_Screen(object):
                         horde_button_click_timer = time.time()*1000.0
                 
                 elif (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.FIGHT_SCENE):
-                    pass
+                    self.__context_DTO.get_current_scene().mouse_click_event(pressed_mouse)
             
             # render cursor
             self.render_cursor(cursor_x, cursor_y)
@@ -164,3 +165,10 @@ class Main_Screen(object):
         cursor_y-= self.__resource_DTO.get_mouse_cursor().get_height() / 2
         # render the cursor
         self._screen.blit(self.__resource_DTO.get_mouse_cursor(), (cursor_x, cursor_y))
+    
+    
+    '''
+    TODO: move to other place
+    '''
+    def generate_enemy(self, resource_DTO):
+        return Enemy_Util.generate_enemy_by_scene(self, resource_DTO)

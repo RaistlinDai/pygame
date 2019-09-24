@@ -14,6 +14,6 @@ class Profession_Enum(Enum):
     classdocs
     @attention: the value structure: profession constructor
     '''
-
-    PROF_WARROIR = Warrior
-    PROF_ROGUE = Rogue
+    # Enum name = [Profession name, image size rage]
+    PROF_WARROIR = [Warrior, 1.3]
+    PROF_ROGUE = [Rogue, 1]

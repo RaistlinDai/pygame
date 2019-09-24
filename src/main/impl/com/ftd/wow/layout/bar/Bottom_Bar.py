@@ -24,6 +24,10 @@ class Bottom_Bar(object):
         self.__current_character = None
         # active skills
         self.__active_skills = None
+        # cover skill
+        self.__current_cover_skill = None
+        # select skill
+        self.__current_select_skill = None
         
         if current_character:
             self.__current_character = current_character
@@ -66,7 +70,12 @@ class Bottom_Bar(object):
             temp_pos_y = Image_Util.calculate_skill_in_fight_positionY_by_screen_size(self.__size_h + self.__pos_y)
             temp_size = Image_Util.calculate_skill_in_fight_size_by_screen_size(self.__size_h + self.__pos_y)
             
-            active_skill_image = active_skill.get_skill_image()
+            if self.__current_select_skill and self.__current_select_skill.get_skill_name() == active_skill.get_skill_name():
+                active_skill_image = active_skill.get_skill_image_select()
+            elif self.__current_cover_skill and self.__current_cover_skill.get_skill_name() == active_skill.get_skill_name():
+                active_skill_image = active_skill.get_skill_image_select()
+            else:
+                active_skill_image = active_skill.get_skill_image()
             active_skill_image = pygame.transform.scale(active_skill_image, (temp_size, temp_size))
             
             idx = idx + 1
@@ -75,4 +84,48 @@ class Bottom_Bar(object):
             
     def set_current_character(self, current_character):
         self.__current_character = current_character
+            
+            
+    def render_cover_skill(self, cursor_x, cursor_y):
+        if not self.__active_skills:
+            return
+        
+        temp_pos_x = []
+        idx = 0
+        for idx in [0,1,2,3]:
+            temp_pos_x.append(Image_Util.calculate_skill_in_fight_positionX_by_screen_size(self.__size_w, idx))
+            temp_pos_y = Image_Util.calculate_skill_in_fight_positionY_by_screen_size(self.__size_h + self.__pos_y)
+            temp_size = Image_Util.calculate_skill_in_fight_size_by_screen_size(self.__size_h + self.__pos_y)
+            
+        if (temp_pos_x[0] < cursor_x < temp_pos_x[0] + temp_size) and (temp_pos_y < cursor_y < temp_pos_y + temp_size) and self.__active_skills[0]:
+            if not self.__current_select_skill:
+                self.__current_cover_skill = self.__active_skills[0]
+        elif (temp_pos_x[1] < cursor_x < temp_pos_x[1] + temp_size) and (temp_pos_y < cursor_y < temp_pos_y + temp_size) and self.__active_skills[1]:
+            if not self.__current_select_skill:
+                self.__current_cover_skill = self.__active_skills[1]
+        elif (temp_pos_x[2] < cursor_x < temp_pos_x[2] + temp_size) and (temp_pos_y < cursor_y < temp_pos_y + temp_size) and self.__active_skills[2]:
+            if not self.__current_select_skill:
+                self.__current_cover_skill = self.__active_skills[2]
+        elif (temp_pos_x[3] < cursor_x < temp_pos_x[3] + temp_size) and (temp_pos_y < cursor_y < temp_pos_y + temp_size) and self.__active_skills[3]:
+            if not self.__current_select_skill:
+                self.__current_cover_skill = self.__active_skills[3]
+        else:
+            self.__current_cover_skill = None
+            
+    
+    def get_current_select_skill(self):
+        return self.__current_select_skill
+        
+    
+    def mouse_click_event(self, pressed_mouse):
+        
+        if pressed_mouse[0]:
+            if self.__current_cover_skill:
+                self.__current_select_skill = self.__current_cover_skill
+            else:
+                pass
+            
+        elif pressed_mouse[2]:
+            if self.__current_select_skill:
+                self.__current_select_skill = None
             

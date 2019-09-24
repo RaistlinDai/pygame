@@ -10,11 +10,38 @@ class Context_DTO(object):
     '''
     
     def __init__(self):
-        self.__active_team = {}          # position : character name
+        self.__active_team = None
+        self.__active_enemies = None
         self.__current_scene = None
         self.__current_scene_mode = None
         self.__screen_width = 1280
         self.__screen_height = 720
+        self.__in_fight = False
+
+
+    def get_active_enemies(self):
+        return self.__active_enemies
+
+
+    def set_active_enemies(self, value):
+        self.__active_enemies = value
+
+
+    def del_active_enemies(self):
+        del self.__active_enemies
+
+
+    def get_in_fight(self):
+        return self.__in_fight
+
+
+    def set_in_fight(self, value):
+        self.__in_fight = value
+
+
+    def del_in_fight(self):
+        del self.__in_fight
+
 
     def get_current_scene_mode(self):
         return self.__current_scene_mode
@@ -26,7 +53,6 @@ class Context_DTO(object):
 
     def del_current_scene_mode(self):
         del self.__current_scene_mode
-
 
 
     def get_screen_height(self):
@@ -82,5 +108,7 @@ class Context_DTO(object):
     screen_size = property(get_screen_width, set_screen_width, del_screen_width, "screen_width's docstring")
     screen_height = property(get_screen_height, set_screen_height, del_screen_height, "screen_height's docstring")
     current_scene_mode = property(get_current_scene_mode, set_current_scene_mode, del_current_scene_mode, "current_scene_mode's docstring")
+    in_fight = property(get_in_fight, set_in_fight, del_in_fight, "in_fight's docstring")
+    active_enemies = property(get_active_enemies, set_active_enemies, del_active_enemies, "active_enemies's docstring")
         
     

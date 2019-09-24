@@ -69,15 +69,28 @@ class Image_Util(object):
     
     
     @staticmethod
-    def calculate_character_position_by_screen_size(screen_w, screen_y, team_position):
+    def calculate_character_position_by_screen_size(screen_w, screen_y, team_position, profession_image_rate):
         '''
         Calculate the standard character position according to the screen's size
-        The default value is 1:50-420, 2:150-420, 3:250-420, 4:350-420 in 1280*720
+        The default value is 1:50-450, 2:150-450, 3:250-450, 4:350-450 in 1280*720
         @param screen_h: the height of screen
         @return: the standard position of character 
         '''
         standard_x = (50 + 100 * (team_position - 1)) * screen_w / 1280
-        standard_y = 450 * screen_y / 720
+        standard_y = (550 - 100 * profession_image_rate) * screen_y / 720
+        return (int(standard_x), int(standard_y))
+    
+    
+    @staticmethod
+    def calculate_enemy_position_by_screen_size(screen_w, screen_y, team_position, profession_image_rate):
+        '''
+        Calculate the standard enemy position according to the screen's size
+        The default value is 1:750-450, 2:830-450, 3:960-450, 4:1090-450 in 1280*720
+        @param screen_h: the height of screen
+        @return: the standard position of character 
+        '''
+        standard_x = (750 + 130 * (team_position - 1)) * screen_w / 1280
+        standard_y = (550 - 100 * profession_image_rate) * screen_y / 720
         return (int(standard_x), int(standard_y))
     
     
@@ -114,7 +127,7 @@ class Image_Util(object):
         @param screen_h: the height of screen
         @return: standard_Y: the standard position Y of skill 
         '''
-        standard_Y = 600 * screen_h / 720
+        standard_Y = 570 * screen_h / 720
         return int(standard_Y)
     
     

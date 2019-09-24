@@ -37,7 +37,14 @@ class Materials_Constant:
     # ============================================= #
     #                 Enemy                         #
     # ============================================= #
-    boss_ragnaros_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\boss\\ragnaros.png'
+    enemy_fireelemental_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\fireelemental.png',
+                                          'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\fireelemental-selected.png']
+    enemy_lavaelemental_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\lavaelemental.png',
+                                          'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\lavaelemental-selected.png']
+    enemy_volcanicelemental_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\volcanicelemental.png',
+                                              'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\volcanicelemental-selected.png']
+    enemy_moltengaint_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\moltengaint.png']
+    boss_ragnaros_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\boss\\ragnaros.png']
     
     # ============================================= #
     #                 Skill label                   #
