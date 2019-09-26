@@ -102,3 +102,14 @@ class Materials_Constant:
     rogue_impulsion_inactive_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\rogue\\impulsion-inactive.png'
     
     chaos_bolt_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\skill\\warlock\\chaos_bolt.png'
+    
+    # ============================================= #
+    #                 action effect                 #
+    # ============================================= #
+    action_effect_flat_cut_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\actioneffect\\flat_cut.png'
+    action_effect_strike_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\actioneffect\\strike.png'
+    action_effect_vertical_cut_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\actioneffect\\vertical_cut.png'
+    action_effect_roar_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\actioneffect\\roar.png'
+    action_effect_chop_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\actioneffect\\chop.png'
+    
+    

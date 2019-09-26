@@ -14,27 +14,8 @@ class Strangle(ISkill):
     
     
     def __init__(self):
-        # give a name
-        self.__name = 'Strangle'
-        # images
-        self.__image = pygame.image.load(Materials_Constant.rogue_strangle_image_filename).convert_alpha()
-        self.__image_select = pygame.image.load(Materials_Constant.rogue_strangle_select_image_filename).convert_alpha()
-        self.__image_inactive = pygame.image.load(Materials_Constant.rogue_strangle_inactive_image_filename).convert_alpha()
-        
-    
-    def get_skill_image(self):
-        return self.__image
-
-
-    def get_skill_image_select(self):
-        return self.__image_select
-    
-    
-    def get_skill_image_inactive(self):
-        return self.__image_inactive
-
-    
-    def get_skill_name(self):
-        return self.__name
-    
+        super().__init__('Strangle', pygame.image.load(Materials_Constant.rogue_strangle_image_filename).convert_alpha(),\
+                         pygame.image.load(Materials_Constant.rogue_strangle_select_image_filename).convert_alpha(), \
+                         pygame.image.load(Materials_Constant.rogue_strangle_inactive_image_filename).convert_alpha(), \
+                         pygame.image.load(Materials_Constant.action_effect_vertical_cut_image_filename).convert_alpha())
     
