@@ -49,15 +49,23 @@ class CharacterAgainst (ICharacter):
         return self.__enemy_images[1]
     
     
-    def resize_character_images(self, size_w, size_h):            
-        idx1 = 0
+    def get_fighting_image(self):
+        return self.__enemy_images[2]
+    
+    
+    def resize_character_images(self, size_w, size_h, calc_in_fight_w, calc_in_fight_h):
         # retrieve profession image rage
         rate = self.get_character_enemy_type_rate()
+        idx1 = 0
         for img in self.__enemy_images:
-            self.__enemy_images[idx1] = pygame.transform.scale(img, (int(size_w*rate), int(size_h*rate)))
+            # fighting image
+            if idx1 == 2:
+                self.__enemy_images[idx1] = pygame.transform.scale(img, (int(calc_in_fight_w*rate), int(calc_in_fight_h*rate)))
+            else:
+                self.__enemy_images[idx1] = pygame.transform.scale(img, (int(size_w*rate), int(size_h*rate)))
             idx1 = idx1 + 1
             
-            
+                   
     def get_character_enemy_type_rate(self):
         # retrieve profession image rage
         rate = 1

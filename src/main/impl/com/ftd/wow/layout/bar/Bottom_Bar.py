@@ -117,6 +117,10 @@ class Bottom_Bar(object):
         return self.__current_select_skill
         
     
+    def set_current_select_skill(self, current_select_skill):
+        self.__current_select_skill = current_select_skill
+    
+    
     def mouse_click_event(self, pressed_mouse):
         
         if pressed_mouse[0]:

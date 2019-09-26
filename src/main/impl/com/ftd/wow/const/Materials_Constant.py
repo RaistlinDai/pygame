@@ -29,20 +29,28 @@ class Materials_Constant:
     #                 Profession                    #
     # ============================================= #
     character_rogue_image_filenames = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-t1-01.png',
-                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-t1-01-select.png']
+                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-t1-01-select.png',
+                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-fight.png']
     
     character_warrior_image_filenames = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\warrior\\armorset_orc-male-warrior-t1-01.png',
-                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\warrior\\armorset_orc-male-warrior-t1-01-select.png']
+                                         'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\warrior\\armorset_orc-male-warrior-t1-01-select.png',
+                                         'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\warrior\\armorset_orc-male-warrior-fight.png']
     
     # ============================================= #
     #                 Enemy                         #
     # ============================================= #
-    enemy_fireelemental_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\fireelemental.png',
-                                          'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\fireelemental-selected.png']
-    enemy_lavaelemental_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\lavaelemental.png',
-                                          'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\lavaelemental-selected.png']
-    enemy_volcanicelemental_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\volcanicelemental.png',
-                                              'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\volcanicelemental-selected.png']
+    enemy_fireelemental_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\fireelemental\\fireelemental.png',
+                                          'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\fireelemental\\fireelemental-selected.png',
+                                          'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\fireelemental\\fireelemental-fight.png']
+    
+    enemy_lavaelemental_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\lavaelemental\\lavaelemental.png',
+                                          'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\lavaelemental\\lavaelemental-selected.png',
+                                          'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\lavaelemental\\lavaelemental-fight.png']
+    
+    enemy_volcanicelemental_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\volcanicelemental\\volcanicelemental.png',
+                                              'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\volcanicelemental\\volcanicelemental-selected.png',
+                                              'main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\volcanicelemental\\volcanicelemental-fight.png']
+    
     enemy_moltengaint_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\moltengaint.png']
     boss_ragnaros_image_filename = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\enemy\\boss\\ragnaros.png']
     

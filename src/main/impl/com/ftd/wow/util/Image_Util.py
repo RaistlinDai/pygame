@@ -95,6 +95,45 @@ class Image_Util(object):
     
     
     @staticmethod
+    def calculate_character_in_fight_height_by_screen_size(screen_h):
+        '''
+        Calculate the fighting character height according to the screen's height
+        The default value is 100 in 1280*720
+        @param screen_h: the height of screen
+        @return: the standard height of character 
+        '''
+        standard_h = 200 * screen_h / 720
+        return int(standard_h)
+    
+    
+    @staticmethod
+    def calculate_character_in_fight_position_by_screen_size(screen_w, screen_y, team_position, profession_image_rate):
+        '''
+        Calculate the standard character position according to the screen's size
+        The default value is 1:50-450, 2:150-450, 3:250-450, 4:350-450 in 1280*720
+        @param screen_h: the height of screen
+        @return: the standard position of character 
+        '''
+        standard_x = (50 + 50 * (team_position - 1)) * screen_w / 1280
+        standard_y = (380 - 100 * profession_image_rate) * screen_y / 720
+        return (int(standard_x), int(standard_y))
+
+
+    
+    @staticmethod
+    def calculate_enemy_in_fight_position_by_screen_size(screen_w, screen_y, team_position, profession_image_rate):
+        '''
+        Calculate the standard character position according to the screen's size
+        The default value is 1:50-450, 2:150-450, 3:250-450, 4:350-450 in 1280*720
+        @param screen_h: the height of screen
+        @return: the standard position of character 
+        '''
+        standard_x = (750 + 50 * (team_position - 1)) * screen_w / 1280
+        standard_y = (380 - 100 * profession_image_rate) * screen_y / 720
+        return (int(standard_x), int(standard_y))
+    
+    
+    @staticmethod
     def calculate_skill_in_fight_height_by_screen_size(screen_h):
         '''
         Calculate the skill label height according to the screen's height
