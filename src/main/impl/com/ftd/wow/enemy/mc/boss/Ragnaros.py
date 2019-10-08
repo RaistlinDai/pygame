@@ -14,4 +14,4 @@ class Ragnaros (IEnemy):
     '''
     
     def __init__(self):
-        super().__init__(Materials_Constant.boss_ragnaros_image_filename)
+        super().__init__(Materials_Constant.boss_ragnaros_image_filename, [100, 12, 8, 10, 5, 5])

@@ -14,5 +14,5 @@ class LavaElemental (IEnemy):
     '''
     
     def __init__(self):
-        super().__init__(Materials_Constant.enemy_lavaelemental_image_filename)
+        super().__init__(Materials_Constant.enemy_lavaelemental_image_filename, [12, 10, 4, 15, 1, 8, 1.2])
 

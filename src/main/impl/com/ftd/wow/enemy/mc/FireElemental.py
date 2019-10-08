@@ -14,4 +14,6 @@ class FireElemental (IEnemy):
     '''
     
     def __init__(self):
-        super().__init__(Materials_Constant.enemy_fireelemental_image_filename)
+        super().__init__(Materials_Constant.enemy_fireelemental_image_filename, \
+                         [16, 12, 6, 11, 30, 15, 1.2])
+    

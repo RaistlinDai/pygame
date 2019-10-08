@@ -182,4 +182,18 @@ class Image_Util(object):
         return int(standard_size)
     
     
+    @staticmethod
+    def calculate_skill_effect_size_by_screen_size(screen_w, screen_h):
+        '''
+        Calculate the skill effect size according to the screen's size
+        The default value is 500,300 in 1280*720
+        @param screen_w: the width of screen
+        @param screen_h: the height of screen
+        @return: standard_w, standard_h: the standard size of skill 
+        '''
+        standard_w = 500 * screen_w / 1280
+        standard_h = 300 * screen_h / 720
+        return (int(standard_w), int(standard_h))
+    
+    
     

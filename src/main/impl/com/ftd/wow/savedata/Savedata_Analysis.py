@@ -46,7 +46,12 @@ class Savedata_Analsis (object):
                     load_character_skills[skill_name] = character_skill
             
             # create character
-            load_character = Character(temp_char['Name'], resource_DTO.get_profession(temp_char['Profession']), load_character_skills)
+            load_character = Character(temp_char['Name'], \
+                                       resource_DTO.get_profession(temp_char['Profession']), \
+                                       int(temp_char['Level']), \
+                                       int(temp_char['Weapon']), \
+                                       int(temp_char['Amour']), \
+                                       load_character_skills)
             load_characters.append(load_character)
             
         return load_characters

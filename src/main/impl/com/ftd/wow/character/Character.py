@@ -15,7 +15,7 @@ class Character (ICharacter):
     
     '''
     
-    def __init__(self, name, prof, character_skills):
+    def __init__(self, name, prof, level, weapon, amour, character_skills):
         
         # super class constructor
         super().__init__()
@@ -31,11 +31,34 @@ class Character (ICharacter):
         if prof and isinstance(prof, IProfession):
             self.__prof = prof
         
+        # level
+        self.__level = level
+        # weapon
+        self.__weapon = weapon
+        # level
+        self.__amour = amour
+        
         # images
         self.load_profession_images()
         # skills
         self.load_skills(character_skills)
         
+    
+    def get_profession(self):
+        return self.__prof
+    
+    
+    def get_level(self):
+        return self.__level
+    
+    
+    def get_weapon(self):
+        return self.__weapon
+    
+    
+    def get_amour(self):
+        return self.__amour
+    
     
     def load_profession_images(self):
         if not self.__prof:
@@ -145,6 +168,7 @@ class Character_Skill (object):
             self.__level = level
         if skill and isinstance(skill, ISkill):
             self.__skill = skill
+
 
     def get_skill(self):
         return self.__skill

@@ -14,7 +14,11 @@ class Disapper(ISkill):
     
     
     def __init__(self):
-        super().__init__('Disapper', pygame.image.load(Materials_Constant.rogue_disapper_image_filename).convert_alpha(),\
+        skill_images = [pygame.image.load(Materials_Constant.rogue_disapper_image_filename).convert_alpha(),\
                          pygame.image.load(Materials_Constant.rogue_disapper_select_image_filename).convert_alpha(), \
                          pygame.image.load(Materials_Constant.rogue_disapper_inactive_image_filename).convert_alpha(), \
-                         pygame.image.load(Materials_Constant.action_effect_vertical_cut_image_filename).convert_alpha())
+                         pygame.image.load(Materials_Constant.action_effect_vertical_cut_image_filename).convert_alpha()]
+        
+        skill_properties = []
+        
+        super().__init__('Disapper', skill_images, skill_properties)

@@ -15,4 +15,4 @@ class Moltengaint (IEnemy):
     
     
     def __init__(self):
-        super().__init__(Materials_Constant.enemy_moltengaint_image_filename)
+        super().__init__(Materials_Constant.enemy_moltengaint_image_filename, [50, 10, 10, 1, 4, 3, 1.2])

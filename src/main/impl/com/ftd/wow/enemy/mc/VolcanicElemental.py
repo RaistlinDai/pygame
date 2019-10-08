@@ -14,4 +14,4 @@ class VolcanicElemental (IEnemy):
     '''
     
     def __init__(self):
-        super().__init__(Materials_Constant.enemy_volcanicelemental_image_filename)
+        super().__init__(Materials_Constant.enemy_volcanicelemental_image_filename, [20, 7, 6, 5, 2, 2, 1.2])

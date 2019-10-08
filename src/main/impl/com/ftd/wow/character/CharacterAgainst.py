@@ -14,7 +14,7 @@ class CharacterAgainst (ICharacter):
     
     '''
     
-    def __init__(self, name, enemy_type):
+    def __init__(self, name, enemy_type, level=1):
         
         # super class constructor
         super().__init__()
@@ -28,9 +28,24 @@ class CharacterAgainst (ICharacter):
         if enemy_type and isinstance(enemy_type, IEnemy):
             self.__enemy_type = enemy_type
         
+        # level
+        self.__level = level
+        
         # images
         self.load_enemy_images()
+    
         
+    def get_level(self):
+        return self.__level
+    
+    
+    def get_weapon(self):
+        return 1
+    
+    
+    def get_amour(self):
+        return 1
+    
     
     def load_enemy_images(self):
         if not self.__enemy_type:
@@ -77,3 +92,7 @@ class CharacterAgainst (ICharacter):
     
     def get_character_name(self):
         return self.__character_name
+    
+    
+    def get_profession(self):
+        return self.__enemy_type

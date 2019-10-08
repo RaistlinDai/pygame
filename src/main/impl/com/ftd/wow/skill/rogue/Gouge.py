@@ -14,8 +14,12 @@ class Gouge(ISkill):
     
     
     def __init__(self):
-        super().__init__('Gouge', pygame.image.load(Materials_Constant.rogue_gouge_image_filename).convert_alpha(),\
+        skill_images = [pygame.image.load(Materials_Constant.rogue_gouge_image_filename).convert_alpha(),\
                          pygame.image.load(Materials_Constant.rogue_gouge_select_image_filename).convert_alpha(), \
                          pygame.image.load(Materials_Constant.rogue_gouge_inactive_image_filename).convert_alpha(), \
-                         pygame.image.load(Materials_Constant.action_effect_vertical_cut_image_filename).convert_alpha())
+                         pygame.image.load(Materials_Constant.action_effect_vertical_cut_image_filename).convert_alpha()]
+        
+        skill_properties = []
+        
+        super().__init__('Gouge', skill_images, skill_properties)
     

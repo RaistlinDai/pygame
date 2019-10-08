@@ -3,8 +3,6 @@ Created on Sep 23, 2019
 
 @author: ftd
 '''
-from src.main.impl.com.ftd.wow.enemy.mc.FireElemental import FireElemental
-from src.main.impl.com.ftd.wow.enemy.mc.LavaElemental import LavaElemental
 from src.main.impl.com.ftd.wow.character.CharacterAgainst import CharacterAgainst
 
 class Enemy_Util(object):

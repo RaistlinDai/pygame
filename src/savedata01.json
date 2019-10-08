@@ -28,9 +28,9 @@
 		{
 			"Name": "Caramon",
 			"Profession": "PROF_WARROIR",
-			"Level": "6",
-			"Weapon": "3",
-			"Amour": "5",
+			"Level": "1",
+			"Weapon": "5",
+			"Amour": "4",
 			"Accessory01": "",
 			"Accessory02": "",
 			"Skills": [{"Demoralizing":[1,1,2]},

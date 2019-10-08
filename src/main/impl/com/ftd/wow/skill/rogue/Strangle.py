@@ -14,8 +14,12 @@ class Strangle(ISkill):
     
     
     def __init__(self):
-        super().__init__('Strangle', pygame.image.load(Materials_Constant.rogue_strangle_image_filename).convert_alpha(),\
+        skill_images = [pygame.image.load(Materials_Constant.rogue_strangle_image_filename).convert_alpha(),\
                          pygame.image.load(Materials_Constant.rogue_strangle_select_image_filename).convert_alpha(), \
                          pygame.image.load(Materials_Constant.rogue_strangle_inactive_image_filename).convert_alpha(), \
-                         pygame.image.load(Materials_Constant.action_effect_vertical_cut_image_filename).convert_alpha())
+                         pygame.image.load(Materials_Constant.action_effect_vertical_cut_image_filename).convert_alpha()]
+        
+        skill_properties = []
+        
+        super().__init__('Strangle', skill_images, skill_properties)
     

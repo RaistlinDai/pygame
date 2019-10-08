@@ -14,8 +14,12 @@ class Impulsion(ISkill):
     
     
     def __init__(self):
-        super().__init__('Impulsion', pygame.image.load(Materials_Constant.rogue_impulsion_image_filename).convert_alpha(),\
+        skill_images = [pygame.image.load(Materials_Constant.rogue_impulsion_image_filename).convert_alpha(),\
                          pygame.image.load(Materials_Constant.rogue_impulsion_select_image_filename).convert_alpha(), \
                          pygame.image.load(Materials_Constant.rogue_impulsion_inactive_image_filename).convert_alpha(), \
-                         pygame.image.load(Materials_Constant.action_effect_vertical_cut_image_filename).convert_alpha())
+                         pygame.image.load(Materials_Constant.action_effect_vertical_cut_image_filename).convert_alpha()]
+        
+        skill_properties = []
+        
+        super().__init__('Impulsion', skill_images, skill_properties)
     

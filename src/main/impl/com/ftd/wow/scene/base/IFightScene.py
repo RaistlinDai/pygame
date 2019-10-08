@@ -8,6 +8,7 @@ from src.main.api.com.ftd.wow.scene.IScene import IScene
 from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
 from src.main.impl.com.ftd.wow.util.Enemy_Util import Enemy_Util
 import time
+from src.main.impl.com.ftd.wow.util.Fight_Util import Fight_Util
 
 class IFightScene(IScene):
     '''
@@ -43,6 +44,7 @@ class IFightScene(IScene):
         
         self.__is_fighting = False
         self.__fighting_timer = 0
+        self.__is_fighting_in_round = False
         
         # setup the active team and characters
         self.add_active_team(active_team)
@@ -183,7 +185,16 @@ class IFightScene(IScene):
         # image timer
         current_time = time.time()*1000.0
         
+        # in fight
         if self.__is_fighting and self.__fighting_timer > 0 and current_time - self.__fighting_timer <= 1000:
+            # calculate attack result
+            '''
+            @todo: remove self.__is_fighting_in_round for skill calculation testing
+            '''
+            if not self.__is_fighting_in_round:
+                Fight_Util.calculate_fighting(self.__current_selection, self.__current_target, self.__bottom_bar.get_current_select_skill())
+                self.__is_fighting_in_round = True
+                
             # render the character
             if self.__active_team:
                 characters = self.__active_team.get_teammembers()
@@ -208,7 +219,7 @@ class IFightScene(IScene):
                         screen_ins.blit(self.__current_target.get_fighting_image(), (calc_w,calc_h))
                         break
             
-            # render the character
+            # render the enemy
             if self.__active_enemies:
                 enemies = self.__active_enemies.get_teammembers()
             
@@ -232,6 +243,11 @@ class IFightScene(IScene):
                         screen_ins.blit(self.__current_target.get_fighting_image(), (calc_w,calc_h))
                         break
             
+            # render the skill effect
+            if self.__bottom_bar.get_current_select_skill():
+                effect_img = self.__bottom_bar.get_current_select_skill().get_effect_image()
+                screen_ins.blit(effect_img, Image_Util.calculate_skill_effect_size_by_screen_size(self.__size_w, self.__size_h))
+            
         else:
             if self.__fighting_timer > 0 and current_time - self.__fighting_timer > 1000:
                 # release select skill
@@ -239,6 +255,7 @@ class IFightScene(IScene):
                 
             self.__is_fighting = False
             self.__fighting_timer = 0
+            self.__is_fighting_in_round = False
             
             
     def add_active_team(self, active_team):
