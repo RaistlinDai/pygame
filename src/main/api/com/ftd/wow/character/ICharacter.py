@@ -24,8 +24,35 @@ class ICharacter(object):
         self.__physical_dots = {} # {SkillName: {1:SkillEffect, 2:SkillEffect}}
         self.__magic_dots = {}    # {SkillName: {1:SkillEffect, 2:SkillEffect}}
         
+        self.__physical_hots = {} # {SkillName: {1:SkillEffect, 2:SkillEffect}}
+        self.__magic_hots = {}    # {SkillName: {1:SkillEffect, 2:SkillEffect}}
+        
         self.__debuffs = {}       # {SkillName: {1:SkillEffect, 2:SkillEffect}}
         self.__buffs = {}         # {SkillName: {1:SkillEffect, 2:SkillEffect}}
+
+
+    def get_physical_hots(self):
+        return self.__physical_hots
+
+
+    def get_magic_hots(self):
+        return self.__magic_hots
+
+
+    def set_physical_hots(self, value):
+        self.__physical_hots = value
+
+
+    def set_magic_hots(self, value):
+        self.__magic_hots = value
+
+
+    def del_physical_hots(self):
+        del self.__physical_hots
+
+
+    def del_magic_hots(self):
+        del self.__magic_hots
 
 
     def get_resist_physical_dizzy_rate(self):
@@ -204,6 +231,8 @@ class ICharacter(object):
     magic_dots = property(get_magic_dots, set_magic_dots, del_magic_dots, "magic_dots's docstring")
     debuffs = property(get_debuffs, set_debuffs, del_debuffs, "debuffs's docstring")
     buffs = property(get_buffs, set_buffs, del_buffs, "buffs's docstring")
+    physical_hots = property(get_physical_hots, set_physical_hots, del_physical_hots, "physical_hots's docstring")
+    magic_hots = property(get_magic_hots, set_magic_hots, del_magic_hots, "magic_hots's docstring")
     
     
     

@@ -42,14 +42,20 @@ class ISkill(object):
         self.__extension_value = 0
         self.__target = 1
         self.__speical_effects = []
+        self.__image = None
+        self.__image_select = None
+        self.__image_inactive = None
+        self.__effect_image = None
         
         # give a name
         self.__name = name
+        
         # images
-        self.__image = skill_images[0]
-        self.__image_select = skill_images[1]
-        self.__image_inactive = skill_images[2]
-        self.__effect_image = skill_images[3]
+        if skill_images and len(skill_images) > 0:
+            self.__image = skill_images[0]
+            self.__image_select = skill_images[1]
+            self.__image_inactive = skill_images[2]
+            self.__effect_image = skill_images[3]
         
         # properties
         if skill_properties and len(skill_properties) >= 9:

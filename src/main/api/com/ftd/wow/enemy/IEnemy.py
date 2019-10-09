@@ -10,9 +10,10 @@ class IEnemy(object):
     
     '''
     
-    def __init__(self, enemy_images, enemy_properties=None):
+    def __init__(self, enemy_images, skill_enum, enemy_properties=None):
         '''
         @param enemy_images: 
+        @param skill_enum: 
         @param enemy_properties: 0: basic_healthy;
                                  1: basic_attack;
                                  2: basic_defense;
@@ -27,6 +28,8 @@ class IEnemy(object):
         self.__skills = []
         # image
         self._load_images(enemy_images)
+        # fight skills
+        self._load_skills(skill_enum)
         
         if not enemy_properties or len(enemy_properties) != 7:
             return
@@ -57,6 +60,12 @@ class IEnemy(object):
             enemy_image = pygame.image.load(temp_image).convert_alpha()
             self.__images.append(enemy_image)
     
+    
+    def _load_skills(self, skill_enum):
+        for temp_skill in skill_enum:
+            temp_skill = temp_skill.value()
+            self.__skills.append(temp_skill)
+            
     
     def get_skills(self):
         return self.__skills

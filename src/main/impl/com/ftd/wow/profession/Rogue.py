@@ -4,7 +4,6 @@ Created on Sep 04, 2019
 @author: ftd
 '''
 
-import pygame
 from src.main.api.com.ftd.wow.profession.IProfession import IProfession
 from src.main.impl.com.ftd.wow.skill.rogue.Rogue_Skill_Enum import Rogue_Skill_Enum
 from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant

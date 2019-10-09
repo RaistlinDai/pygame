@@ -32,6 +32,10 @@ class IProfession(object):
         self._load_skills(skill_enum)
         # camping skills
         
+        
+        if not profession_properties or len(profession_properties) != 7:
+            return
+        
         # basic properties
         # healthy
         self.__basic_healthy = profession_properties[0]
@@ -59,8 +63,8 @@ class IProfession(object):
     
     def _load_skills(self, skill_enum):
         for temp_skill in skill_enum:
-            rogue_skill = temp_skill.value()
-            self.__skills.append(rogue_skill)
+            temp_skill = temp_skill.value()
+            self.__skills.append(temp_skill)
     
     
     def get_skills(self):

@@ -51,7 +51,7 @@ class MainScreen(object):
         self.__context_DTO.set_active_team(Team(None, None, load_characters[0], load_characters[1]))
         # generate enemy
         generated_enemies = self.generate_enemy(self.__resource_DTO)
-        self.__context_DTO.set_active_enemies(Team(generated_enemies[0], generated_enemies[1], generated_enemies[2], None))
+        self.__context_DTO.set_active_enemies(Team(generated_enemies[0], generated_enemies[1], generated_enemies[2], generated_enemies[3]))
         
         # setup current scene
         self.__context_DTO.set_current_scene_mode(SceneMode_Enum.MENU_SCENE)

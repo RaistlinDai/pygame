@@ -4,7 +4,6 @@ Created on Sep 04, 2019
 @author: ftd
 '''
 
-import pygame
 from src.main.api.com.ftd.wow.character.ICharacter import ICharacter
 
 class Team (object):

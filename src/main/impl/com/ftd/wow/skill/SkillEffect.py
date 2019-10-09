@@ -32,6 +32,13 @@ class SkillEffect(object):
     
 
     def __init__(self, skill_effect_type=None, skill_effect_value=0, skill_effect_rate=0, skill_effect_duration=0, skill_is_stackable=False):
+        '''
+        @param skill_effect_type: effect type, e.g. CONTROL_DIZZY
+        @param skill_effect_value: effect value, e.g. reduce speed 5
+        @param skill_effect_rate: effect rate, e.g. reduce attack 10%
+        @param skill_effect_duration: effect duration, e.g. duration 2 round
+        @param skill_is_stackable: is effect stackable
+        '''
         self.__skill_effect_type = skill_effect_type
         self.__skill_effect_value = skill_effect_value
         self.__skill_effect_rate = skill_effect_rate

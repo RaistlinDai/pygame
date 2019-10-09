@@ -4,6 +4,7 @@ Created on Sep 23, 2019
 @author: ftd
 '''
 from src.main.impl.com.ftd.wow.character.CharacterAgainst import CharacterAgainst
+from src.main.impl.com.ftd.wow.enemy.mc.Enemy_MC_Enum import Enemy_MC_Enum
 
 class Enemy_Util(object):
     '''
@@ -20,13 +21,13 @@ class Enemy_Util(object):
         # create enemy
         idx = 0
         for idx in [0,1,2,3]:
-            if idx == 0:
-                temp_enemy_character = CharacterAgainst("Enemy" + str(idx), resource_DTO.get_enemy('MC_VALCANICELEMENTAL'))
-            elif idx == 1:
-                temp_enemy_character = CharacterAgainst("Enemy" + str(idx), resource_DTO.get_enemy('MC_LAVAELEMENTAL'))
+            if idx == 1:
+                temp_enemy_character = CharacterAgainst("Enemy" + str(idx), resource_DTO.get_enemy(Enemy_MC_Enum.MC_FIREELEMENTAL.name))
             elif idx == 2:
-                temp_enemy_character = CharacterAgainst("Enemy" + str(idx), resource_DTO.get_enemy('MC_FIREELEMENTAL'))
-                
+                temp_enemy_character = CharacterAgainst("Enemy" + str(idx), resource_DTO.get_enemy(Enemy_MC_Enum.MC_FIREELEMENTAL.name))
+            else:
+                temp_enemy_character = None
+            
             enemy_group.append(temp_enemy_character)
         
         return enemy_group

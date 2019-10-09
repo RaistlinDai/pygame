@@ -4,11 +4,11 @@ Created on Jul 14, 2019
 @author: ftd
 '''
 import pygame
+import time
 from src.main.api.com.ftd.wow.scene.IScene import IScene
 from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
-from src.main.impl.com.ftd.wow.util.Enemy_Util import Enemy_Util
-import time
 from src.main.impl.com.ftd.wow.util.Fight_Util import Fight_Util
+from src.main.impl.com.ftd.wow.combat.Combat_Judgment import Combat_Judgment
 
 class IFightScene(IScene):
     '''
@@ -34,6 +34,9 @@ class IFightScene(IScene):
         
         self.__bottom_bar = None
         self.__top_bar = None
+        
+        # combat judgment
+        self.__combat_judgment = Combat_Judgment()
         
         self.__current_selection = None
         self.__current_target = None
@@ -79,17 +82,46 @@ class IFightScene(IScene):
         # render the top bar
         self.__top_bar.render_image(screen_ins, self.__size_w, self.__size_h)
         
-        # render the characters
-        self.render_characters(screen_ins)
+        '''
+        @todo: trigger combat
+        '''
+        # start the combat judgment
+        self.start_combat()
         
-        # render the enemies
-        self.render_enemies(screen_ins)
+        # in combat
+        if self.__combat_judgment.get_is_start():
+            
+            '''
+            @todo: render combat round count
+            '''
+            # render the combat round count
+            
+            
+            
+            
+            # render the characters
+            self.render_characters_in_combat(screen_ins)
+            
+            # render the enemies
+            self.render_enemies_in_combat(screen_ins)
+            
+            # render the fighting image
+            self.render_fighting(screen_ins)
+    
+    
+    def start_combat(self):
+        # trigger the combat judgment
+        self.__combat_judgment.set_is_start_as_True()
+        # initialize the combat judgment
+        self.__combat_judgment.initialize(self.__active_team.get_teammembers, self.__active_enemies.get_teammembers())
         
-        # render the fighting image
-        self.render_fighting(screen_ins)
+    
+    def close_combat(self):
+        # close the combat judgment
+        self.__combat_judgment.set_is_start_as_False()
         
              
-    def render_characters(self, screen_ins):             
+    def render_characters_in_combat(self, screen_ins):             
         # render the character
         if not self.__active_team:
             return
@@ -132,7 +164,7 @@ class IFightScene(IScene):
                 screen_ins.blit(temp_char.get_stand_image(), (x,y), (0, 0, new_w, new_h))
     
     
-    def render_enemies(self, screen_ins):             
+    def render_enemies_in_combat(self, screen_ins):             
         # render the character
         if not self.__active_enemies:
             return
@@ -187,8 +219,8 @@ class IFightScene(IScene):
         
         # in fight
         if self.__is_fighting and self.__fighting_timer > 0 and current_time - self.__fighting_timer <= 1000:
-            # calculate attack result
             '''
+            Calculate attack result
             @todo: remove self.__is_fighting_in_round for skill calculation testing
             '''
             if not self.__is_fighting_in_round:
