@@ -1,0 +1,12 @@
+1. Scene_Manager should be the highest level manager, to maintain the scenes changing.
+   The Scene_Manager registers in Context_DTO
+2. There are a couple of secondary managers to maintain each scene, and in each of them there would be some sub-managers 
+   to handle some transaction details:
+        - Scene_Manager
+            - Login
+            - In downtown            - Downtown_Archon
+            - In dungeon selection   - Dungeon_Explorer
+            - In dungeon exploration - Abyss_Overlord       - maintain the exploration in dungeon
+                   - Generate enemy   - Monster_Incubator
+                   - In combat        - Combat_Judgment
+                   - In camp          - Camp_Charger

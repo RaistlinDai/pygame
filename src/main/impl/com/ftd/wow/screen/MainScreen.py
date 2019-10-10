@@ -46,16 +46,24 @@ class MainScreen(object):
         
     
     def execute(self):
+        '''
+        @todo: add login and load scene - consider to add a "Scene Controller" to handle the scene changing
+        '''
         # load savedata
         load_characters = Savedata_Analsis.load_savedata(self.__resource_DTO)
+        
+        '''
+        @todo: 
+        '''
+        
         self.__context_DTO.set_active_team(Team(None, None, load_characters[0], load_characters[1]))
         # generate enemy
         generated_enemies = self.generate_enemy(self.__resource_DTO)
         self.__context_DTO.set_active_enemies(Team(generated_enemies[0], generated_enemies[1], generated_enemies[2], generated_enemies[3]))
         
         # setup current scene
-        self.__context_DTO.set_current_scene_mode(SceneMode_Enum.MENU_SCENE)
-        self.__context_DTO.set_current_scene(self.__resource_DTO.get_scene(MenuScene_Enum.HORDE_LOGIN.name))
+        self.__context_DTO.get_scene_manager().set_current_scene_mode(SceneMode_Enum.MENU_SCENE)
+        self.__context_DTO.get_scene_manager().set_current_scene(self.__resource_DTO.get_scene(MenuScene_Enum.HORDE_LOGIN.name))
         
         # horde button
         horde_start_button = Horde_Button(585, 270, 100, 100)
@@ -74,34 +82,34 @@ class MainScreen(object):
             #               Scene maintain             #
             #==========================================#
             # render the background
-            self.render_scene(self.__context_DTO.get_current_scene())
+            self.render_scene(self.__context_DTO.get_scene_manager().get_current_scene())
             
             # render the button & determine the background
-            if (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.MENU_SCENE):
+            if (self.__context_DTO.get_scene_manager().get_current_scene_mode() == SceneMode_Enum.MENU_SCENE):
                 if (not horde_start_button.is_over()):
                     self._screen.blit(horde_start_button.show_button(), horde_start_button.get_position())
                 else:
                     self._screen.blit(horde_start_button.show_button_cover(), horde_start_button.get_position())
                     
-            elif (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.LOAD_SCENE):
+            elif (self.__context_DTO.get_scene_manager().get_current_scene_mode() == SceneMode_Enum.LOAD_SCENE):
                 if (current_timer - horde_button_click_timer < 2000):
                     self._screen.blit(horde_start_button.show_button_click(), horde_start_button.get_position())
                 elif (current_timer - horde_button_click_timer >= 2000):
-                    self.__context_DTO.set_current_scene_mode(SceneMode_Enum.FIGHT_SCENE)
+                    self.__context_DTO.get_scene_manager().set_current_scene_mode(SceneMode_Enum.FIGHT_SCENE)
                     
-            elif (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.FIGHT_SCENE):
+            elif (self.__context_DTO.get_scene_manager().get_current_scene_mode() == SceneMode_Enum.FIGHT_SCENE):
                 # re-load the background
-                self.__context_DTO.set_current_scene_mode(SceneMode_Enum.FIGHT_SCENE)
-                self.__context_DTO.set_current_scene(self.__resource_DTO.get_scene(FightScene_Enum.MC_BOSS_10.name))
-                self.__context_DTO.get_current_scene().add_active_team(self.__context_DTO.get_active_team())
-                self.__context_DTO.get_current_scene().set_current_character(load_characters[1])
+                self.__context_DTO.get_scene_manager().set_current_scene_mode(SceneMode_Enum.FIGHT_SCENE)
+                self.__context_DTO.get_scene_manager().set_current_scene(self.__resource_DTO.get_scene(FightScene_Enum.MC_BOSS_10.name))
+                self.__context_DTO.get_scene_manager().get_current_scene().add_active_team(self.__context_DTO.get_active_team())
+                self.__context_DTO.get_scene_manager().get_current_scene().set_current_character(load_characters[1])
                 
                 self.__context_DTO.set_in_fight(True)
                 if self.__context_DTO.get_in_fight() == True:
-                    self.__context_DTO.get_current_scene().add_active_enemies(self.__context_DTO.get_active_enemies())
+                    self.__context_DTO.get_scene_manager().get_current_scene().add_active_enemies(self.__context_DTO.get_active_enemies())
                 
                 # Mouse cursor event
-                self.__context_DTO.get_current_scene().cursor_event(cursor_x, cursor_y)
+                self.__context_DTO.get_scene_manager().get_current_scene().cursor_event(cursor_x, cursor_y)
             
             #==========================================#
             #               Event handler              #
@@ -131,15 +139,18 @@ class MainScreen(object):
         
             # mouse click event
             if pressed_mouse[0] or pressed_mouse[2]:
+                '''
+                @todo: move into Scene_Manager?
+                '''
                 # menu scene
-                if (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.MENU_SCENE):
+                if (self.__context_DTO.get_scene_manager().get_current_scene_mode() == SceneMode_Enum.MENU_SCENE):
                     # horde button click
                     if (horde_start_button.is_over()):
-                        self.__context_DTO.set_current_scene_mode(SceneMode_Enum.LOAD_SCENE)
+                        self.__context_DTO.get_scene_manager().set_current_scene_mode(SceneMode_Enum.LOAD_SCENE)
                         horde_button_click_timer = time.time()*1000.0
                 
-                elif (self.__context_DTO.get_current_scene_mode() == SceneMode_Enum.FIGHT_SCENE):
-                    self.__context_DTO.get_current_scene().mouse_click_event(pressed_mouse)
+                elif (self.__context_DTO.get_scene_manager().get_current_scene_mode() == SceneMode_Enum.FIGHT_SCENE):
+                    self.__context_DTO.get_scene_manager().get_current_scene().mouse_click_event(pressed_mouse)
             
             # render cursor
             self.render_cursor(cursor_x, cursor_y)

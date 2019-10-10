@@ -8,7 +8,7 @@ import time
 from src.main.api.com.ftd.wow.scene.IScene import IScene
 from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
 from src.main.impl.com.ftd.wow.util.Fight_Util import Fight_Util
-from src.main.impl.com.ftd.wow.combat.Combat_Judgment import Combat_Judgment
+from src.main.impl.com.ftd.wow.controller.Combat_Judgment import Combat_Judgment
 
 class IFightScene(IScene):
     '''
