@@ -20,5 +20,5 @@ class Scene_Login(IMenuScene):
         return self.__background
     
     
-    def render_scene(self, screen_ins, screen_w=None, screen_h=None):
+    def render(self, screen_ins, screen_w=None, screen_h=None):
         super().render_scene(screen_ins, screen_w, screen_h)

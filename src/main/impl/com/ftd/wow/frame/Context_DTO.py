@@ -3,7 +3,6 @@ Created on Sep 17, 2019
 
 @author: ftd
 '''
-from src.main.impl.com.ftd.wow.controller.Scene_Manager import Scene_Manager
 
 class Context_DTO(object):
     '''
@@ -16,12 +15,7 @@ class Context_DTO(object):
         self.__screen_width = 1280
         self.__screen_height = 720
         self.__in_fight = False
-        self.__scene_manager = Scene_Manager()
 
-
-    def get_scene_manager(self):
-        return self.__scene_manager
-    
     
     def get_active_enemies(self):
         return self.__active_enemies

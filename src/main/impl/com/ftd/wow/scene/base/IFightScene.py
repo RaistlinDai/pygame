@@ -68,7 +68,7 @@ class IFightScene(IScene):
         self.set_current_character(current_character)
     
     
-    def render_scene(self, screen_ins, screen_w=None, screen_h=None):
+    def render(self, screen_ins, screen_w=None, screen_h=None):
         if (screen_w and screen_h):
             self.__size_w = screen_w
             self.__size_h = screen_h

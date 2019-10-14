@@ -3,7 +3,6 @@ Created on Jul 14, 2019
 
 @author: ftd
 '''
-from _overlapped import NULL
 class IScene(object):
     '''
     '''
@@ -13,5 +12,9 @@ class IScene(object):
         pass
         
         
-    def render_scene(self, screen_ins):
+    def render(self, screen_ins):
+        pass
+    
+    
+    def mouse_click_event(self, pressed_mouse):
         pass
