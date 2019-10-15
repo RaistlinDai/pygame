@@ -15,7 +15,7 @@ class Combat_Judgment(object):
         
         '''
         # Judgment is start or not
-        self.__is_start = False
+        self.__is_start_combat = False
         # round count
         self.__round_count = 0
         # all characters in fighting
@@ -50,10 +50,14 @@ class Combat_Judgment(object):
             @todo: calculate order list
             '''
             pass
+
+
+    def set_is_start_combat(self, value):
+        self.__is_start_combat = value
         
 
-    def get_is_start(self):
-        return self.__is_start
+    def get_is_start_combat(self):
+        return self.__is_start_combat
 
 
     def get_round_count(self):
@@ -70,14 +74,6 @@ class Combat_Judgment(object):
 
     def get_current_active_character(self):
         return self.__current_active_character
-
-
-    def set_is_start_as_True(self):
-        self.__is_start = True
-
-
-    def set_is_start_as_False(self):
-        self.__is_start = False
         
 
     def set_round_count(self, value):
@@ -96,8 +92,8 @@ class Combat_Judgment(object):
         self.__current_active_character = value
 
 
-    def del_is_start(self):
-        del self.__is_start
+    def del_is_start_combat(self):
+        del self.__is_start_combat
 
 
     def del_round_count(self):
@@ -116,7 +112,7 @@ class Combat_Judgment(object):
         del self.__current_active_character
 
 
-    is_start = property(get_is_start, None, del_is_start, "is_start's docstring")
+    is_start = property(get_is_start_combat, None, del_is_start_combat, "is_start's docstring")
     round_count = property(get_round_count, set_round_count, del_round_count, "round_count's docstring")
     all_characters = property(get_all_characters, set_all_characters, del_all_characters, "all_characters's docstring")
     order_list = property(get_order_list, set_order_list, del_order_list, "order_list's docstring")

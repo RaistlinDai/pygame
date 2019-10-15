@@ -4,7 +4,7 @@ Created on Oct 11, 2019
 @author: ftd
 '''
 
-class ILeader(object):
+class IController(object):
     '''
     
     '''
@@ -14,11 +14,11 @@ class ILeader(object):
         self.__in_hibernation = True
     
     
-    def wake_up_leader(self):
+    def wake_up_controller(self):
         self.__in_hibernation = False
     
     
-    def fall_asleep_leader(self):
+    def fall_asleep_controller(self):
         self.__in_hibernation = True
         
     
@@ -36,3 +36,10 @@ class ILeader(object):
     
     def set_is_going_hibernate(self, value):
         self.__is_going_hibernate = value
+        
+        
+    # ========================================================== #
+    #                         Event                              #
+    # ========================================================== #
+    def mouse_click_event(self, pressed_mouse, contextDTO):
+        pass

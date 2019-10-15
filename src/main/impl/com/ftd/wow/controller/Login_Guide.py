@@ -4,10 +4,10 @@ Created on Oct 10, 2019
 @author: ftd
 '''
 from src.main.impl.com.ftd.wow.scene.MenuScene_Enum import MenuScene_Enum
-from src.main.api.com.ftd.wow.controller.ILeader import ILeader
+from src.main.api.com.ftd.wow.controller.IController import IController
 import time
 
-class Login_Guide(ILeader):
+class Login_Guide(IController):
     '''
     
     '''
@@ -51,7 +51,9 @@ class Login_Guide(ILeader):
     # ========================================================== #
     #                         Event                              #
     # ========================================================== #
-    def mouse_click_event(self, pressed_mouse):
+    def mouse_click_event(self, pressed_mouse, contextDTO):
+        super().mouse_click_event(pressed_mouse, contextDTO)
+        
         if pressed_mouse[0]:
             if self.__current_scene.is_button_cover() and not super().get_is_going_hibernate() and not super().get_in_hibernation():
                 # trigger scene loading
@@ -59,8 +61,6 @@ class Login_Guide(ILeader):
                 self.__button_click_timer = time.time()*1000.0
     
     
-    def cursor_event(self, cursor_x, cursor_y):
-        self.get_cover_character(cursor_x, cursor_y)
-        # bottom bar
-        self.__bottom_bar.render_cover_skill(cursor_x, cursor_y)
+    def cursor_event(self, cursor_x, cursor_y, contextDTO):
+        pass
         

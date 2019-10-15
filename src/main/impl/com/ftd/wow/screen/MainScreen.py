@@ -56,13 +56,14 @@ class MainScreen(object):
         @todo: 
         '''
         
-        self.__context_DTO.set_active_team(Team(None, None, load_characters[0], load_characters[1]))
+        self.__context_DTO.get_ContextDto_InCombat().set_active_team(Team(None, None, load_characters[0], load_characters[1]))
+        
         # generate enemy
         generated_enemies = self.generate_enemy(self.__resource_DTO)
-        self.__context_DTO.set_active_enemies(Team(generated_enemies[0], generated_enemies[1], generated_enemies[2], generated_enemies[3]))
+        self.__context_DTO.get_ContextDto_InCombat().set_active_enemies(Team(generated_enemies[0], generated_enemies[1], generated_enemies[2], generated_enemies[3]))
         
         # update manager
-        self.__manager.update_leader(SceneMode_Enum.MENU_SCENE)
+        self.__manager.update_controller(SceneMode_Enum.MENU_SCENE)
                 
         move_x, move_y = 0, 0
         
@@ -74,13 +75,16 @@ class MainScreen(object):
             #==========================================#
             #         Controller maintain              #
             #==========================================#
-            self.__manager.wakeup_next_leader()
+            self.__manager.wakeup_next_controller()
             
             #==========================================#
             #               Scene render               #
             #==========================================#
             # render the background
             self.__manager.render_scene(self._screen, self.__context_DTO)
+        
+            # Mouse cursor event
+            self.__manager.event_cursor(cursor_x, cursor_y, self.__context_DTO)
             
             #==========================================#
             #               Event handler              #
@@ -110,11 +114,11 @@ class MainScreen(object):
         
             # mouse click event
             if pressed_mouse[0] or pressed_mouse[2]:
-                self.__manager.event_mouse_click(pressed_mouse)
+                self.__manager.event_mouse_click(pressed_mouse, self.__context_DTO)
             
             # render cursor
             self.render_cursor(cursor_x, cursor_y)
-                
+            
             # render the screen
             pygame.display.update()
         

@@ -13,7 +13,7 @@ class Bottom_Bar(object):
     
     '''
     
-    def __init__(self, size_w=None, size_h=None, current_character=None):
+    def __init__(self, size_w=None, size_h=None):
         # size
         self.__size_w = 1280
         self.__size_h = 250
@@ -28,10 +28,6 @@ class Bottom_Bar(object):
         self.__current_cover_skill = None
         # select skill
         self.__current_select_skill = None
-        
-        if current_character:
-            self.__current_character = current_character
-            self.__active_skills = self.__current_character.get_active_skills()
         
         # images
         self.__image = pygame.image.load(Materials_Constant.bottom_bar_image_filename).convert_alpha()
