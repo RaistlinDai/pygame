@@ -27,7 +27,7 @@ class Top_Bar(object):
             self.__image = pygame.transform.scale(self.__image, (self.__size_w, self.__size_h))
 
     
-    def render_image(self, screen_ins, screen_w, screen_h):
+    def render_image(self, screen_ins, screen_w, screen_h, contextDTO=None):
         if screen_w and screen_h:
             self.__size_w = screen_w
             self.__size_h = Image_Util.calculate_top_bar_height_by_screen_size(screen_h)

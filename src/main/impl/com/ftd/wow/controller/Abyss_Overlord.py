@@ -106,7 +106,6 @@ class Abyss_Overlord(IController):
     def set_current_character(self, contextDTO):
         current_character = contextDTO.get_ContextDto_InCombat().get_active_team().get_teammember04()
         contextDTO.get_ContextDto_InCombat().set_current_selection(current_character)
-        self.get_current_scene_bottom_bar().set_current_character(current_character)
             
             
     # ========================================================== #
@@ -115,19 +114,27 @@ class Abyss_Overlord(IController):
     def mouse_click_event(self, pressed_mouse, contextDTO):
         super().mouse_click_event(pressed_mouse, contextDTO)
         
-        '''
         if pressed_mouse[0]:
-            if self.get_active_enemies().get_current_select_skill() and self.__current_target:
+            
+            if contextDTO.get_ContextDto_InCombat().get_current_cover_skill():
+                temp_skill = contextDTO.get_ContextDto_InCombat().get_current_cover_skill()
+                contextDTO.get_ContextDto_InCombat().set_current_select_skill(temp_skill)
+            else:
+                pass
+            
+            if contextDTO.get_ContextDto_InCombat().get_current_select_skill() and \
+               contextDTO.get_ContextDto_InCombat().get_current_target():
                 # trigger fighting image
-                self.__is_fighting = True
-                self.__fighting_timer = time.time()*1000.0
+                contextDTO.get_ContextDto_InCombat().set_is_fight_in_round(True)
+                contextDTO.get_ContextDto_InCombat().set_fighting_timer(time.time()*1000.0)
         
-        # bottom bar click event
-        self.get_active_enemies().mouse_click_event(pressed_mouse)
-        '''
-    
+        elif pressed_mouse[2]:
+            if contextDTO.get_ContextDto_InCombat().get_current_select_skill():
+                contextDTO.get_ContextDto_InCombat().set_current_select_skill(None)
+
     
     def cursor_event(self, cursor_x, cursor_y, contextDTO):
-        self.__current_scene.get_cover_character(cursor_x, cursor_y, contextDTO)
-        # bottom bar
-        self.get_current_scene_bottom_bar().render_cover_skill(cursor_x, cursor_y)
+        # cover character
+        self.get_current_scene().get_cover_character(cursor_x, cursor_y, contextDTO)
+        # cover skill
+        self.get_current_scene_bottom_bar().get_cover_skill(cursor_x, cursor_y, contextDTO)

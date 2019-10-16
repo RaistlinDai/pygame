@@ -63,6 +63,16 @@ class Context_DTO_InCombat(object):
         self.__current_target = None
         self.__current_target_extension = []
         
+        # cover skill
+        self.__current_cover_skill = None
+        # select skill
+        self.__current_select_skill = None
+        
+        # is fight in round
+        self.__is_fight_in_round = False
+        self.__fighting_timer = 0
+        self.__is_fight_calculate = False
+        
     
     def get_active_enemies(self):
         return self.__active_enemies
@@ -110,3 +120,43 @@ class Context_DTO_InCombat(object):
 
     def set_current_target_extension(self, value):
         self.__current_target_extension = value
+    
+    
+    def get_current_cover_skill(self):
+        return self.__current_cover_skill
+
+
+    def set_current_select_skill(self, value):
+        self.__current_select_skill = value
+    
+    
+    def get_current_select_skill(self):
+        return self.__current_select_skill
+
+
+    def set_current_cover_skill(self, value):
+        self.__current_cover_skill = value
+    
+    
+    def get_is_fight_in_round(self):
+        return self.__is_fight_in_round
+
+
+    def set_is_fight_in_round(self, value):
+        self.__is_fight_in_round = value
+    
+    
+    def get_fighting_timer(self):
+        return self.__fighting_timer
+
+
+    def set_fighting_timer(self, value):
+        self.__fighting_timer = value
+    
+    
+    def get_is_fight_calculate(self):
+        return self.__is_fight_calculate
+
+
+    def set_is_fight_calculate(self, value):
+        self.__is_fight_calculate = value
