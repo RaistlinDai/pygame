@@ -7,6 +7,7 @@ from src.main.impl.com.ftd.wow.scene.FightScene_Enum import FightScene_Enum
 from src.main.api.com.ftd.wow.controller.IController import IController
 import time
 from src.main.impl.com.ftd.wow.controller.Combat_Judgment import Combat_Judgment
+from src.main.impl.com.ftd.wow.controller.Maze_Walker import Maze_Walker
 
 class Abyss_Overlord(IController):
     '''
@@ -15,10 +16,12 @@ class Abyss_Overlord(IController):
     
     def __init__(self, resourceDTO):
         super().__init__()
-        self.__current_scene = resourceDTO.get_scene(FightScene_Enum.MC_BOSS_10.name)
-        
+        # maze walker
+        self.__maze_walker = Maze_Walker()
         # combat judgment
         self.__combat_judgment = Combat_Judgment()
+        
+        self.__current_scene = resourceDTO.get_scene(FightScene_Enum.MC_BOSS_10.name)
         
 
     def get_current_scene(self):
@@ -35,6 +38,12 @@ class Abyss_Overlord(IController):
     
     def set_current_scene_bottom_bar(self, value):
         self.__current_scene.set_bottom_bar(value)
+    
+    
+    def wake_up_controller(self, contextDto=None):
+        super().wake_up_controller(contextDto)
+        if contextDto:
+            self.__maze_walker.generate_map(contextDto.get_ContextDto_InMap().get_map_size())
         
     
     def render_scene(self, screen_ins, contextDTO):

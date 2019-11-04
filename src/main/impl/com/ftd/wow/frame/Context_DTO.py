@@ -13,6 +13,7 @@ class Context_DTO(object):
         self.__screen_width = 1280
         self.__screen_height = 720
         
+        self.__contextDto_InMap = Context_DTO_InMap()
         self.__contextDto_InCombat = Context_DTO_InCombat()
 
 
@@ -46,11 +47,34 @@ class Context_DTO(object):
 
     def set_ContextDto_InCombat(self, value):
         self.__contextDto_InCombat = value
+
+
+    def get_ContextDto_InMap(self):
+        return self.__contextDto_InMap
+
+
+    def set_ContextDto_InMap(self, value):
+        self.__contextDto_InMap = value
         
 
     screen_size = property(get_screen_width, set_screen_width, del_screen_width, "screen_width's docstring")
     screen_height = property(get_screen_height, set_screen_height, del_screen_height, "screen_height's docstring")
-        
+
+
+
+class Context_DTO_InMap(object):
+    
+    def __init__(self):
+        self.__map_size = None
+    
+    def get_map_size(self):
+        return self.__map_size
+
+
+    def set_map_size(self, value):
+        self.__map_size = value
+    
+    
     
 class Context_DTO_InCombat(object):
     

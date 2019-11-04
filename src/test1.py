@@ -1,17 +1,4 @@
-import array
-test1 = {'F1':{1:'A', 2:'B'}}
-key1 = 'X'
+from src.main.impl.com.ftd.wow.util.Map_Util import Map_Util,\
+    MapSize_Enum
 
-test1['F1'][3] = 'C'
-
-print(test1)
-
-test2 = [1,2,3]
-test3 = [4,5]
-
-if isinstance(test2, list):
-    print('YES')
-
-for item in test3:
-    test2.append(item)
-print(test2)
+Map_Util.generate_random_map(MapSize_Enum.SIZE_BIG)

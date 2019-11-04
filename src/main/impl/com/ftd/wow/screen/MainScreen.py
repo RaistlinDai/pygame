@@ -63,7 +63,7 @@ class MainScreen(object):
         self.__context_DTO.get_ContextDto_InCombat().set_active_enemies(Team(generated_enemies[0], generated_enemies[1], generated_enemies[2], generated_enemies[3]))
         
         # update manager
-        self.__manager.update_controller(SceneMode_Enum.MENU_SCENE)
+        self.__manager.update_controller(self.__context_DTO, SceneMode_Enum.MENU_SCENE)
                 
         move_x, move_y = 0, 0
         
@@ -75,7 +75,7 @@ class MainScreen(object):
             #==========================================#
             #         Controller maintain              #
             #==========================================#
-            self.__manager.wakeup_next_controller()
+            self.__manager.wakeup_next_controller(self.__context_DTO)
             
             #==========================================#
             #               Scene render               #

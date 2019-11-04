@@ -7,6 +7,7 @@ from src.main.impl.com.ftd.wow.scene.base.SceneMode_Enum import SceneMode_Enum
 from src.main.api.com.ftd.wow.controller.IController import IController
 from src.main.impl.com.ftd.wow.controller.Login_Guide import Login_Guide
 from src.main.impl.com.ftd.wow.controller.Abyss_Overlord import Abyss_Overlord
+from src.main.impl.com.ftd.wow.controller.Maze_Walker import MapSize_Enum
 
 class Big_Boss(object):
     '''
@@ -58,7 +59,7 @@ class Big_Boss(object):
     current_scene_mode = property(get_current_scene_mode, set_current_scene_mode, del_current_scene_mode, "current_scene_mode's docstring")
     
     
-    def update_controller(self, scene_mode=None):
+    def update_controller(self, contextDTO, scene_mode=None):
         self.__current_scene_mode = scene_mode
         
         if self.__current_scene_mode:
@@ -72,12 +73,12 @@ class Big_Boss(object):
                 
             elif self.__current_scene_mode == SceneMode_Enum.FIGHT_SCENE:
                 self.__current_controller = Abyss_Overlord(self.__resource_DTO)
-                self.__current_controller.wake_up_controller()
+                self.__current_controller.wake_up_controller(contextDTO)
         else:
             self.__current_controller = None
     
     
-    def wakeup_next_controller(self):
+    def wakeup_next_controller(self, contextDTO):
         '''
         @todo: complete the whole scene flow: MENU_SCENE -> Loop: <CITY_SCENE -> PREPARE_SCENE -> FIGHT_SCENE>
         '''
@@ -88,7 +89,11 @@ class Big_Boss(object):
             if self.__current_scene_mode == SceneMode_Enum.MENU_SCENE:
                 self.__current_scene_mode = SceneMode_Enum.FIGHT_SCENE
                 self.__current_controller = Abyss_Overlord(self.__resource_DTO)
-                self.__current_controller.wake_up_controller()
+                '''
+                @todo: set map size
+                '''
+                contextDTO.get_ContextDto_InMap().set_map_size(MapSize_Enum.SIZE_SMALL)
+                self.__current_controller.wake_up_controller(contextDTO)
                 
     
     def render_scene(self, screen_ins, contextDTO):
@@ -105,6 +110,9 @@ class Big_Boss(object):
         self.__current_controller.render_scene(screen_ins, contextDTO)
     
     
+    # ========================================================== #
+    #                         Event                              #
+    # ========================================================== #
     def event_mouse_click(self, pressed_mouse, contextDTO):
         if not self.__current_controller:
             return False, 'No leader available!'

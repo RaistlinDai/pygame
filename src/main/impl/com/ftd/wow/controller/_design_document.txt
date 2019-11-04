@@ -7,6 +7,7 @@
             - In downtown            - Downtown_Archon
             - In dungeon selection   - Dungeon_Explorer
             - In dungeon exploration - Abyss_Overlord       - maintain the exploration in dungeon
+                   - Generate map     - Maze_Walker
                    - Generate enemy   - Monster_Incubator
                    - In combat        - Combat_Judgment
                    - In camp          - Camp_Charger
