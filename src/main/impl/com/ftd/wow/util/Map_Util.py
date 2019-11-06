@@ -1,5 +1,5 @@
 import random
-from src.main.impl.com.ftd.wow.map.Map_DTO import Cell_DTO
+from src.main.impl.com.ftd.wow.map.Map_DTO import Cell_DTO, Map_DTO
 from enum import Enum, unique
         
         
@@ -46,8 +46,11 @@ class Map_Util(object):
     
     @staticmethod
     def generate_random_map(map_size):
+        
+        mapDTO = Map_DTO(map_size)
+        
         if not isinstance(map_size, MapSize_Enum):
-            return []
+            return mapDTO
         
         # map cell list
         map_cell_list = []
@@ -102,6 +105,10 @@ class Map_Util(object):
         Map_Util.reorder_cells(map_cell_list)
         # render the map
         Map_Util.render_map(map_cell_list)
+        
+        mapDTO.set_cell_list(map_cell_list)
+        mapDTO.set_entrence(entrance_cell)
+        return mapDTO
         
         
     @staticmethod

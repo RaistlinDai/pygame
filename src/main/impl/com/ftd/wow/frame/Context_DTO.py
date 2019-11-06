@@ -66,6 +66,7 @@ class Context_DTO_InMap(object):
     
     def __init__(self):
         self.__map_size = None
+        self.__map = None
     
     def get_map_size(self):
         return self.__map_size
@@ -73,6 +74,14 @@ class Context_DTO_InMap(object):
 
     def set_map_size(self, value):
         self.__map_size = value
+    
+    
+    def get_map(self):
+        return self.__map
+
+
+    def set_map(self, value):
+        self.__map = value
     
     
     

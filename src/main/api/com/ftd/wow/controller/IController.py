@@ -43,3 +43,7 @@ class IController(object):
     # ========================================================== #
     def mouse_click_event(self, pressed_mouse, contextDTO):
         pass
+    
+    
+    def event_keyboard_keydown(self, move_x, move_y, contextDTO):
+        pass

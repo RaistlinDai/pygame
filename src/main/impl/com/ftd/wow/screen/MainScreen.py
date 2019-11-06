@@ -66,6 +66,7 @@ class MainScreen(object):
         self.__manager.update_controller(self.__context_DTO, SceneMode_Enum.MENU_SCENE)
                 
         move_x, move_y = 0, 0
+        keyboard_keydown = None
         
         # main loop
         while True:
@@ -97,6 +98,7 @@ class MainScreen(object):
                     
                 # keyboard event
                 if event.type == KEYDOWN:
+                    keyboard_keydown = event.key
                     if event.key == K_LEFT:
                         move_x = -1
                     elif event.key == K_RIGHT:
@@ -106,12 +108,16 @@ class MainScreen(object):
                     elif event.key == K_DOWN:
                         move_y = 1
                 elif event.type == KEYUP:
+                    keyboard_keydown = None
                     move_x = 0
                     move_y = 0
             
+            # keyboard key down event
+            if keyboard_keydown:
+                self.__manager.event_keyboard_keydown(move_x, move_y, self.__context_DTO)
+            
             # get the keyboard and mouse click
             pressed_mouse = pygame.mouse.get_pressed()
-        
             # mouse click event
             if pressed_mouse[0] or pressed_mouse[2]:
                 self.__manager.event_mouse_click(pressed_mouse, self.__context_DTO)

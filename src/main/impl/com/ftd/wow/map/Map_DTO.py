@@ -10,8 +10,25 @@ class Map_DTO(object):
     def __init__(self, map_size):
         self.__map_size = map_size
         self.__cell_list = []
-        self.__current_cell = 0
+        self.__entrence = None
     
+    
+    def get_cell_list(self):
+        return self.__cell_list
+    
+    
+    def set_cell_list(self, value):
+        self.__cell_list = value
+        
+        
+    def get_entrence(self):
+        return self.__entrence
+    
+    
+    def set_entrence(self, value):
+        self.__entrence = value
+        
+        
 
 class Cell_DTO(object):
     '''

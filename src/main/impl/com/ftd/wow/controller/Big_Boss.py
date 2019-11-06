@@ -125,6 +125,20 @@ class Big_Boss(object):
         
         # arrange event task to current leader
         self.__current_controller.mouse_click_event(pressed_mouse, contextDTO)
+    
+    
+    def event_keyboard_keydown(self, move_x, move_y, contextDTO):
+        if not self.__current_controller:
+            return False, 'No leader available!'
+        
+        if not self.__current_controller.get_current_scene():
+            return False, 'No available scene for the current leader!'
+        
+        if not self.__current_controller.event_keyboard_keydown:
+            return False, 'Scene mouse click event is not valid!'
+        
+        # arrange event task to current leader
+        self.__current_controller.event_keyboard_keydown(move_x, move_y, contextDTO)
         
     
     def event_cursor(self, cursor_x, cursor_y, contextDTO):

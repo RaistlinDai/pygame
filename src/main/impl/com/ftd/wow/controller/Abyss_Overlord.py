@@ -44,6 +44,8 @@ class Abyss_Overlord(IController):
         super().wake_up_controller(contextDto)
         if contextDto:
             self.__maze_walker.generate_map(contextDto.get_ContextDto_InMap().get_map_size())
+            # backup the map into contextDTO
+            contextDto.get_ContextDto_InMap().set_map(self.__maze_walker.get_map())
         
     
     def render_scene(self, screen_ins, contextDTO):
@@ -140,6 +142,23 @@ class Abyss_Overlord(IController):
         elif pressed_mouse[2]:
             if contextDTO.get_ContextDto_InCombat().get_current_select_skill():
                 contextDTO.get_ContextDto_InCombat().set_current_select_skill(None)
+    
+    
+    def event_keyboard_keydown(self, move_x, move_y, contextDTO):
+        super().event_keyboard_keydown(move_x, move_y, contextDTO)
+        
+        # get the current map
+        current_map = self.__maze_walker.get_map()
+        (current_cell, current_position, current_direction) = self.__maze_walker.get_current_position()
+        
+        if not current_cell:
+            current_cell = current_map.get_entrence()
+        
+        if move_x != 0:
+            print('Abyss_Overlord move on x')
+        
+        if move_y != 0:
+            print('Abyss_Overlord move on y')
 
     
     def cursor_event(self, cursor_x, cursor_y, contextDTO):
