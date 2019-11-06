@@ -29,6 +29,8 @@ class Cell_DTO(object):
         self.__enemy_team = None
         
         self.__special_event = None
+        
+        self.__nearby_cells = []
     
     
     def get_pos_x(self):
@@ -54,3 +56,14 @@ class Cell_DTO(object):
     def set_type(self, value):
         self.__type = value
         
+
+    def get_nearby_cells(self):
+        return self.__nearby_cells
+    
+    
+    def set_nearby_cells(self, value):
+        self.__nearby_cells = value
+        
+    
+    def append_nearby_cells(self, value):
+        self.__nearby_cells.append(value)

@@ -10,9 +10,9 @@ class MapSize_Enum(Enum):
     @attention: the value structure: scene constructor
     '''
     
-    SIZE_BIG = (150,180)
-    SIZE_MIDDLE = (100,120)
-    SIZE_SMALL = (50,60)
+    SIZE_BIG = (100,110)
+    SIZE_MIDDLE = (70,80)
+    SIZE_SMALL = (40,50)
     
 
 @unique
@@ -42,7 +42,7 @@ class Map_Util(object):
     
     '''
     
-    DEFAULT_CELL_COUNT_IN_SINGLE_GROUP = (3,8)
+    DEFAULT_CELL_COUNT_IN_SINGLE_GROUP = (4,8)
     
     @staticmethod
     def generate_random_map(map_size):
@@ -63,24 +63,37 @@ class Map_Util(object):
         temp_room_list = []
         temp_room_list.append(entrance_cell)
         
-        while (temp_map_size_count > 0):
+        while (temp_map_size_count > 2 or len(temp_room_list) == 0):
             # pick up one Room cell as start point
             room_number = random.randint(0, len(temp_room_list)-1)
             temp_start_point = temp_room_list[room_number]
             
             # generate new cell group
-            generated_cell_group, new_group_count, room_cell = \
+            generated_cell_group, new_group_count, new_room_cell, existing_room_cell = \
                 Map_Util.generate_single_cell_group(temp_start_point, temp_map_size_count, map_cell_list)
+                
+            # update start point
+            if new_group_count > 0:
+                # add room cell
+                if new_room_cell:
+                    temp_room_list.append(new_room_cell)
+                elif existing_room_cell:
+                    # update the nearby cells
+                    nearby_cell = Map_Util.analysis_nearby_cells(existing_room_cell, generated_cell_group)
+                    existing_room_cell.append_nearby_cells(nearby_cell)
+                    if len(existing_room_cell.get_nearby_cells()) == 4:
+                        temp_room_list.remove(existing_room_cell)
+                
+                # update the nearby cells
+                nearby_cell = Map_Util.analysis_nearby_cells(temp_start_point, generated_cell_group)
+                temp_start_point.append_nearby_cells(nearby_cell)
+                if len(temp_start_point.get_nearby_cells()) == 4:
+                    temp_room_list.remove(temp_start_point)
+            else:
+                temp_room_list.remove(temp_start_point)
+                
             # merge cell group
             map_cell_list = map_cell_list + generated_cell_group
-
-            # add room cell
-            if room_cell:
-                temp_room_list.append(room_cell)
-                
-            # remove room cell
-            if new_group_count == 0:
-                temp_room_list.remove(temp_start_point)
             
             # reduce the map size
             temp_map_size_count = temp_map_size_count - new_group_count
@@ -102,10 +115,10 @@ class Map_Util(object):
         
         temp_cell_list = []
         if not isinstance(start_cell, Cell_DTO):
-            return temp_cell_list, 0, None
+            return temp_cell_list, 0, None, None
         
         # verify if the related cells are existing, and the exactly direction
-        temp_nearby_cells = Map_Util.get_nearby_cells(start_cell, cell_group)
+        temp_nearby_cells = start_cell.get_nearby_cells()
         '''
         Here we use binary to replace the four directions: NSWE; and 0 means no related cell, 1 means it does.
         For example, 1101 means on North, South and East, the related cells are generated already.
@@ -154,7 +167,7 @@ class Map_Util(object):
         elif len(left_directions) == 1:
             generated_direction = left_directions[0]
         else:
-            return temp_cell_list, 0, None
+            return temp_cell_list, 0, None, None
         
         # calculate the cell group size
         temp_size_in_group = random.randint(Map_Util.DEFAULT_CELL_COUNT_IN_SINGLE_GROUP[0], \
@@ -163,40 +176,47 @@ class Map_Util(object):
         startY = start_cell.get_pos_y()
         is_generate_room = True
         
-        if temp_size_in_group > count_limit:
+        if temp_size_in_group >= count_limit:
             temp_size_in_group = count_limit
-        else:
-            # verify if there's cell existing in this direction
-            cell_distance = 999
-            cell_far_end = None
-            for temp_cell in cell_group:
-                if generated_direction == 4 and startX == temp_cell.get_pos_x() and startY < temp_cell.get_pos_y():
-                    if cell_distance > abs(startY - temp_cell.get_pos_y()):
-                        cell_far_end = temp_cell
-                        cell_distance = abs(startY - temp_cell.get_pos_y())
-                elif generated_direction == 3 and startX == temp_cell.get_pos_x() and startY > temp_cell.get_pos_y():
-                    if cell_distance > abs(startY - temp_cell.get_pos_y()):
-                        cell_far_end = temp_cell
-                        cell_distance = abs(startY - temp_cell.get_pos_y())
-                elif generated_direction == 2 and startY == temp_cell.get_pos_y() and startX > temp_cell.get_pos_x():
-                    if cell_distance > abs(startX - temp_cell.get_pos_x()):
-                        cell_far_end = temp_cell
-                        cell_distance = abs(startX - temp_cell.get_pos_x())
-                elif generated_direction == 1 and startY == temp_cell.get_pos_y() and startX < temp_cell.get_pos_x():
-                    if cell_distance > abs(startX - temp_cell.get_pos_x()):
-                        cell_far_end = temp_cell
-                        cell_distance = abs(startX - temp_cell.get_pos_x())
             
-            # if the far-end cell is a Room, then cut-off the extend new cell
-            if cell_far_end and cell_distance <= temp_size_in_group:
+        # verify if there's cell existing in this direction
+        cell_distance = 999
+        cell_far_end = None
+        for temp_cell in cell_group:
+            if generated_direction == 4 and startX == temp_cell.get_pos_x() and startY < temp_cell.get_pos_y():
+                if cell_distance > abs(startY - temp_cell.get_pos_y()):
+                    cell_far_end = temp_cell
+                    cell_distance = abs(startY - temp_cell.get_pos_y())
+            elif generated_direction == 3 and startX == temp_cell.get_pos_x() and startY > temp_cell.get_pos_y():
+                if cell_distance > abs(startY - temp_cell.get_pos_y()):
+                    cell_far_end = temp_cell
+                    cell_distance = abs(startY - temp_cell.get_pos_y())
+            elif generated_direction == 2 and startY == temp_cell.get_pos_y() and startX > temp_cell.get_pos_x():
+                if cell_distance > abs(startX - temp_cell.get_pos_x()):
+                    cell_far_end = temp_cell
+                    cell_distance = abs(startX - temp_cell.get_pos_x())
+            elif generated_direction == 1 and startY == temp_cell.get_pos_y() and startX < temp_cell.get_pos_x():
+                if cell_distance > abs(startX - temp_cell.get_pos_x()):
+                    cell_far_end = temp_cell
+                    cell_distance = abs(startX - temp_cell.get_pos_x())
+            
+        # if the far-end cell is a Room, then link it
+        existing_room_cell = None
+        if cell_far_end:
+            # link the generated room to the new cell group
+            if cell_far_end.get_type() == CellType_Enum.TYPE_ROOM or cell_far_end.get_type() == CellType_Enum.TYPE_ENTRANCE:
                 temp_size_in_group = cell_distance - 1
-                # link the generated room to the new cell group
-                if cell_far_end.get_type() == CellType_Enum.TYPE_ROOM or cell_far_end.get_type() == CellType_Enum.TYPE_ENTRANCE:
-                    is_generate_room = False
+                is_generate_room = False
+                existing_room_cell = cell_far_end
+            elif cell_distance <= temp_size_in_group:
+                if cell_distance <= 3:
+                    return temp_cell_list, 0, None, None
+                else:
+                    temp_size_in_group = cell_distance - 1
         
         # generate the map cells
         i = 0
-        room_cell = None
+        new_room_cell = None
         while (i < temp_size_in_group):
             if generated_direction == 4:
                 tempCell = Cell_DTO(startX, startY + i + 1, CellType_Enum.TYPE_CORRIDOR)
@@ -209,19 +229,32 @@ class Map_Util(object):
             
             if i + 1 == temp_size_in_group and is_generate_room:
                 tempCell.set_type(CellType_Enum.TYPE_ROOM)
-                room_cell = tempCell
+                new_room_cell = tempCell
             
             temp_cell_list.append(tempCell)
             
             i = i + 1
         
-        return temp_cell_list, temp_size_in_group, room_cell
+        # apply nearby cells
+        i = 0
+        for temp_cell in temp_cell_list:
+            if i - 1 >= 0:
+                temp_cell.append_nearby_cells(temp_cell_list[i - 1])
+            else:
+                temp_cell.append_nearby_cells(start_cell)
+                
+            if i + 1 < len(temp_cell_list):
+                temp_cell.append_nearby_cells(temp_cell_list[i + 1])
+            elif existing_room_cell:
+                temp_cell.append_nearby_cells(existing_room_cell)
+                
+            i += 1
+                
+        return temp_cell_list, temp_size_in_group, new_room_cell, existing_room_cell
     
     
     @staticmethod
-    def get_nearby_cells(start_cell, cell_group):
-        
-        nearby_cell_list = []
+    def analysis_nearby_cells(start_cell, cell_group):
         start_x = start_cell.get_pos_x()
         start_y = start_cell.get_pos_y()
         
@@ -232,15 +265,19 @@ class Map_Util(object):
             if start_x == temp_x and start_y == temp_y:
                 continue
             elif start_x == temp_x and abs(start_y - temp_y) == 1:
-                nearby_cell_list.append(tempCell)
+                return tempCell
+                
             elif start_y == temp_y and abs(start_x - temp_x) == 1:
-                nearby_cell_list.append(tempCell)
+                return tempCell
         
-        return nearby_cell_list 
+        return None 
     
     
     @staticmethod
     def reorder_cells(cell_group):
+        '''
+        re-order the cells
+        '''
         group_length = len(cell_group)
         for i in range(group_length):
             temp_cell = cell_group[i]
@@ -261,6 +298,9 @@ class Map_Util(object):
     
     @staticmethod
     def render_map(cell_group):
+        '''
+        render the map
+        '''
         max_x = 0
         max_y = 0
         for temp_cell in cell_group:
@@ -268,7 +308,6 @@ class Map_Util(object):
                 max_x = temp_cell.get_pos_x()
             if max_y < temp_cell.get_pos_y():
                 max_y = temp_cell.get_pos_y()
-        print("Max pos:", max_x, max_y)
         
         current_posY_nbr = -9999
         current_line_txt = ''
@@ -290,8 +329,7 @@ class Map_Util(object):
                 current_line_txt += 'O'
             elif temp_cell.get_type() == CellType_Enum.TYPE_ROOM:
                 current_line_txt += 'X'
-            
+                
             current_posY_nbr = abs_y
         
         print(current_line_txt)
-            

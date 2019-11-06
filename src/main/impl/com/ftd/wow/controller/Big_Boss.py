@@ -7,7 +7,7 @@ from src.main.impl.com.ftd.wow.scene.base.SceneMode_Enum import SceneMode_Enum
 from src.main.api.com.ftd.wow.controller.IController import IController
 from src.main.impl.com.ftd.wow.controller.Login_Guide import Login_Guide
 from src.main.impl.com.ftd.wow.controller.Abyss_Overlord import Abyss_Overlord
-from src.main.impl.com.ftd.wow.controller.Maze_Walker import MapSize_Enum
+from src.main.impl.com.ftd.wow.util.Map_Util import MapSize_Enum
 
 class Big_Boss(object):
     '''
