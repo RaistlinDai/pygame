@@ -3,17 +3,19 @@ Created on Oct 09, 2019
 
 @author: ftd
 '''
+from src.main.api.com.ftd.wow.controller.IController import IController
 
-class Combat_Judgment(object):
+class Combat_Judgment(IController):
     '''
     This is the Judgment for Combat round, 
     it will determine the characters' orders, damages, mental stress, body injury and all other affects.
     '''
     
-    def __init__(self,):
+    def __init__(self):
         '''
         
         '''
+        super().__init__()
         # Judgment is start or not
         self.__is_start_combat = False
         # round count

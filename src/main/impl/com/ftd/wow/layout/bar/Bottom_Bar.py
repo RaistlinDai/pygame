@@ -77,9 +77,10 @@ class Bottom_Bar(object):
             
     def get_cover_skill(self, cursor_x, cursor_y, contextDTO):
         
-        active_skills = contextDTO.get_ContextDto_InCombat().get_current_selection().get_active_skills()
-        if not active_skills:
+        if not contextDTO.get_ContextDto_InCombat().get_current_selection() or \
+           not contextDTO.get_ContextDto_InCombat().get_current_selection().get_active_skills():
             return
+        active_skills = contextDTO.get_ContextDto_InCombat().get_current_selection().get_active_skills()
         
         temp_pos_x = []
         idx = 0

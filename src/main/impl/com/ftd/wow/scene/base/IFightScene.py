@@ -8,6 +8,7 @@ import time
 from src.main.api.com.ftd.wow.scene.IScene import IScene
 from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
 from src.main.impl.com.ftd.wow.util.Fight_Util import Fight_Util
+from src.main.impl.com.ftd.wow.controller.Abyss_Overlord import StatusType_Enum
 
 class IFightScene(IScene):
     '''
@@ -22,10 +23,14 @@ class IFightScene(IScene):
         self.__size_h = 720
         
         # character-screen properties
-        self.__character_properties = {1:{'position':(50, 420), 'image_size':(0,0,0,0), 'character':None}, 
-                                       2:{'position':(150, 420), 'image_size':(0,0,0,0), 'character':None}, 
-                                       3:{'position':(250, 420), 'image_size':(0,0,0,0), 'character':None}, 
-                                       4:{'position':(350, 420), 'image_size':(0,0,0,0), 'character':None}}
+        self.__character_move_properties = {1:{'position':(200, 340), 'image_size':(0,0,0,0), 'character':None}, 
+                                            2:{'position':(350, 340), 'image_size':(0,0,0,0), 'character':None}, 
+                                            3:{'position':(500, 340), 'image_size':(0,0,0,0), 'character':None}, 
+                                            4:{'position':(650, 340), 'image_size':(0,0,0,0), 'character':None}}
+        self.__character_combat_properties = {1:{'position':(50, 420), 'image_size':(0,0,0,0), 'character':None}, 
+                                              2:{'position':(150, 420), 'image_size':(0,0,0,0), 'character':None}, 
+                                              3:{'position':(250, 420), 'image_size':(0,0,0,0), 'character':None}, 
+                                              4:{'position':(350, 420), 'image_size':(0,0,0,0), 'character':None}}
         self.__enemy_properties = {1:{'position':(700, 420), 'image_size':(0,0,0,0), 'enemy':None, "merge":None}, 
                                    2:{'position':(830, 420), 'image_size':(0,0,0,0), 'enemy':None, "merge":None}, 
                                    3:{'position':(960, 420), 'image_size':(0,0,0,0), 'enemy':None, "merge":None}, 
@@ -53,11 +58,11 @@ class IFightScene(IScene):
     
     
     def get_character_properties(self):
-        return self.__character_properties
+        return self.__character_combat_properties
     
     
     def set_character_properties(self, value):
-        self.__character_properties = value
+        self.__character_combat_properties = value
         
         
     def get_bottom_bar(self):
@@ -91,7 +96,11 @@ class IFightScene(IScene):
         self.__top_bar.render_image(screen_ins, self.__size_w, self.__size_h, contextDTO)
         
         # in combat
-        if screen_status == "COMBAT":
+        if screen_status == StatusType_Enum.STATUS_MOVE:
+            # render the characters
+            self.render_characters_in_move(screen_ins, contextDTO)
+            
+        elif screen_status == StatusType_Enum.STATUS_COMBAT:
             
             '''
             @todo: render combat round count
@@ -108,8 +117,47 @@ class IFightScene(IScene):
             # render the fighting image
             self.render_fighting(screen_ins, contextDTO)
         
+        elif screen_status == StatusType_Enum.STATUS_CAMP:
+            # render the characters
+            '''
+            @todo: add method
+            '''
+            self.render_characters_in_camp(screen_ins, contextDTO)
+    
+    
+    def render_characters_in_move(self, screen_ins, contextDTO):
+        # render the character
+        if not contextDTO.get_ContextDto_InCombat().get_active_team():
+            return
+        characters = contextDTO.get_ContextDto_InCombat().get_active_team().get_teammembers()
+    
+        idx = 0
+        for temp_char in characters:
+            idx = idx + 1
+            if not temp_char:
+                continue
+        
+            # resize character stand image
+            calc_h = Image_Util.calculate_character_move_height_by_screen_size(self.__size_h)
+            calc_w = Image_Util.calculate_character_move_width_by_height(temp_char.get_stand_image(), calc_h)
+
+            temp_char.resize_character_images(calc_w, calc_h, 1, 1)
+            temp_prof_rate = temp_char.get_character_profession_rate()
+            
+            # re-calculate character stand image position
+            (x,y) = Image_Util.calculate_character_move_position_by_screen_size(self.__size_w, self.__size_h, idx, temp_prof_rate)
+            self.__character_move_properties[idx]['position'] = (x,y)
+            self.__character_move_properties[idx]['image_size'] = (0, 0, calc_w, calc_h)
+            
+            # render characters in move
+            '''
+            @todo: render characters moving images
+            '''
+            new_w, new_h = temp_char.get_stand_image().get_size()
+            screen_ins.blit(temp_char.get_stand_image(), (x,y), (0, 0, new_w, new_h))
+            
              
-    def render_characters_in_combat(self, screen_ins, contextDTO):             
+    def render_characters_in_combat(self, screen_ins, contextDTO):
         # render the character
         if not contextDTO.get_ContextDto_InCombat().get_active_team():
             return
@@ -122,18 +170,18 @@ class IFightScene(IScene):
                 continue
             
             # resize character stand image
-            calc_h = Image_Util.calculate_character_height_by_screen_size(self.__size_h)
-            calc_w = Image_Util.calculate_character_width_by_height(temp_char.get_stand_image(), calc_h)
+            calc_h = Image_Util.calculate_character_combat_height_by_screen_size(self.__size_h)
+            calc_w = Image_Util.calculate_character_combat_width_by_height(temp_char.get_stand_image(), calc_h)
             calc_in_fight_h = Image_Util.calculate_character_in_fight_height_by_screen_size(self.__size_h)
-            calc_in_fight_w = Image_Util.calculate_character_width_by_height(temp_char.get_fighting_image(), calc_in_fight_h)
+            calc_in_fight_w = Image_Util.calculate_character_combat_width_by_height(temp_char.get_fighting_image(), calc_in_fight_h)
 
             temp_char.resize_character_images(calc_w, calc_h, calc_in_fight_w, calc_in_fight_h)
             temp_prof_rate = temp_char.get_character_profession_rate()
             
             # re-calculate character stand image position
-            (x,y) = Image_Util.calculate_character_position_by_screen_size(self.__size_w, self.__size_h, idx, temp_prof_rate)
-            self.__character_properties[idx]['position'] = (x,y)
-            self.__character_properties[idx]['image_size'] = (0, 0, calc_w, calc_h)
+            (x,y) = Image_Util.calculate_character_combat_position_by_screen_size(self.__size_w, self.__size_h, idx, temp_prof_rate)
+            self.__character_combat_properties[idx]['position'] = (x,y)
+            self.__character_combat_properties[idx]['image_size'] = (0, 0, calc_w, calc_h)
             
             if contextDTO.get_ContextDto_InCombat().get_current_selection() and \
                contextDTO.get_ContextDto_InCombat().get_current_selection().get_character_name() == temp_char.get_character_name():
@@ -154,6 +202,13 @@ class IFightScene(IScene):
                 screen_ins.blit(temp_char.get_stand_image(), (x,y), (0, 0, new_w, new_h))
     
     
+    def render_characters_in_camp(self, screen_ins, contextDTO):
+        # render the character
+        if not contextDTO.get_ContextDto_InCombat().get_active_team():
+            return
+        characters = contextDTO.get_ContextDto_InCombat().get_active_team().get_teammembers()
+        
+    
     def render_enemies_in_combat(self, screen_ins, contextDTO):             
         # render the character
         if not contextDTO.get_ContextDto_InCombat().get_active_enemies():
@@ -169,10 +224,10 @@ class IFightScene(IScene):
                 continue
             
             # resize character
-            calc_h = Image_Util.calculate_character_height_by_screen_size(self.__size_h)
-            calc_w = Image_Util.calculate_character_width_by_height(temp_char.get_stand_image(), calc_h)
+            calc_h = Image_Util.calculate_character_combat_height_by_screen_size(self.__size_h)
+            calc_w = Image_Util.calculate_character_combat_width_by_height(temp_char.get_stand_image(), calc_h)
             calc_in_fight_h = Image_Util.calculate_character_in_fight_height_by_screen_size(self.__size_h)
-            calc_in_fight_w = Image_Util.calculate_character_width_by_height(temp_char.get_fighting_image(), calc_in_fight_h)
+            calc_in_fight_w = Image_Util.calculate_character_combat_width_by_height(temp_char.get_fighting_image(), calc_in_fight_h)
             
             temp_char.resize_character_images(calc_w, calc_h, calc_in_fight_w, calc_in_fight_h)
             temp_prof_rate = temp_char.get_character_enemy_type_rate()
@@ -305,8 +360,8 @@ class IFightScene(IScene):
         if contextDTO.get_ContextDto_InCombat().get_is_fight_in_round():
             return
         
-        for temp_idx in self.__character_properties:
-            temp_char = self.__character_properties[temp_idx]
+        for temp_idx in self.__character_combat_properties:
+            temp_char = self.__character_combat_properties[temp_idx]
             (temp_char_x, temp_char_y) = temp_char['position']
             (temp_char_p1, temp_char_p2, temp_char_w, temp_char_h) = temp_char['image_size']
             

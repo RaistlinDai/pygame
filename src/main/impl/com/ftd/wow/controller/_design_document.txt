@@ -1,13 +1,15 @@
 1. Big_Boss should be the highest level manager, to maintain the scenes changing.
    The Big_Boss registers in Context_DTO
-2. There are a couple of secondary managers to maintain each scene, and in each of them there would be some sub-managers 
+2. There are a couple of secondary managers to maintain each scene, and in each of them there would be some more sub-managers 
    to handle some transaction details:
         - Scene_Manager
-            - Login
+            - Login                  - Login_Guide
             - In downtown            - Downtown_Archon
             - In dungeon selection   - Dungeon_Explorer
             - In dungeon exploration - Abyss_Overlord       - maintain the exploration in dungeon
-                   - Generate map     - Maze_Walker
-                   - Generate enemy   - Monster_Incubator
-                   - In combat        - Combat_Judgment
-                   - In camp          - Camp_Charger
+                   - Generate map     - Maze_Walker         
+                                        1. generate map        - 80%
+                                        2. move forward in map - 30%
+                   - Generate enemy   - Monster_Incubator      - 0%
+                   - In combat        - Combat_Judgment        - 20%
+                   - In camp          - Camp_Charger           - 0%

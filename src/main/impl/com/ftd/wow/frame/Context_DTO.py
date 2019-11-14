@@ -90,7 +90,7 @@ class Context_DTO_InCombat(object):
     def __init__(self):
         self.__active_team = None
         self.__active_enemies = None
-        self.__in_fight = False
+        self.__combat = False
 
         self.__current_selection = None
         self.__current_target = None
@@ -123,12 +123,12 @@ class Context_DTO_InCombat(object):
         self.__active_team = value
 
 
-    def get_in_fight(self):
-        return self.__in_fight
+    def get_combat(self):
+        return self.__combat
 
 
-    def set_in_fight(self, value):
-        self.__in_fight = value
+    def set_combat(self, value):
+        self.__combat = value
     
     
     def get_current_selection(self):
