@@ -127,7 +127,7 @@ class Big_Boss(object):
         self.__current_controller.mouse_click_event(pressed_mouse, contextDTO)
     
     
-    def event_keyboard_keydown(self, move_x, move_y, contextDTO):
+    def event_keyboard_keydown(self, move_a, move_d, move_w, move_s, contextDTO):
         if not self.__current_controller:
             return False, 'No leader available!'
         
@@ -138,7 +138,7 @@ class Big_Boss(object):
             return False, 'Scene mouse click event is not valid!'
         
         # arrange event task to current leader
-        self.__current_controller.event_keyboard_keydown(move_x, move_y, contextDTO)
+        self.__current_controller.event_keyboard_keydown(move_a, move_d, move_w, move_s, contextDTO)
         
     
     def event_cursor(self, cursor_x, cursor_y, contextDTO):

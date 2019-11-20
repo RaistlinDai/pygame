@@ -13,6 +13,7 @@ from src.main.impl.com.ftd.wow.scene.base.SceneMode_Enum import SceneMode_Enum
 from src.main.impl.com.ftd.wow.savedata.Savedata_Analysis import Savedata_Analsis
 from src.main.impl.com.ftd.wow.util.Enemy_Util import Enemy_Util
 from src.main.impl.com.ftd.wow.controller.Big_Boss import Big_Boss
+import time
 
 class MainScreen(object):
     '''
@@ -65,8 +66,7 @@ class MainScreen(object):
         # update manager
         self.__manager.update_controller(self.__context_DTO, SceneMode_Enum.MENU_SCENE)
                 
-        move_x, move_y = 0, 0
-        keyboard_keydown = None
+        move_a, move_d, move_w, move_s = 0, 0, 0, 0
         
         # main loop
         while True:
@@ -98,23 +98,26 @@ class MainScreen(object):
                     
                 # keyboard event
                 if event.type == KEYDOWN:
-                    keyboard_keydown = event.key
-                    if event.key == K_LEFT:
-                        move_x = -1
-                    elif event.key == K_RIGHT:
-                        move_x = 1
-                    elif event.key == K_UP:
-                        move_y = -1
-                    elif event.key == K_DOWN:
-                        move_y = 1
+                    if event.key == K_a or event.key == K_LEFT:
+                        move_a = 1
+                    elif event.key == K_d or event.key == K_RIGHT:
+                        move_d = 1
+                    elif event.key == K_UP or event.key == K_w:
+                        move_w = 1
+                    elif event.key == K_DOWN or event.key == K_s:
+                        move_s = 1
                 elif event.type == KEYUP:
-                    keyboard_keydown = None
-                    move_x = 0
-                    move_y = 0
+                    if event.key == K_a or event.key == K_LEFT:
+                        move_a = 0
+                    elif event.key == K_d or event.key == K_RIGHT:
+                        move_d = 0
+                    elif event.key == K_UP or event.key == K_w:
+                        move_w = 0
+                    elif event.key == K_DOWN or event.key == K_s:
+                        move_s = 0
             
             # keyboard key down event
-            if keyboard_keydown:
-                self.__manager.event_keyboard_keydown(move_x, move_y, self.__context_DTO)
+            self.__manager.event_keyboard_keydown(move_a, move_d, move_w, move_s, self.__context_DTO)
             
             # get the keyboard and mouse click
             pressed_mouse = pygame.mouse.get_pressed()
@@ -127,6 +130,8 @@ class MainScreen(object):
             
             # render the screen
             pygame.display.update()
+            
+            time.sleep(0.001)
         
     
     def render_cursor(self, cursor_x, cursor_y):

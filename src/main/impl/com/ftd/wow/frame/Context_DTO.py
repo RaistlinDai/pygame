@@ -67,6 +67,9 @@ class Context_DTO_InMap(object):
     def __init__(self):
         self.__map_size = None
         self.__map = None
+        self.__map_position = None
+        self.__map_next_room = None
+        
     
     def get_map_size(self):
         return self.__map_size
@@ -82,7 +85,29 @@ class Context_DTO_InMap(object):
 
     def set_map(self, value):
         self.__map = value
+        
     
+    def get_map_position(self):
+        return self.__map_position
+
+
+    def set_map_position(self, value):
+        self.__map_position = value
+        
+    
+    def get_map_next_room(self):
+        return self.__map_next_room
+
+
+    def set_map_next_room(self, value):
+        self.__map_next_room = value
+        
+    
+    def clear_map(self):
+        self.__map_size = None
+        self.__map = None
+        self.__map_position = None
+        self.__map_next_room = None
     
     
 class Context_DTO_InCombat(object):

@@ -1,7 +1,3 @@
-import random
-from enum import Enum, unique
-
-
 class Map_DTO(object):
     '''
     Map_DTO include the cell_list, format is [[pos_x, pos_y],[....]....]
@@ -42,7 +38,7 @@ class Cell_DTO(object):
         
         self.__type = cell_type
         
-        self.__has_enemy = False
+        self.__in_combat = False
         self.__enemy_team = None
         
         self.__special_event = None
@@ -84,3 +80,54 @@ class Cell_DTO(object):
     
     def append_nearby_cells(self, value):
         self.__nearby_cells.append(value)
+
+
+    def get_in_combat(self):
+        return self.__in_combat
+    
+    
+    def set_in_combat(self, value):
+        self.__in_combat = value
+
+
+class Position_DTO(object):
+    '''
+    Position DataObject
+    NOTE: the default cell size is 100
+    '''
+    def __init__(self, map_cell=None, cell_position=0, move_direction=None):
+        self.__map_cell = map_cell
+        self.__cell_position = cell_position
+        self.__move_direction = move_direction
+
+
+    def get_map_cell(self):
+        return self.__map_cell
+
+
+    def get_cell_position(self):
+        return self.__cell_position
+
+
+    def get_move_direction(self):
+        return self.__move_direction
+
+
+    def set_map_cell(self, value):
+        self.__map_cell = value
+
+
+    def set_cell_position(self, value):
+        self.__cell_position = value
+
+
+    def set_move_direction(self, value):
+        self.__move_direction = value
+
+
+    map_cell = property(get_map_cell, set_map_cell, None, None)
+    cell_position = property(get_cell_position, set_cell_position, None, None)
+    move_direction = property(get_move_direction, set_move_direction, None, None)
+    
+    
+    

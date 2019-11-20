@@ -33,6 +33,8 @@ class Abyss_Overlord(IController):
         self.__maze_walker = Maze_Walker()
         # combat judgment
         self.__combat_judgment = Combat_Judgment()
+        # scene changing timer
+        self.__scene_changing_timer = 0
         
         self.__current_scene = resourceDTO.get_scene(FightScene_Enum.MC_BOSS_10.name)
         
@@ -58,12 +60,18 @@ class Abyss_Overlord(IController):
         # active Maze_Walker
         if contextDto:
             self.__maze_walker.wake_up_controller(contextDto)
-            self.__maze_walker.generate_map(contextDto.get_ContextDto_InMap().get_map_size())
-            # backup the map into contextDTO
-            contextDto.get_ContextDto_InMap().set_map(self.__maze_walker.get_map())
         
     
     def render_scene(self, screen_ins, contextDTO):
+        
+        # calculate scene changing timer
+        if self.__scene_changing_timer > 0:
+            current_time = time.time()*1000.0
+            if current_time - self.__scene_changing_timer < 2000:
+                pass
+            else:
+                self.__scene_changing_timer = 0 
+                
         # re-load the character to background
         self.available_active_team(contextDTO)
         
@@ -143,6 +151,9 @@ class Abyss_Overlord(IController):
     #                         Event                              #
     # ========================================================== #
     def mouse_click_event(self, pressed_mouse, contextDTO):
+        '''
+        Mouse click event
+        '''
         super().mouse_click_event(pressed_mouse, contextDTO)
         
         if pressed_mouse[0]:
@@ -164,26 +175,26 @@ class Abyss_Overlord(IController):
                 contextDTO.get_ContextDto_InCombat().set_current_select_skill(None)
     
     
-    def event_keyboard_keydown(self, move_x, move_y, contextDTO):
-        super().event_keyboard_keydown(move_x, move_y, contextDTO)
+    def event_keyboard_keydown(self, move_a, move_d, move_w, move_s, contextDTO):
+        '''
+        Keyboard event
+        '''
+        # ignore keyboard event once changing the scene
+        if self.__scene_changing_timer > 0:
+            return 
         
-        if move_x != 0:
-            print('Abyss_Overlord move on x')
-        
-        if move_y != 0:
-            print('Abyss_Overlord move on y')
-        
+        super().event_keyboard_keydown(move_a, move_d, move_w, move_s, contextDTO)
+
         if not self.__maze_walker.get_in_hibernation():
-            # get the current map
-            current_map = self.__maze_walker.get_map()
-            (current_cell, current_position, current_direction) = self.__maze_walker.get_current_position()
-            
-            if not current_cell:
-                current_cell = current_map.get_entrence()
-                current_position = 0
+            # characters move in map
+            self.__scene_changing_timer, error_msg = \
+                self.__maze_walker.manage_characters_move_in_map(move_a, move_d, move_w, move_s, contextDTO)
 
     
     def cursor_event(self, cursor_x, cursor_y, contextDTO):
+        '''
+        Cursor event
+        '''
         # cover character
         self.get_current_scene().get_cover_character(cursor_x, cursor_y, contextDTO)
         # cover skill

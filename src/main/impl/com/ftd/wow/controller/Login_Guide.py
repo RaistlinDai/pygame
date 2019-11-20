@@ -61,13 +61,13 @@ class Login_Guide(IController):
                 self.__button_click_timer = time.time()*1000.0
     
     
-    def event_keyboard_keydown(self, move_x, move_y, contextDTO):
-        super().event_keyboard_keydown(move_x, move_y, contextDTO)
+    def event_keyboard_keydown(self, move_a, move_d, move_w, move_s, contextDTO):
+        super().event_keyboard_keydown(move_a, move_d, move_w, move_s, contextDTO)
         
-        if move_x != 0:
+        if move_a != 0 or move_d != 0:
             print('Login_Guide move on x')
         
-        if move_y != 0:
+        if move_w != 0 or move_s != 0:
             print('Login_Guide move on y')
             
     

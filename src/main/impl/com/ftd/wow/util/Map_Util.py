@@ -26,6 +26,19 @@ class CellType_Enum(Enum):
     TYPE_CORRIDOR = "Corridor"
     TYPE_ROOM = "Room"
     TYPE_SECRET = "Secret"
+
+
+@unique
+class MoveDirection_Enum(Enum):
+    '''
+    classdocs
+    @attention: the move direction
+    '''
+    
+    DIRECTION_NORTH = "North"
+    DIRECTION_SOUTH = "South"
+    DIRECTION_WEST = "West"
+    DIRECTION_EAST = "East"
     
     
 class Map_Util(object):
@@ -43,6 +56,7 @@ class Map_Util(object):
     '''
     
     DEFAULT_CELL_COUNT_IN_SINGLE_GROUP = (4,8)
+    DEFAULT_CELL_SIZE = 100
     
     @staticmethod
     def generate_random_map(map_size):
@@ -82,14 +96,16 @@ class Map_Util(object):
                     temp_room_list.append(new_room_cell)
                 elif existing_room_cell:
                     # update the nearby cells
-                    nearby_cell = Map_Util.analysis_nearby_cells(existing_room_cell, generated_cell_group)
-                    existing_room_cell.append_nearby_cells(nearby_cell)
+                    nearby_cells = Map_Util.get_nearby_cells_in_cell_group(existing_room_cell, generated_cell_group)
+                    if len(nearby_cells) == 1:
+                        existing_room_cell.append_nearby_cells(nearby_cells[0])
                     if len(existing_room_cell.get_nearby_cells()) == 4:
                         temp_room_list.remove(existing_room_cell)
                 
                 # update the nearby cells
-                nearby_cell = Map_Util.analysis_nearby_cells(temp_start_point, generated_cell_group)
-                temp_start_point.append_nearby_cells(nearby_cell)
+                nearby_cells = Map_Util.get_nearby_cells_in_cell_group(temp_start_point, generated_cell_group)
+                if len(nearby_cells) == 1:
+                    temp_start_point.append_nearby_cells(nearby_cells[0])
                 if len(temp_start_point.get_nearby_cells()) == 4:
                     temp_room_list.remove(temp_start_point)
             else:
@@ -101,13 +117,15 @@ class Map_Util(object):
             # reduce the map size
             temp_map_size_count = temp_map_size_count - new_group_count
         
-        # re-order the map cells
-        Map_Util.reorder_cells(map_cell_list)
-        # render the map
-        Map_Util.render_map(map_cell_list)
-        
+        # update mapDTO
         mapDTO.set_cell_list(map_cell_list)
         mapDTO.set_entrence(entrance_cell)
+        
+        # re-order the map cells
+        Map_Util.reorder_cells(mapDTO)
+        
+        # render the map
+        Map_Util.render_map(mapDTO)
         return mapDTO
         
         
@@ -126,48 +144,10 @@ class Map_Util(object):
         
         # verify if the related cells are existing, and the exactly direction
         temp_nearby_cells = start_cell.get_nearby_cells()
-        '''
-        Here we use binary to replace the four directions: NSWE; and 0 means no related cell, 1 means it does.
-        For example, 1101 means on North, South and East, the related cells are generated already.
-        The variable "temp_existing_directions" is the converted binary value
-        The variable "generated_direction" is the representation of for directions: 4:N, 3:S, 2:W, 1:E
-        The variable "left_directions" is the directions which do not generated cell
-        '''
-        temp_existing_directions = 0
+        
+        # get the left directions
         generated_direction = 0
-        left_directions = []
-        if temp_nearby_cells and len(temp_nearby_cells) > 0:
-            for temp_cell in temp_nearby_cells:
-                # on Y
-                if temp_cell.get_pos_x() == start_cell.get_pos_x():
-                    # south existing
-                    if temp_cell.get_pos_y() < start_cell.get_pos_y():
-                        temp_existing_directions = temp_existing_directions + 4
-                    # north existing
-                    elif temp_cell.get_pos_y() > start_cell.get_pos_y():
-                        temp_existing_directions = temp_existing_directions + 8
-                # on X
-                elif temp_cell.get_pos_y() == start_cell.get_pos_y():
-                    # west existing
-                    if temp_cell.get_pos_x() < start_cell.get_pos_x():
-                        temp_existing_directions = temp_existing_directions + 2
-                    # east existing
-                    elif temp_cell.get_pos_x() > start_cell.get_pos_x():
-                        temp_existing_directions = temp_existing_directions + 1
-                        
-        # verify the direction
-        tempBinStr = bin(temp_existing_directions)[2:]
-        for temp_char in range(4 - len(tempBinStr)):
-            tempBinStr = '0' + tempBinStr
-            
-        if int(tempBinStr[0]) == 0:
-            left_directions.append(4)
-        if int(tempBinStr[1]) == 0:
-            left_directions.append(3)
-        if int(tempBinStr[2]) == 0:
-            left_directions.append(2)
-        if int(tempBinStr[3]) == 0:
-            left_directions.append(1)
+        temp_list, left_directions = Map_Util.get_cell_directions(start_cell, temp_nearby_cells)
         
         if len(left_directions) > 1:
             generated_direction = random.choice(left_directions)
@@ -261,9 +241,83 @@ class Map_Util(object):
     
     
     @staticmethod
-    def analysis_nearby_cells(start_cell, cell_group):
+    def get_cell_directions(start_cell, nearby_cells):
+        '''
+        Here we use binary to replace the four directions: NSWE; and 0 means no related cell, 1 means it does.
+        For example, 1101 means on North, South and East, the related cells are generated already.
+        The variable "temp_existing_directions" is the converted binary value
+        The variable "generated_direction" is the representation of for directions: 4:N, 3:S, 2:W, 1:E
+        The variable "left_directions" is the directions which do not generated cell
+        
+        @return: existing_directions - Format - {1:Cell, 2:Cell, 3:Cell, 4:Cell}
+        @return: left_directions     - Format - [4,3,2,1]
+        '''
+        temp_existing_directions = 0
+        existing_directions = {}
+        left_directions = []
+        cell_on_south = None
+        cell_on_north = None
+        cell_on_west = None
+        cell_on_east = None
+        if nearby_cells and len(nearby_cells) > 0:
+            for temp_cell in nearby_cells:
+                # on Y
+                if temp_cell.get_pos_x() == start_cell.get_pos_x():
+                    # south existing
+                    if temp_cell.get_pos_y() < start_cell.get_pos_y():
+                        temp_existing_directions = temp_existing_directions + 4
+                        cell_on_south = temp_cell
+                    # north existing
+                    elif temp_cell.get_pos_y() > start_cell.get_pos_y():
+                        temp_existing_directions = temp_existing_directions + 8
+                        cell_on_north = temp_cell
+                # on X
+                elif temp_cell.get_pos_y() == start_cell.get_pos_y():
+                    # west existing
+                    if temp_cell.get_pos_x() < start_cell.get_pos_x():
+                        temp_existing_directions = temp_existing_directions + 2
+                        cell_on_west = temp_cell
+                    # east existing
+                    elif temp_cell.get_pos_x() > start_cell.get_pos_x():
+                        temp_existing_directions = temp_existing_directions + 1
+                        cell_on_east = temp_cell
+                        
+        # verify the direction
+        tempBinStr = bin(temp_existing_directions)[2:]
+        for temp_char in range(4 - len(tempBinStr)):
+            tempBinStr = '0' + tempBinStr
+            
+        if int(tempBinStr[0]) == 0:
+            left_directions.append(4)
+        else:
+            existing_directions[4] = cell_on_north
+            
+        if int(tempBinStr[1]) == 0:
+            left_directions.append(3)
+        else:
+            existing_directions[3] = cell_on_south
+            
+        if int(tempBinStr[2]) == 0:
+            left_directions.append(2)
+        else:
+            existing_directions[2] = cell_on_west
+            
+        if int(tempBinStr[3]) == 0:
+            left_directions.append(1)
+        else:
+            existing_directions[1] = cell_on_east
+        
+        return existing_directions, left_directions
+    
+    
+    @staticmethod
+    def get_nearby_cells_in_cell_group(start_cell, cell_group):
+        '''
+        Retrieve the nearby cell in cell group
+        '''
         start_x = start_cell.get_pos_x()
         start_y = start_cell.get_pos_y()
+        nearby_cells = []
         
         for tempCell in cell_group:
             temp_x = tempCell.get_pos_x()
@@ -272,19 +326,62 @@ class Map_Util(object):
             if start_x == temp_x and start_y == temp_y:
                 continue
             elif start_x == temp_x and abs(start_y - temp_y) == 1:
-                return tempCell
-                
+                nearby_cells.append(tempCell)
             elif start_y == temp_y and abs(start_x - temp_x) == 1:
-                return tempCell
+                nearby_cells.append(tempCell)
         
-        return None 
+        return nearby_cells 
     
     
     @staticmethod
-    def reorder_cells(cell_group):
+    def get_next_cell_in_map_by_direction(current_cell, direction, mapDTO):
+        '''
+        Retrieve the next cell according to the move direction
+        '''
+        if not mapDTO or not isinstance(mapDTO, Map_DTO):
+            return None
+        
+        if not current_cell or not isinstance(current_cell, Cell_DTO):
+            return None
+        
+        if not direction or not isinstance(direction, MoveDirection_Enum):
+            return None
+        
+        cell_group = mapDTO.get_cell_list()
+        
+        pos_x = current_cell.get_pos_x()
+        pos_y = current_cell.get_pos_y()
+        
+        for tempCell in cell_group:
+            temp_x = tempCell.get_pos_x()
+            temp_y = tempCell.get_pos_y()
+            
+            if pos_y == temp_y and pos_x - temp_x == 1 and \
+               direction == MoveDirection_Enum.DIRECTION_WEST:
+                return tempCell
+            elif pos_y == temp_y and temp_x - pos_x == 1 and \
+               direction == MoveDirection_Enum.DIRECTION_EAST:
+                return tempCell
+            elif pos_x == temp_x and pos_y - temp_y == 1 and \
+               direction == MoveDirection_Enum.DIRECTION_SOUTH:
+                return tempCell
+            elif pos_x == temp_x and temp_y - pos_y == 1 and \
+               direction == MoveDirection_Enum.DIRECTION_NORTH:
+                return tempCell
+            
+        return None
+        
+    
+    @staticmethod
+    def reorder_cells(mapDTO):
         '''
         re-order the cells
         '''
+        if not isinstance(mapDTO, Map_DTO):
+            return None
+        
+        cell_group = mapDTO.get_cell_list()
+        
         group_length = len(cell_group)
         for i in range(group_length):
             temp_cell = cell_group[i]
@@ -304,10 +401,15 @@ class Map_Util(object):
     
     
     @staticmethod
-    def render_map(cell_group):
+    def render_map(mapDTO):
         '''
         render the map
         '''
+        if not isinstance(mapDTO, Map_DTO):
+            return None
+        
+        cell_group = mapDTO.get_cell_list()
+        
         max_x = 0
         max_y = 0
         for temp_cell in cell_group:
@@ -340,3 +442,8 @@ class Map_Util(object):
             current_posY_nbr = abs_y
         
         print(current_line_txt)
+        
+    
+    @staticmethod
+    def calculate_movement(move_x):
+        pass

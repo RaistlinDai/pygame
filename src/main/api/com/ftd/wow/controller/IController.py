@@ -45,5 +45,5 @@ class IController(object):
         pass
     
     
-    def event_keyboard_keydown(self, move_x, move_y, contextDTO):
+    def event_keyboard_keydown(self, move_a, move_d, move_w, move_s, contextDTO):
         pass
