@@ -9,6 +9,7 @@ import time
 from src.main.impl.com.ftd.wow.controller.Combat_Judgment import Combat_Judgment
 from src.main.impl.com.ftd.wow.controller.Maze_Walker import Maze_Walker
 from enum import Enum, unique
+from src.main.impl.com.ftd.wow.const.Scene_Constant import Scene_Constant
 
 @unique
 class StatusType_Enum(Enum):
@@ -65,13 +66,8 @@ class Abyss_Overlord(IController):
     def render_scene(self, screen_ins, contextDTO):
         
         # calculate scene changing timer
-        if self.__scene_changing_timer > 0:
-            current_time = time.time()*1000.0
-            if current_time - self.__scene_changing_timer < 2000:
-                pass
-            else:
-                self.__scene_changing_timer = 0 
-                
+        gradual_darken, gradual_brighten, darken_rate = self.verify_darken_in_scene_change()
+        
         # re-load the character to background
         self.available_active_team(contextDTO)
         
@@ -88,7 +84,8 @@ class Abyss_Overlord(IController):
             
         # render the background & characters
         temp_scene = self.get_current_scene()
-        temp_scene.render(screen_ins, contextDTO.get_screen_width(), contextDTO.get_screen_height(), contextDTO, temp_status)
+        temp_scene.render(screen_ins, contextDTO.get_screen_width(), contextDTO.get_screen_height(), contextDTO, \
+                          temp_status, gradual_darken, gradual_brighten, darken_rate)
         
     
     def start_combat(self, contextDTO):
@@ -146,7 +143,33 @@ class Abyss_Overlord(IController):
         current_character = contextDTO.get_ContextDto_InCombat().get_active_team().get_teammember04()
         contextDTO.get_ContextDto_InCombat().set_current_selection(current_character)
             
-            
+    
+    def verify_darken_in_scene_change(self):
+        '''
+        Verify the darken properties once scene changing
+        '''
+        darken_rate = 0
+        gradual_darken = False
+        gradual_brighten = False
+        if self.__scene_changing_timer > 0:
+            current_time = time.time()*1000.0
+            if current_time - self.__scene_changing_timer < Scene_Constant.SCENE_CHANGING_TIMER_MAX:
+                if current_time - self.__scene_changing_timer <= Scene_Constant.SCENE_CHANGING_TIMER_MAX / 2 :
+                    darken_rate = (current_time - self.__scene_changing_timer) / Scene_Constant.SCENE_CHANGING_TIMER_MAX * 2
+                    gradual_darken = True
+                    gradual_brighten = False
+                else:
+                    darken_rate = (current_time - self.__scene_changing_timer) / Scene_Constant.SCENE_CHANGING_TIMER_MAX * 2 - 1
+                    gradual_darken = False
+                    gradual_brighten = True
+            else:
+                self.__scene_changing_timer = 0
+                gradual_darken = False
+                gradual_brighten = False
+        
+        return gradual_darken, gradual_brighten, darken_rate
+    
+        
     # ========================================================== #
     #                         Event                              #
     # ========================================================== #

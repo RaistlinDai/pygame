@@ -56,7 +56,7 @@ class Map_Util(object):
     '''
     
     DEFAULT_CELL_COUNT_IN_SINGLE_GROUP = (4,8)
-    DEFAULT_CELL_SIZE = 100
+    DEFAULT_CELL_SIZE = (1, 100)
     
     @staticmethod
     def generate_random_map(map_size):

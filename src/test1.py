@@ -1,9 +1,12 @@
-from src.main.impl.com.ftd.wow.util.Map_Util import Map_Util,\
-    MapSize_Enum
+import pygame
+from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 
-Map_Util.generate_random_map(MapSize_Enum.SIZE_SMALL)
+screen = pygame.display.set_mode((640,480))
+img = pygame.image.load(Materials_Constant.background_Molten_Core_filename)
 
-
-listaa = {1:None,2:None,3:None,4:None}
-if 3 in listaa.keys():
-    print(listaa[3])
+for opacity in range(255, 0, -15):
+    work_img = img.copy()
+    pygame.draw.rect(work_img, (255,0, 0, opacity),  (0,0, 640,480))
+    screen.blit(work_img, (0,0))
+    pygame.display.flip()
+    pygame.time.delay(100)

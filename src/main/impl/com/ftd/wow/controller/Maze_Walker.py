@@ -32,7 +32,7 @@ class Maze_Walker(IController):
         
         positionDTO = Position_DTO()
         positionDTO.set_map_cell(self.__map.get_entrence())
-        positionDTO.set_cell_position(0)
+        positionDTO.set_cell_position(Map_Util.DEFAULT_CELL_SIZE[0])
         positionDTO.set_move_direction(MoveDirection_Enum.DIRECTION_EAST)
         contextDto.get_ContextDto_InMap().set_map_position(positionDTO)
         
@@ -78,7 +78,7 @@ class Maze_Walker(IController):
             current_cell = current_map.get_entrence()
             
         if not current_cell_position:
-            current_cell_position = 0
+            current_cell_position = Map_Util.DEFAULT_CELL_SIZE[0]
             
         if not current_direction:
             current_direction = MoveDirection_Enum.DIRECTION_EAST
@@ -133,38 +133,38 @@ class Maze_Walker(IController):
             current_cell_position = current_cell_position + move_d - move_a
             
             # calculate map cells
-            if current_cell_position >= 100:
+            if current_cell_position > Map_Util.DEFAULT_CELL_SIZE[1]:
                 next_cell = Map_Util.get_next_cell_in_map_by_direction(current_cell, current_direction, current_map)
                 if next_cell.get_type() == CellType_Enum.TYPE_CORRIDOR:
-                    current_cell_position = 0
+                    current_cell_position = Map_Util.DEFAULT_CELL_SIZE[0]
                     current_cell = next_cell
                 elif next_cell.get_type() == CellType_Enum.TYPE_ENTRANCE or\
                      next_cell.get_type() == CellType_Enum.TYPE_ROOM:
                     # waiting at the door of room
-                    current_cell_position = 99
+                    current_cell_position = Map_Util.DEFAULT_CELL_SIZE[1]
                     contextDTO.get_ContextDto_InMap().set_map_next_room(next_cell)
                 
-            elif current_cell_position < 0:
+            elif current_cell_position < Map_Util.DEFAULT_CELL_SIZE[0]:
                 next_cell = Map_Util.get_next_cell_in_map_by_direction(current_cell, current_opposite_direction, current_map)
                 if next_cell.get_type() == CellType_Enum.TYPE_CORRIDOR:
-                    current_cell_position = 99
+                    current_cell_position = Map_Util.DEFAULT_CELL_SIZE[1]
                     current_cell = next_cell
                 elif next_cell.get_type() == CellType_Enum.TYPE_ENTRANCE or\
                      next_cell.get_type() == CellType_Enum.TYPE_ROOM:
                     # waiting at the door of room
-                    current_cell_position = 0
+                    current_cell_position = Map_Util.DEFAULT_CELL_SIZE[0]
                     contextDTO.get_ContextDto_InMap().set_map_next_room(next_cell)
             
             # enter the room
             next_room_cell = contextDTO.get_ContextDto_InMap().get_map_next_room()
             if move_w != 0 and next_room_cell and \
                (next_room_cell.get_type() == CellType_Enum.TYPE_ENTRANCE or next_room_cell.get_type() == CellType_Enum.TYPE_ROOM):
-                if current_cell_position == 99:
-                    current_cell_position = 0
+                if current_cell_position == Map_Util.DEFAULT_CELL_SIZE[1]:
+                    current_cell_position = Map_Util.DEFAULT_CELL_SIZE[0]
                     current_cell = next_room_cell
                     contextDTO.get_ContextDto_InMap().set_map_next_room(None)
-                elif current_cell_position == 0:
-                    current_cell_position = 99
+                elif current_cell_position == Map_Util.DEFAULT_CELL_SIZE[0]:
+                    current_cell_position = Map_Util.DEFAULT_CELL_SIZE[1]
                     current_cell = next_room_cell
                     contextDTO.get_ContextDto_InMap().set_map_next_room(None)
                 

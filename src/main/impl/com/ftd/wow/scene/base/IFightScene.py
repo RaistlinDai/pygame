@@ -9,6 +9,7 @@ from src.main.api.com.ftd.wow.scene.IScene import IScene
 from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
 from src.main.impl.com.ftd.wow.util.Fight_Util import Fight_Util
 from src.main.impl.com.ftd.wow.controller.Abyss_Overlord import StatusType_Enum
+from src.main.impl.com.ftd.wow.const.Scene_Constant import Scene_Constant
 
 class IFightScene(IScene):
     '''
@@ -80,14 +81,39 @@ class IFightScene(IScene):
     def set_top_bar(self, value):
         self.__top_bar = value
         
+        
+    def darken(self, screen_ins, value):
+        "Value is 0 to 255. So 128 would be 50% darken"
+        dark = pygame.Surface(screen_ins.get_size(), 32)
+        dark.set_alpha(value, pygame.RLEACCEL)
+        screen_ins.blit(dark, (0, 0), (0,0,self.__size_w,self.__size_h))
+        
     
-    def render(self, screen_ins, screen_w=None, screen_h=None, contextDTO=None, screen_status=None):
+    def gradual_darken(self, screen_ins, darken_rate):
+        darken_value = 255 * darken_rate
+        self.darken(screen_ins, int(darken_value))
+        
+        
+    def gradual_brighten(self, screen_ins, darken_rate):
+        darken_value = 255 * (1 - darken_rate)
+        self.darken(screen_ins, int(darken_value))
+    
+    
+    def render(self, screen_ins, screen_w=None, screen_h=None, contextDTO=None, \
+               screen_status=None, gradual_darken=False, gradual_brighten=False, darken_rate=0):
+        
         if (screen_w and screen_h):
             self.__size_w = screen_w
             self.__size_h = screen_h
             self.__background = pygame.transform.scale(self.__background, (screen_w, screen_h))
-            
+        
         screen_ins.blit(self.__background, (0,0), (0,0,self.__size_w,self.__size_h))
+        
+        # gradual darken or brighten
+        if gradual_darken:
+            self.gradual_darken(screen_ins, darken_rate)
+        elif gradual_brighten:
+            self.gradual_brighten(screen_ins, darken_rate)
         
         # render the bottom bar
         self.__bottom_bar.render_image(screen_ins, self.__size_w, self.__size_h, contextDTO)
@@ -95,13 +121,13 @@ class IFightScene(IScene):
         # render the top bar
         self.__top_bar.render_image(screen_ins, self.__size_w, self.__size_h, contextDTO)
         
-        # in combat
+        
         if screen_status == StatusType_Enum.STATUS_MOVE:
-            # render the characters
+            # in move
             self.render_characters_in_move(screen_ins, contextDTO)
             
         elif screen_status == StatusType_Enum.STATUS_COMBAT:
-            
+            # in combat
             '''
             @todo: render combat round count
             '''
@@ -118,11 +144,13 @@ class IFightScene(IScene):
             self.render_fighting(screen_ins, contextDTO)
         
         elif screen_status == StatusType_Enum.STATUS_CAMP:
-            # render the characters
+            # in camp
             '''
             @todo: add method
             '''
             self.render_characters_in_camp(screen_ins, contextDTO)
+        
+        self.render_font(screen_ins)
     
     
     def render_characters_in_move(self, screen_ins, contextDTO):
@@ -272,7 +300,7 @@ class IFightScene(IScene):
         # in fight
         if contextDTO.get_ContextDto_InCombat().get_is_fight_in_round() and \
            contextDTO.get_ContextDto_InCombat().get_fighting_timer() > 0 and \
-           current_time - contextDTO.get_ContextDto_InCombat().get_fighting_timer() <= 1000:
+           current_time - contextDTO.get_ContextDto_InCombat().get_fighting_timer() <= Scene_Constant.FIGHTING_TIMER_MAX:
             '''
             Calculate attack result
             @todo: remove self.__is_fighting_in_round for skill calculation testing
@@ -346,7 +374,7 @@ class IFightScene(IScene):
             
         else:
             if contextDTO.get_ContextDto_InCombat().get_fighting_timer() > 0 and \
-               current_time - contextDTO.get_ContextDto_InCombat().get_fighting_timer() > 1000:
+               current_time - contextDTO.get_ContextDto_InCombat().get_fighting_timer() > Scene_Constant.FIGHTING_TIMER_MAX:
                 # release select skill
                 contextDTO.get_ContextDto_InCombat().set_current_select_skill(None)
             
@@ -392,3 +420,12 @@ class IFightScene(IScene):
                 contextDTO.get_ContextDto_InCombat().set_current_target(None)
         
     
+    
+    def render_font(self, sceneInst):
+        font1 = pygame.font.SysFont('arial', 16)
+        text = font1.render("Room change !!!",True,(255, 255, 255))
+        
+        textRectObj = text.get_rect()
+        textRectObj.center = (200, 150)
+        
+        sceneInst.blit(text, textRectObj)
