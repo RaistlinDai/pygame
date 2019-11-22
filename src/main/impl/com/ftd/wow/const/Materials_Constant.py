@@ -30,11 +30,21 @@ class Materials_Constant:
     # ============================================= #
     character_rogue_image_filenames = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-t1-01.png',
                                        'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-t1-01-select.png',
-                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-fight.png']
+                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-fight.png',
+                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-fight.png',
+                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-move-01.png',
+                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-move-02.png',
+                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-move-03.png',
+                                       'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-move-04.png']
     
     character_warrior_image_filenames = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\warrior\\armorset_orc-male-warrior-t1-01.png',
                                          'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\warrior\\armorset_orc-male-warrior-t1-01-select.png',
-                                         'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\warrior\\armorset_orc-male-warrior-fight.png']
+                                         'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\warrior\\armorset_orc-male-warrior-fight.png',
+                                         'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\warrior\\armorset_orc-male-warrior-fight.png',
+                                         'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-move-01.png',
+                                         'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-move-02.png',
+                                         'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-move-03.png',
+                                         'main\\resource\\com\\ftd\\wow\\materials\\pic\\character\\rogue\\armorset_undead-male-rogue-move-04.png']
     
     # ============================================= #
     #                 Enemy                         #

@@ -10,6 +10,7 @@ from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
 from src.main.impl.com.ftd.wow.util.Fight_Util import Fight_Util
 from src.main.impl.com.ftd.wow.controller.Abyss_Overlord import StatusType_Enum
 from src.main.impl.com.ftd.wow.const.Scene_Constant import Scene_Constant
+import random
 
 class IFightScene(IScene):
     '''
@@ -91,16 +92,18 @@ class IFightScene(IScene):
     
     def gradual_darken(self, screen_ins, darken_rate):
         darken_value = 255 * darken_rate
-        self.darken(screen_ins, int(darken_value))
+        self.darken(screen_ins, round(darken_value))
         
         
     def gradual_brighten(self, screen_ins, darken_rate):
         darken_value = 255 * (1 - darken_rate)
-        self.darken(screen_ins, int(darken_value))
+        self.darken(screen_ins, round(darken_value))
     
     
-    def render(self, screen_ins, screen_w=None, screen_h=None, contextDTO=None, \
-               screen_status=None, gradual_darken=False, gradual_brighten=False, darken_rate=0):
+    def render(self, screen_ins, screen_w=None, screen_h=None, contextDTO=None, screen_status=None, \
+               gradual_darken=False, gradual_brighten=False, darken_rate=0, character_moving_timer=0):
+        
+        new_moving_timer = 0
         
         if (screen_w and screen_h):
             self.__size_w = screen_w
@@ -121,10 +124,9 @@ class IFightScene(IScene):
         # render the top bar
         self.__top_bar.render_image(screen_ins, self.__size_w, self.__size_h, contextDTO)
         
-        
         if screen_status == StatusType_Enum.STATUS_MOVE:
             # in move
-            self.render_characters_in_move(screen_ins, contextDTO)
+            new_moving_timer = self.render_characters_in_move(screen_ins, contextDTO, character_moving_timer)
             
         elif screen_status == StatusType_Enum.STATUS_COMBAT:
             # in combat
@@ -150,26 +152,84 @@ class IFightScene(IScene):
             '''
             self.render_characters_in_camp(screen_ins, contextDTO)
         
+        "FONT TESTING"
         self.render_font(screen_ins)
+        
+        return new_moving_timer
     
     
-    def render_characters_in_move(self, screen_ins, contextDTO):
+    def render_characters_in_move(self, screen_ins, contextDTO, character_moving_timer):
+        
+        new_moving_timer = 0
+        
         # render the character
-        if not contextDTO.get_ContextDto_InCombat().get_active_team():
-            return
-        characters = contextDTO.get_ContextDto_InCombat().get_active_team().get_teammembers()
-    
+        if not contextDTO.get_active_team():
+            return new_moving_timer
+        characters = contextDTO.get_active_team().get_teammembers()
+        
+        # character move
+        characters_move = contextDTO.get_ContextDto_InMap().get_characters_move()
+        if character_moving_timer > 0:
+            if not characters_move:
+                # initialize characters_move
+                characters_move = {}
+                for temp_char in characters:
+                    if not temp_char:
+                        continue
+                    # random a pace index for character's moving
+                    random_pace_idx = random.randint(1,4)
+                    characters_move[temp_char.get_character_name()] = random_pace_idx
+                
+                contextDTO.get_ContextDto_InMap().set_characters_move(characters_move)
+            else:
+                for temp_char in characters:
+                    if not temp_char:
+                        continue
+                    character_name = temp_char.get_character_name()
+                    if not character_name in characters_move.keys():
+                        # random a pace index for character's moving
+                        random_pace_idx = random.randint(1,4)
+                        characters_move[temp_char.get_character_name()] = random_pace_idx
+                        
+                contextDTO.get_ContextDto_InMap().set_characters_move(characters_move)
+        
         idx = 0
         for temp_char in characters:
             idx = idx + 1
             if not temp_char:
                 continue
-        
+            
+            character_name = temp_char.get_character_name()
+            character_img = temp_char.get_stand_image()
+            img_idx = 0
+            
+            # get move image if necessary
+            if character_moving_timer > 0:
+                current_time = time.time()*1000
+                current_pace_idx = characters_move[character_name]
+                
+                if not current_pace_idx:
+                    current_pace_idx = random.randint(1,4)
+                
+                if current_time - character_moving_timer <= Scene_Constant.MOVE_PACE_TIMER_MAX:
+                    character_img = temp_char.get_moving_image(current_pace_idx)
+                else:
+                    character_img, current_pace_idx = temp_char.get_next_moving_image_and_idx(current_pace_idx)
+                    new_moving_timer = current_time
+                
+                img_idx = current_pace_idx + 3
+                characters_move[character_name] = current_pace_idx
+                contextDTO.get_ContextDto_InMap().set_characters_move(characters_move)
+            else:
+                contextDTO.get_ContextDto_InMap().set_characters_move(None)
+            
             # resize character stand image
             calc_h = Image_Util.calculate_character_move_height_by_screen_size(self.__size_h)
-            calc_w = Image_Util.calculate_character_move_width_by_height(temp_char.get_stand_image(), calc_h)
-
-            temp_char.resize_character_images(calc_w, calc_h, 1, 1)
+            calc_w = Image_Util.calculate_character_move_width_by_height(character_img, calc_h)
+            
+            temp_char.resize_character_images_by_height(calc_h, 1)
+            character_img = temp_char.get_image_by_index(img_idx)
+            
             temp_prof_rate = temp_char.get_character_profession_rate()
             
             # re-calculate character stand image position
@@ -178,18 +238,17 @@ class IFightScene(IScene):
             self.__character_move_properties[idx]['image_size'] = (0, 0, calc_w, calc_h)
             
             # render characters in move
-            '''
-            @todo: render characters moving images
-            '''
-            new_w, new_h = temp_char.get_stand_image().get_size()
-            screen_ins.blit(temp_char.get_stand_image(), (x,y), (0, 0, new_w, new_h))
+            new_w, new_h = character_img.get_size()
+            screen_ins.blit(character_img, (x,y), (0, 0, new_w, new_h))
+            
+        return new_moving_timer
             
              
     def render_characters_in_combat(self, screen_ins, contextDTO):
         # render the character
-        if not contextDTO.get_ContextDto_InCombat().get_active_team():
+        if not contextDTO.get_active_team():
             return
-        characters = contextDTO.get_ContextDto_InCombat().get_active_team().get_teammembers()
+        characters = contextDTO.get_active_team().get_teammembers()
         
         idx = 0
         for temp_char in characters:
@@ -203,7 +262,7 @@ class IFightScene(IScene):
             calc_in_fight_h = Image_Util.calculate_character_in_fight_height_by_screen_size(self.__size_h)
             calc_in_fight_w = Image_Util.calculate_character_combat_width_by_height(temp_char.get_fighting_image(), calc_in_fight_h)
 
-            temp_char.resize_character_images(calc_w, calc_h, calc_in_fight_w, calc_in_fight_h)
+            temp_char.resize_character_images_by_height(calc_h, calc_in_fight_h)
             temp_prof_rate = temp_char.get_character_profession_rate()
             
             # re-calculate character stand image position
@@ -232,9 +291,9 @@ class IFightScene(IScene):
     
     def render_characters_in_camp(self, screen_ins, contextDTO):
         # render the character
-        if not contextDTO.get_ContextDto_InCombat().get_active_team():
+        if not contextDTO.get_active_team():
             return
-        characters = contextDTO.get_ContextDto_InCombat().get_active_team().get_teammembers()
+        characters = contextDTO.get_active_team().get_teammembers()
         
     
     def render_enemies_in_combat(self, screen_ins, contextDTO):             
@@ -257,7 +316,7 @@ class IFightScene(IScene):
             calc_in_fight_h = Image_Util.calculate_character_in_fight_height_by_screen_size(self.__size_h)
             calc_in_fight_w = Image_Util.calculate_character_combat_width_by_height(temp_char.get_fighting_image(), calc_in_fight_h)
             
-            temp_char.resize_character_images(calc_w, calc_h, calc_in_fight_w, calc_in_fight_h)
+            temp_char.resize_character_images_by_height(calc_h, calc_in_fight_h)
             temp_prof_rate = temp_char.get_character_enemy_type_rate()
             
             # re-calculate character position
@@ -312,8 +371,8 @@ class IFightScene(IScene):
                 contextDTO.get_ContextDto_InCombat().set_is_fight_calculate(True)
                 
             # render the character
-            if contextDTO.get_ContextDto_InCombat().get_active_team():
-                characters = contextDTO.get_ContextDto_InCombat().get_active_team().get_teammembers()
+            if contextDTO.get_active_team():
+                characters = contextDTO.get_active_team().get_teammembers()
             
                 idx = 0
                 for temp_char in characters:
@@ -419,7 +478,6 @@ class IFightScene(IScene):
             else:
                 contextDTO.get_ContextDto_InCombat().set_current_target(None)
         
-    
     
     def render_font(self, sceneInst):
         font1 = pygame.font.SysFont('arial', 16)

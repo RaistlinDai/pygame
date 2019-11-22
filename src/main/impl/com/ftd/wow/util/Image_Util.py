@@ -18,7 +18,7 @@ class Image_Util(object):
         @return: the standard height of bottom bar 
         '''
         standard_h = 250 * screen_h / 720
-        return int(standard_h)
+        return round(standard_h)
     
     
     @staticmethod
@@ -30,7 +30,7 @@ class Image_Util(object):
         @return: the standard positionY of bottom bar 
         '''
         standard_y = 470 * screen_h / 720
-        return int(standard_y)
+        return round(standard_y)
     
     
     @staticmethod
@@ -42,7 +42,7 @@ class Image_Util(object):
         @return: the standard height of top bar 
         '''
         standard_h = 96 * screen_h / 720
-        return int(standard_h)
+        return round(standard_h)
 
     
     @staticmethod
@@ -54,7 +54,7 @@ class Image_Util(object):
         @return: the standard height of character 
         '''
         standard_h = 180 * character_h / 720
-        return int(standard_h)
+        return round(standard_h)
     
     
     @staticmethod
@@ -65,7 +65,7 @@ class Image_Util(object):
         '''
         w, h = character_image.get_size()
         character_w = w * character_h / h
-        return int(character_w)
+        return round(character_w)
     
     
     @staticmethod
@@ -77,7 +77,7 @@ class Image_Util(object):
         @return: the standard height of character 
         '''
         standard_h = 100 * character_h / 720
-        return int(standard_h)
+        return round(standard_h)
     
     
     @staticmethod
@@ -88,7 +88,7 @@ class Image_Util(object):
         '''
         w, h = character_image.get_size()
         character_w = w * character_h / h
-        return int(character_w)
+        return round(character_w)
     
     
     @staticmethod
@@ -101,7 +101,7 @@ class Image_Util(object):
         '''
         standard_x = (200 + 150 * (team_position - 1)) * screen_w / 1280
         standard_y = (550 - 180 * profession_image_rate) * screen_y / 720
-        return (int(standard_x), int(standard_y))
+        return (int(standard_x), round(standard_y))
     
     
     @staticmethod
@@ -114,7 +114,7 @@ class Image_Util(object):
         '''
         standard_x = (50 + 100 * (team_position - 1)) * screen_w / 1280
         standard_y = (550 - 100 * profession_image_rate) * screen_y / 720
-        return (int(standard_x), int(standard_y))
+        return (int(standard_x), round(standard_y))
     
     
     @staticmethod
@@ -127,7 +127,7 @@ class Image_Util(object):
         '''
         standard_x = (750 + 130 * (team_position - 1)) * screen_w / 1280
         standard_y = (550 - 100 * profession_image_rate) * screen_y / 720
-        return (int(standard_x), int(standard_y))
+        return (int(standard_x), round(standard_y))
     
     
     @staticmethod
@@ -139,7 +139,7 @@ class Image_Util(object):
         @return: the standard height of character 
         '''
         standard_h = 200 * screen_h / 720
-        return int(standard_h)
+        return round(standard_h)
     
     
     @staticmethod
@@ -152,7 +152,7 @@ class Image_Util(object):
         '''
         standard_x = (50 + 50 * (team_position - 1)) * screen_w / 1280
         standard_y = (380 - 100 * profession_image_rate) * screen_y / 720
-        return (int(standard_x), int(standard_y))
+        return (int(standard_x), round(standard_y))
 
 
     
@@ -166,7 +166,7 @@ class Image_Util(object):
         '''
         standard_x = (750 + 50 * (team_position - 1)) * screen_w / 1280
         standard_y = (380 - 100 * profession_image_rate) * screen_y / 720
-        return (int(standard_x), int(standard_y))
+        return (int(standard_x), round(standard_y))
     
     
     @staticmethod
@@ -178,7 +178,7 @@ class Image_Util(object):
         @return: standard_h: the standard height of skill 
         '''
         standard_h = 60 * screen_h / 720
-        return int(standard_h)
+        return round(standard_h)
     
     
     @staticmethod
@@ -191,7 +191,7 @@ class Image_Util(object):
         @return: standard_X: the standard position X of skill 
         '''
         standard_X = 200 * screen_w / 1280 + label_idx * (60 * screen_w / 1280)
-        return int(standard_X)
+        return round(standard_X)
     
      
     @staticmethod
@@ -203,7 +203,7 @@ class Image_Util(object):
         @return: standard_Y: the standard position Y of skill 
         '''
         standard_Y = 570 * screen_h / 720
-        return int(standard_Y)
+        return round(standard_Y)
     
     
     @staticmethod
@@ -215,7 +215,7 @@ class Image_Util(object):
         @return: standard_size: the standard size of skill 
         '''
         standard_size = 50 * screen_h / 720
-        return int(standard_size)
+        return round(standard_size)
     
     
     @staticmethod
@@ -229,7 +229,7 @@ class Image_Util(object):
         '''
         standard_w = 500 * screen_w / 1280
         standard_h = 300 * screen_h / 720
-        return (int(standard_w), int(standard_h))
+        return (int(standard_w), round(standard_h))
     
     
     

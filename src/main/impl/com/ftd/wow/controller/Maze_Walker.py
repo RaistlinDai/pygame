@@ -57,9 +57,11 @@ class Maze_Walker(IController):
         '''
         The most important function of Maze_Walker, it will maintain the characters' movement in the map. 
         @return: scene_changing_timer
+        @return: character_moving_timer
         @return: error message
         '''
         scene_changing_timer = 0
+        character_moving_timer = 0
         
         # get the current map
         current_map = self.get_map()
@@ -67,7 +69,7 @@ class Maze_Walker(IController):
             '''
             @todo: error
             '''
-            return scene_changing_timer, None
+            return scene_changing_timer, character_moving_timer, "There's no map available!"
         
         positionDTO = contextDTO.get_ContextDto_InMap().get_map_position()
         current_cell = positionDTO.get_map_cell()
@@ -91,7 +93,7 @@ class Maze_Walker(IController):
                 '''
                 @todo: error
                 '''
-                return scene_changing_timer, None
+                return scene_changing_timer, character_moving_timer, "These's no nearby cell available!"
             else:
                 existing_directions, temp_list = Map_Util.get_cell_directions(current_cell, nearby_cells)
                 
@@ -133,6 +135,9 @@ class Maze_Walker(IController):
             current_cell_position = current_cell_position + move_d - move_a
             
             # calculate map cells
+            if move_d - move_a != 0:
+                character_moving_timer = time.time()*1000.0
+                
             if current_cell_position > Map_Util.DEFAULT_CELL_SIZE[1]:
                 next_cell = Map_Util.get_next_cell_in_map_by_direction(current_cell, current_direction, current_map)
                 if next_cell.get_type() == CellType_Enum.TYPE_CORRIDOR:
@@ -143,6 +148,7 @@ class Maze_Walker(IController):
                     # waiting at the door of room
                     current_cell_position = Map_Util.DEFAULT_CELL_SIZE[1]
                     contextDTO.get_ContextDto_InMap().set_map_next_room(next_cell)
+                    character_moving_timer = 0
                 
             elif current_cell_position < Map_Util.DEFAULT_CELL_SIZE[0]:
                 next_cell = Map_Util.get_next_cell_in_map_by_direction(current_cell, current_opposite_direction, current_map)
@@ -154,6 +160,7 @@ class Maze_Walker(IController):
                     # waiting at the door of room
                     current_cell_position = Map_Util.DEFAULT_CELL_SIZE[0]
                     contextDTO.get_ContextDto_InMap().set_map_next_room(next_cell)
+                    character_moving_timer = 0
             
             # enter the room
             next_room_cell = contextDTO.get_ContextDto_InMap().get_map_next_room()
@@ -178,8 +185,9 @@ class Maze_Walker(IController):
             # synchronize ContextDTO
             contextDTO.get_ContextDto_InMap().set_map_position(positionDTO)
         
+        '''
         if move_a != 0 or move_d != 0 or move_w != 0:
             print('position:', current_cell.get_type(), (current_cell.get_pos_x(), current_cell.get_pos_y()), current_cell_position, scene_changing_timer)
-        
-        return scene_changing_timer, None
+        '''
+        return scene_changing_timer, character_moving_timer, None
     

@@ -9,6 +9,7 @@ from src.main.api.com.ftd.wow.character.ICharacter import ICharacter
 from src.main.api.com.ftd.wow.profession.IProfession import IProfession
 from src.main.api.com.ftd.wow.skill.ISkill import ISkill
 from src.main.impl.com.ftd.wow.profession.base.Profession_Enum import Profession_Enum
+from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
 
 class Character (ICharacter):
     '''
@@ -94,7 +95,11 @@ class Character (ICharacter):
                                                       0,
                                                       skill)    
                 self.__fight_skills[skill.get_skill_name()] = new_character_skill
-    
+
+
+    def get_image_by_index(self, idx):
+        return self.__profession_images[idx]
+        
         
     def get_stand_image(self):
         return self.__profession_images[0]
@@ -108,16 +113,32 @@ class Character (ICharacter):
         return self.__profession_images[2]
     
     
-    def resize_character_images(self, size_w, size_h, calc_in_fight_w, calc_in_fight_h):
+    def get_moving_image(self, idx):
+        '''
+        The moving image index begins from 4 to 7
+        '''
+        return self.__profession_images[idx + 3]
+    
+    
+    def get_next_moving_image_and_idx(self, current_idx):
+        next_idx = 1
+        if current_idx != 4:
+            next_idx = current_idx + 1
+        return self.__profession_images[next_idx + 3], next_idx
+    
+    
+    def resize_character_images_by_height(self, size_h, calc_in_fight_h):
         # retrieve profession image rage
         rate = self.get_character_profession_rate()
         idx1 = 0
         for img in self.__profession_images:
             # fighting image
             if idx1 == 2:
-                self.__profession_images[idx1] = pygame.transform.scale(img, (int(calc_in_fight_w*rate), int(calc_in_fight_h*rate)))
+                calc_in_fight_w = Image_Util.calculate_character_move_width_by_height(self.__profession_images[idx1], calc_in_fight_h)
+                self.__profession_images[idx1] = pygame.transform.scale(img, (round(calc_in_fight_w*rate), round(calc_in_fight_h*rate)))
             else:
-                self.__profession_images[idx1] = pygame.transform.scale(img, (int(size_w*rate), int(size_h*rate)))
+                size_w = Image_Util.calculate_character_move_width_by_height(self.__profession_images[idx1], size_h)
+                self.__profession_images[idx1] = pygame.transform.scale(img, (round(size_w*rate), round(size_h*rate)))
             idx1 = idx1 + 1
             
             

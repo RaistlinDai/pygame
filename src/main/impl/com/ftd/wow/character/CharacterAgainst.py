@@ -8,6 +8,7 @@ import pygame
 from src.main.api.com.ftd.wow.character.ICharacter import ICharacter
 from src.main.impl.com.ftd.wow.enemy.mc.Enemy_MC_Enum import Enemy_MC_Enum
 from src.main.api.com.ftd.wow.enemy.IEnemy import IEnemy
+from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
 
 class CharacterAgainst (ICharacter):
     '''
@@ -68,16 +69,18 @@ class CharacterAgainst (ICharacter):
         return self.__enemy_images[2]
     
     
-    def resize_character_images(self, size_w, size_h, calc_in_fight_w, calc_in_fight_h):
+    def resize_character_images_by_height(self, size_h, calc_in_fight_h):
         # retrieve profession image rage
         rate = self.get_character_enemy_type_rate()
         idx1 = 0
         for img in self.__enemy_images:
             # fighting image
             if idx1 == 2:
-                self.__enemy_images[idx1] = pygame.transform.scale(img, (int(calc_in_fight_w*rate), int(calc_in_fight_h*rate)))
+                calc_in_fight_w = Image_Util.calculate_character_move_width_by_height(self.__profession_images[idx1], calc_in_fight_h)
+                self.__enemy_images[idx1] = pygame.transform.scale(img, (round(calc_in_fight_w*rate), round(calc_in_fight_h*rate)))
             else:
-                self.__enemy_images[idx1] = pygame.transform.scale(img, (int(size_w*rate), int(size_h*rate)))
+                size_w = Image_Util.calculate_character_move_width_by_height(self.__profession_images[idx1], size_h)
+                self.__enemy_images[idx1] = pygame.transform.scale(img, (round(size_w*rate), round(size_h*rate)))
             idx1 = idx1 + 1
             
                    

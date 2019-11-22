@@ -36,6 +36,8 @@ class Abyss_Overlord(IController):
         self.__combat_judgment = Combat_Judgment()
         # scene changing timer
         self.__scene_changing_timer = 0
+        # character moving timer
+        self.__character_moving_timer = 0
         
         self.__current_scene = resourceDTO.get_scene(FightScene_Enum.MC_BOSS_10.name)
         
@@ -84,8 +86,11 @@ class Abyss_Overlord(IController):
             
         # render the background & characters
         temp_scene = self.get_current_scene()
-        temp_scene.render(screen_ins, contextDTO.get_screen_width(), contextDTO.get_screen_height(), contextDTO, \
-                          temp_status, gradual_darken, gradual_brighten, darken_rate)
+        temp_pace_timer = temp_scene.render(screen_ins, contextDTO.get_screen_width(), contextDTO.get_screen_height(), \
+                                            contextDTO, temp_status, gradual_darken, gradual_brighten, darken_rate, \
+                                            self.__character_moving_timer)
+        if temp_pace_timer != 0:
+            self.__character_moving_timer = temp_pace_timer
         
     
     def start_combat(self, contextDTO):
@@ -99,7 +104,7 @@ class Abyss_Overlord(IController):
         # trigger the combat judgment
         self.__combat_judgment.set_is_start_combat(True)
         # initialize the combat judgment
-        self.__combat_judgment.initialize(contextDTO.get_ContextDto_InCombat().get_active_team().get_teammembers, \
+        self.__combat_judgment.initialize(contextDTO.get_active_team().get_teammembers, \
                                           contextDTO.get_ContextDto_InCombat().get_active_enemies().get_teammembers())
         
         '''
@@ -115,7 +120,7 @@ class Abyss_Overlord(IController):
         
             
     def available_active_team(self, contextDTO):
-        active_team = contextDTO.get_ContextDto_InCombat().get_active_team()
+        active_team = contextDTO.get_active_team()
         temp_character_properties = self.__current_scene.get_character_properties()
         if active_team:
             idx = 0
@@ -140,7 +145,7 @@ class Abyss_Overlord(IController):
                     
         
     def set_current_character(self, contextDTO):
-        current_character = contextDTO.get_ContextDto_InCombat().get_active_team().get_teammember04()
+        current_character = contextDTO.get_active_team().get_teammember04()
         contextDTO.get_ContextDto_InCombat().set_current_selection(current_character)
             
     
@@ -204,15 +209,19 @@ class Abyss_Overlord(IController):
         '''
         # ignore keyboard event once changing the scene
         if self.__scene_changing_timer > 0:
+            self.__character_moving_timer = 0
             return 
         
         super().event_keyboard_keydown(move_a, move_d, move_w, move_s, contextDTO)
 
         if not self.__maze_walker.get_in_hibernation():
             # characters move in map
-            self.__scene_changing_timer, error_msg = \
+            self.__scene_changing_timer, temp_pace_timer, error_msg = \
                 self.__maze_walker.manage_characters_move_in_map(move_a, move_d, move_w, move_s, contextDTO)
 
+            if self.__character_moving_timer == 0 or temp_pace_timer == 0:
+                self.__character_moving_timer = temp_pace_timer
+    
     
     def cursor_event(self, cursor_x, cursor_y, contextDTO):
         '''

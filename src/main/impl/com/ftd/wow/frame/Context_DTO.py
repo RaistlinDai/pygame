@@ -15,6 +15,7 @@ class Context_DTO(object):
         
         self.__contextDto_InMap = Context_DTO_InMap()
         self.__contextDto_InCombat = Context_DTO_InCombat()
+        self.__active_team = None
 
 
     def get_screen_height(self):
@@ -55,10 +56,14 @@ class Context_DTO(object):
 
     def set_ContextDto_InMap(self, value):
         self.__contextDto_InMap = value
-        
 
-    screen_size = property(get_screen_width, set_screen_width, del_screen_width, "screen_width's docstring")
-    screen_height = property(get_screen_height, set_screen_height, del_screen_height, "screen_height's docstring")
+
+    def get_active_team(self):
+        return self.__active_team
+
+
+    def set_active_team(self, value):
+        self.__active_team = value
 
 
 
@@ -69,6 +74,8 @@ class Context_DTO_InMap(object):
         self.__map = None
         self.__map_position = None
         self.__map_next_room = None
+        " the characters pace index list "
+        self.__characters_move = None
         
     
     def get_map_size(self):
@@ -101,6 +108,14 @@ class Context_DTO_InMap(object):
 
     def set_map_next_room(self, value):
         self.__map_next_room = value
+    
+    
+    def get_characters_move(self):
+        return self.__characters_move
+
+
+    def set_characters_move(self, value):
+        self.__characters_move = value
         
     
     def clear_map(self):
@@ -108,12 +123,12 @@ class Context_DTO_InMap(object):
         self.__map = None
         self.__map_position = None
         self.__map_next_room = None
+        self.__character_pace_idx = None
     
     
 class Context_DTO_InCombat(object):
     
     def __init__(self):
-        self.__active_team = None
         self.__active_enemies = None
         self.__combat = False
 
@@ -138,14 +153,6 @@ class Context_DTO_InCombat(object):
 
     def set_active_enemies(self, value):
         self.__active_enemies = value
-
-
-    def get_active_team(self):
-        return self.__active_team
-
-
-    def set_active_team(self, value):
-        self.__active_team = value
 
 
     def get_combat(self):

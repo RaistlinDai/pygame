@@ -77,8 +77,10 @@ class IProfession(object):
         1: stand-select
         2: atack1
         3: atack2
-        4: suffer
-        5: dead
+        4: move1
+        5: move2
+        6: move3
+        7: move4
         '''
         return self.__images
     

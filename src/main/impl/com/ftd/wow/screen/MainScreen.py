@@ -57,7 +57,7 @@ class MainScreen(object):
         @todo: 
         '''
         
-        self.__context_DTO.get_ContextDto_InCombat().set_active_team(Team(None, None, load_characters[0], load_characters[1]))
+        self.__context_DTO.set_active_team(Team(None, None, load_characters[0], load_characters[1]))
         
         # generate enemy
         generated_enemies = self.generate_enemy(self.__resource_DTO)
