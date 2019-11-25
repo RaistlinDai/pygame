@@ -60,7 +60,10 @@ class Map_Util(object):
     
     @staticmethod
     def generate_random_map(map_size):
-        
+        '''
+        Generate a random map
+        @param map_size: the size of the random map
+        '''
         mapDTO = Map_DTO(map_size)
         
         if not isinstance(map_size, MapSize_Enum):

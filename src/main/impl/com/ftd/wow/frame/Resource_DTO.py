@@ -5,7 +5,6 @@ Created on Sep 17, 2019
 '''
 from src.main.impl.com.ftd.wow.scene.base.IMenuScene import IMenuScene
 from src.main.impl.com.ftd.wow.scene.MenuScene_Enum import MenuScene_Enum
-from src.main.impl.com.ftd.wow.scene.FightScene_Enum import FightScene_Enum
 from src.main.impl.com.ftd.wow.scene.base.IFightScene import IFightScene
 from src.main.impl.com.ftd.wow.layout.bar.Top_Bar import Top_Bar
 from src.main.impl.com.ftd.wow.layout.bar.Bottom_Bar import Bottom_Bar
@@ -14,13 +13,15 @@ import pygame
 from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constant
 from src.main.impl.com.ftd.wow.enemy.mc.Enemy_MC_Enum import Enemy_MC_Enum
 
+from src.main.impl.com.ftd.wow.scene.forrest.ForrestScene_Enum import ForrestScene_Enum
+
 class Resource_DTO(object):
     '''
     
     '''
     
     def __init__(self):
-        self.__backgrounds = {}
+        self.__backgrounds = {}       # {"menu_scene": IMenuScene, "combat_scene_corridor: [IFightScene1, IFightScene2]}
         self.__professions = {}
         self.__enemies = {}
         self.__mouse_cursor = None
@@ -44,8 +45,11 @@ class Resource_DTO(object):
         for sce in MenuScene_Enum:
             self.__backgrounds[sce.name] = IMenuScene(sce)
         
-        for fightsce in FightScene_Enum:
-            self.__backgrounds[fightsce.name] = IFightScene(fightsce, self.__bottom_bar, self.__top_bar)
+        for forrest_sce_list in ForrestScene_Enum:
+            temp_list = []
+            for forrest_sce in forrest_sce_list.value:
+                temp_list.append(IFightScene(forrest_sce, self.__bottom_bar, self.__top_bar))
+            self.__backgrounds[forrest_sce_list.name] = temp_list
             
     
     def _load_professions(self):
@@ -79,6 +83,22 @@ class Resource_DTO(object):
         get the backgrounds by name
         '''
         return self.__backgrounds[scene_name]
+    
+    
+    def get_maze_scene(self, maze_scene_type, maze_scene_idx=None):
+        '''
+        get the backgrounds in maze by type and index
+        '''
+        scene_list = self.__backgrounds[maze_scene_type]
+        return scene_list[maze_scene_idx]
+        
+    
+    def get_maze_scene_list_by_type(self, maze_scene_type):
+        '''
+        get the backgrounds in maze by type
+        '''
+        scene_list = self.__backgrounds[maze_scene_type]
+        return scene_list
     
     
     def get_profession(self, profession_name):

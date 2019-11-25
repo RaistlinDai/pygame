@@ -9,6 +9,9 @@ from src.main.impl.com.ftd.wow.util.Map_Util import Map_Util, MoveDirection_Enum
 from src.main.api.com.ftd.wow.controller.IController import IController
 from src.main.impl.com.ftd.wow.map.Map_DTO import Position_DTO
 import time
+from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
+from src.main.impl.com.ftd.wow.scene.forrest.ForrestScene_Enum import ForrestScene_Enum
+import random
     
     
 class Maze_Walker(IController):
@@ -23,22 +26,52 @@ class Maze_Walker(IController):
         self.__map = None
         
         
-    def wake_up_controller(self, contextDto=None):
-        super().wake_up_controller(contextDto)
+    def wake_up_controller(self, contextDto=None, resourceDto=None):
+        super().wake_up_controller(contextDto, resourceDto)
         # generate map
         self.generate_map(contextDto.get_ContextDto_InMap().get_map_size())
+        # arrange map background
+        self.arrange_map_background(resourceDto)
+        
         # backup the map into contextDTO
         contextDto.get_ContextDto_InMap().set_map(self.__map)
         
+        # initial map position
         positionDTO = Position_DTO()
         positionDTO.set_map_cell(self.__map.get_entrence())
         positionDTO.set_cell_position(Map_Util.DEFAULT_CELL_SIZE[0])
         positionDTO.set_move_direction(MoveDirection_Enum.DIRECTION_EAST)
         contextDto.get_ContextDto_InMap().set_map_position(positionDTO)
         
+        # resize character image
+        calc_h = Image_Util.calculate_character_move_height_by_screen_size(contextDto.get_screen_height())
+        for temp_char in contextDto.get_active_team().get_teammembers():
+            if temp_char:
+                temp_char.resize_character_images_by_height(calc_h, 1)
+        
         
     def generate_map(self, map_size):
         self.__map = Map_Util.generate_random_map(map_size)
+        
+    
+    def arrange_map_background(self, resourceDTO):
+        '''
+        Arrange the background image index to each cell in map
+        @todo: to retrieve the maze type
+        '''
+        corridor_list = resourceDTO.get_maze_scene_list_by_type(ForrestScene_Enum.Forrest_Corridors.name)
+        room_list = resourceDTO.get_maze_scene_list_by_type(ForrestScene_Enum.Forrest_Rooms.name)
+        
+        corridor_list_range = len(corridor_list)
+        room_list_range = len(room_list)
+        
+        for map_cell in self.get_map().get_cell_list():
+            if map_cell.get_type() == CellType_Enum.TYPE_CORRIDOR:
+                idx = random.randint(0, corridor_list_range-1)
+                map_cell.set_background_img_idx(idx)
+            elif map_cell.get_type() == CellType_Enum.TYPE_ROOM or map_cell.get_type() == CellType_Enum.TYPE_ENTRANCE:
+                idx = random.randint(0, room_list_range-1)
+                map_cell.set_background_img_idx(idx)
 
         
     def get_map(self):

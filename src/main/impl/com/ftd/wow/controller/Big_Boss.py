@@ -59,7 +59,7 @@ class Big_Boss(object):
     current_scene_mode = property(get_current_scene_mode, set_current_scene_mode, del_current_scene_mode, "current_scene_mode's docstring")
     
     
-    def update_controller(self, contextDTO, scene_mode=None):
+    def update_controller(self, contextDTO, resourceDTO, scene_mode=None):
         self.__current_scene_mode = scene_mode
         
         if self.__current_scene_mode:
@@ -73,12 +73,12 @@ class Big_Boss(object):
                 
             elif self.__current_scene_mode == SceneMode_Enum.FIGHT_SCENE:
                 self.__current_controller = Abyss_Overlord(self.__resource_DTO)
-                self.__current_controller.wake_up_controller(contextDTO)
+                self.__current_controller.wake_up_controller(contextDTO, resourceDTO)
         else:
             self.__current_controller = None
     
     
-    def wakeup_next_controller(self, contextDTO):
+    def wakeup_next_controller(self, contextDTO, resourceDTO):
         '''
         @todo: complete the whole scene flow: MENU_SCENE -> Loop: <CITY_SCENE -> PREPARE_SCENE -> FIGHT_SCENE>
         '''
@@ -93,7 +93,7 @@ class Big_Boss(object):
                 @todo: set map size
                 '''
                 contextDTO.get_ContextDto_InMap().set_map_size(MapSize_Enum.SIZE_SMALL)
-                self.__current_controller.wake_up_controller(contextDTO)
+                self.__current_controller.wake_up_controller(contextDTO, resourceDTO)
                 
     
     def render_scene(self, screen_ins, contextDTO):

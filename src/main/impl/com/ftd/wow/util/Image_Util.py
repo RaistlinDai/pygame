@@ -10,6 +10,14 @@ class Image_Util(object):
     '''
     
     @staticmethod
+    def calculate_backround_image_size(img, screen_w, screen_h):
+        '''
+        The background images might not be in 4:3 rate, so it has to be calculated before transform
+        '''
+        pass
+        
+    
+    @staticmethod
     def calculate_bottom_bar_height_by_screen_size(screen_h):
         '''
         Calculate the standard bottom bar height according to the screen's height

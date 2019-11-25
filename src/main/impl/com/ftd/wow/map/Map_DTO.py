@@ -34,16 +34,18 @@ class Cell_DTO(object):
     def __init__(self, pos_x=0, pox_y=0, cell_type=None):
         self.__pos_x = pos_x
         self.__pos_y = pox_y
-        self.__size = 10
-        
+        # cell type
         self.__type = cell_type
-        
+        # nearby cells
+        self.__nearby_cells = []
+        # cell background
+        self.__background_img_idx = None
+        '''
+        @todo: in future
+        '''
         self.__in_combat = False
         self.__enemy_team = None
-        
         self.__special_event = None
-        
-        self.__nearby_cells = []
     
     
     def get_pos_x(self):
@@ -80,6 +82,14 @@ class Cell_DTO(object):
     
     def append_nearby_cells(self, value):
         self.__nearby_cells.append(value)
+
+
+    def get_background_img_idx(self):
+        return self.__background_img_idx
+    
+    
+    def set_background_img_idx(self, value):
+        self.__background_img_idx = value
 
 
     def get_in_combat(self):

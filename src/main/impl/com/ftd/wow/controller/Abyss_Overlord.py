@@ -3,13 +3,14 @@ Created on Oct 10, 2019
 
 @author: ftd
 '''
-from src.main.impl.com.ftd.wow.scene.FightScene_Enum import FightScene_Enum
+from src.main.impl.com.ftd.wow.scene.forrest.ForrestScene_Enum import ForrestScene_Enum
 from src.main.api.com.ftd.wow.controller.IController import IController
 import time
 from src.main.impl.com.ftd.wow.controller.Combat_Judgment import Combat_Judgment
 from src.main.impl.com.ftd.wow.controller.Maze_Walker import Maze_Walker
 from enum import Enum, unique
 from src.main.impl.com.ftd.wow.const.Scene_Constant import Scene_Constant
+from src.main.impl.com.ftd.wow.util.Map_Util import CellType_Enum
 
 @unique
 class StatusType_Enum(Enum):
@@ -39,7 +40,7 @@ class Abyss_Overlord(IController):
         # character moving timer
         self.__character_moving_timer = 0
         
-        self.__current_scene = resourceDTO.get_scene(FightScene_Enum.MC_BOSS_10.name)
+        self.__current_scene = None
         
 
     def get_current_scene(self):
@@ -58,11 +59,22 @@ class Abyss_Overlord(IController):
         self.__current_scene.set_bottom_bar(value)
     
     
-    def wake_up_controller(self, contextDto=None):
-        super().wake_up_controller(contextDto)
+    def wake_up_controller(self, contextDto=None, resourceDto=None):
+        super().wake_up_controller(contextDto, resourceDto)
         # active Maze_Walker
         if contextDto:
-            self.__maze_walker.wake_up_controller(contextDto)
+            self.__maze_walker.wake_up_controller(contextDto, resourceDto)
+        
+        # load the background
+        if contextDto.get_ContextDto_InMap().get_map_position().get_map_cell():
+            current_cell = contextDto.get_ContextDto_InMap().get_map_position().get_map_cell()
+            cell_background_idx = current_cell.get_background_img_idx()
+            
+            print(current_cell.get_type())
+            if current_cell.get_type() == CellType_Enum.TYPE_CORRIDOR:
+                self.__current_scene = resourceDto.get_maze_scene(ForrestScene_Enum.Forrest_Corridors.name, cell_background_idx)
+            elif current_cell.get_type() == CellType_Enum.TYPE_ROOM or current_cell.get_type() == CellType_Enum.TYPE_ENTRANCE:
+                self.__current_scene = resourceDto.get_maze_scene(ForrestScene_Enum.Forrest_Rooms.name, cell_background_idx)
         
     
     def render_scene(self, screen_ins, contextDTO):

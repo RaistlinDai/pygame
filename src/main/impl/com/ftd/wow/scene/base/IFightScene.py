@@ -39,7 +39,7 @@ class IFightScene(IScene):
                                    4:{'position':(10900, 420), 'image_size':(0,0,0,0), 'enemy':None, "merge":None}}
         
         # load the scene pictures in order
-        self.__background = pygame.image.load(scene_image.value).convert()
+        self.__background = pygame.image.load(scene_image).convert()
         # adjust the scene size
         if (size_w and size_h):
             self.__size_w = size_w
@@ -201,7 +201,6 @@ class IFightScene(IScene):
             
             character_name = temp_char.get_character_name()
             character_img = temp_char.get_stand_image()
-            img_idx = 0
             
             # get move image if necessary
             if character_moving_timer > 0:
@@ -217,29 +216,21 @@ class IFightScene(IScene):
                     character_img, current_pace_idx = temp_char.get_next_moving_image_and_idx(current_pace_idx)
                     new_moving_timer = current_time
                 
-                img_idx = current_pace_idx + 3
                 characters_move[character_name] = current_pace_idx
                 contextDTO.get_ContextDto_InMap().set_characters_move(characters_move)
             else:
                 contextDTO.get_ContextDto_InMap().set_characters_move(None)
             
-            # resize character stand image
-            calc_h = Image_Util.calculate_character_move_height_by_screen_size(self.__size_h)
-            calc_w = Image_Util.calculate_character_move_width_by_height(character_img, calc_h)
-            
-            temp_char.resize_character_images_by_height(calc_h, 1)
-            character_img = temp_char.get_image_by_index(img_idx)
-            
+            # re-calculate character stand image position
+            calc_w, calc_h = character_img.get_size()
             temp_prof_rate = temp_char.get_character_profession_rate()
             
-            # re-calculate character stand image position
             (x,y) = Image_Util.calculate_character_move_position_by_screen_size(self.__size_w, self.__size_h, idx, temp_prof_rate)
             self.__character_move_properties[idx]['position'] = (x,y)
             self.__character_move_properties[idx]['image_size'] = (0, 0, calc_w, calc_h)
             
             # render characters in move
-            new_w, new_h = character_img.get_size()
-            screen_ins.blit(character_img, (x,y), (0, 0, new_w, new_h))
+            screen_ins.blit(character_img, (x,y), (0, 0, calc_w, calc_h))
             
         return new_moving_timer
             
