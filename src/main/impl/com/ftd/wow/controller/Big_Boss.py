@@ -92,11 +92,11 @@ class Big_Boss(object):
                 '''
                 @todo: set map size
                 '''
-                contextDTO.get_ContextDto_InMap().set_map_size(MapSize_Enum.SIZE_SMALL)
+                contextDTO.get_contextDTO_InMap().set_map_size(MapSize_Enum.SIZE_SMALL)
                 self.__current_controller.wake_up_controller(contextDTO, resourceDTO)
                 
     
-    def render_scene(self, screen_ins, contextDTO):
+    def render_scene(self, screen_ins, contextDTO, resourceDTO):
         if not self.__current_controller:
             return False, 'No leader available!'
         
@@ -107,7 +107,7 @@ class Big_Boss(object):
             return False, 'Scene renderer is not valid!'
         
         # arrange render task to current leader
-        self.__current_controller.render_scene(screen_ins, contextDTO)
+        self.__current_controller.render_scene(screen_ins, contextDTO, resourceDTO)
     
     
     # ========================================================== #

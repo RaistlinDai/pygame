@@ -7,12 +7,11 @@ class Materials_Constant:
     mainframe_image_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\main_frame.png'
     background_Molten_Core_filename = 'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\WoW_Classic_Molten_Core_Background.png'
     
-    background_Forrest_corridor = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\forrest\\forrest_corridor_01.png',
-                                   'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\forrest\\forrest_corridor_02.png',
-                                   'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\forrest\\forrest_corridor_03.png',
-                                   'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\forrest\\forrest_corridor_04.png',
-                                   'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\forrest\\forrest_corridor_05.png']
-    background_Forrest_room = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\forrest\\forrest_room_01.png']
+    background_Forrest_back_corridor = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\forrest\\forrest_far.png']
+    background_Forrest_back_room = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\forrest\\forrest_room_01.png']
+    background_Forrest_fore = ['main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\forrest\\forrest_tree_01.png',
+                               'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\forrest\\forrest_tree_02.png',
+                               'main\\resource\\com\\ftd\\wow\\materials\\pic\\background\\scene\\forrest\\forrest_tree_03.png']
     
     # ============================================= #
     #                 Bar                           #

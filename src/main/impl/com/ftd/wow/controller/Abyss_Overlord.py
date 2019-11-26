@@ -59,25 +59,33 @@ class Abyss_Overlord(IController):
         self.__current_scene.set_bottom_bar(value)
     
     
-    def wake_up_controller(self, contextDto=None, resourceDto=None):
-        super().wake_up_controller(contextDto, resourceDto)
+    def wake_up_controller(self, contextDTO=None, resourceDTO=None):
+        super().wake_up_controller(contextDTO, resourceDTO)
         # active Maze_Walker
-        if contextDto:
-            self.__maze_walker.wake_up_controller(contextDto, resourceDto)
+        if contextDTO:
+            self.__maze_walker.wake_up_controller(contextDTO, resourceDTO)
         
+        # update current scene
+        self.update_current_scene(contextDTO, resourceDTO)
+        
+        
+    def update_current_scene(self, contextDTO, resourceDTO):
         # load the background
-        if contextDto.get_ContextDto_InMap().get_map_position().get_map_cell():
-            current_cell = contextDto.get_ContextDto_InMap().get_map_position().get_map_cell()
+        if contextDTO.get_contextDTO_InMap().get_map_position().get_map_cell():
+            
+            current_cell = contextDTO.get_contextDTO_InMap().get_map_position().get_map_cell()
             cell_background_idx = current_cell.get_background_img_idx()
             
-            print(current_cell.get_type())
+            if not cell_background_idx:
+                return
+            
             if current_cell.get_type() == CellType_Enum.TYPE_CORRIDOR:
-                self.__current_scene = resourceDto.get_maze_scene(ForrestScene_Enum.Forrest_Corridors.name, cell_background_idx)
+                self.__current_scene = resourceDTO.get_maze_background_by_index(ForrestScene_Enum.Forrest_Background_Corridors.name, cell_background_idx)
             elif current_cell.get_type() == CellType_Enum.TYPE_ROOM or current_cell.get_type() == CellType_Enum.TYPE_ENTRANCE:
-                self.__current_scene = resourceDto.get_maze_scene(ForrestScene_Enum.Forrest_Rooms.name, cell_background_idx)
-        
+                self.__current_scene = resourceDTO.get_maze_background_by_index(ForrestScene_Enum.Forrest_Background_Rooms.name, cell_background_idx)
+
     
-    def render_scene(self, screen_ins, contextDTO):
+    def render_scene(self, screen_ins, contextDTO, resourceDTO):
         
         # calculate scene changing timer
         gradual_darken, gradual_brighten, darken_rate = self.verify_darken_in_scene_change()
@@ -95,7 +103,10 @@ class Abyss_Overlord(IController):
         temp_status = StatusType_Enum.STATUS_MOVE
         if self.__combat_judgment.get_is_start_combat():
             temp_status = StatusType_Enum.STATUS_COMBAT
-            
+        
+        # update current scene
+        self.update_current_scene(contextDTO, resourceDTO)
+        
         # render the background & characters
         temp_scene = self.get_current_scene()
         temp_pace_timer = temp_scene.render(screen_ins, contextDTO.get_screen_width(), contextDTO.get_screen_height(), \
@@ -112,12 +123,12 @@ class Abyss_Overlord(IController):
         self.available_active_enemies(contextDTO)
         
         # mark combat flag in contextDTO
-        contextDTO.get_ContextDto_InCombat().set_combat(True)
+        contextDTO.get_contextDTO_InCombat().set_combat(True)
         # trigger the combat judgment
         self.__combat_judgment.set_is_start_combat(True)
         # initialize the combat judgment
         self.__combat_judgment.initialize(contextDTO.get_active_team().get_teammembers, \
-                                          contextDTO.get_ContextDto_InCombat().get_active_enemies().get_teammembers())
+                                          contextDTO.get_contextDTO_InCombat().get_active_enemies().get_teammembers())
         
         '''
         @todo: Combat_Judgment generate the order list and the current character
@@ -145,7 +156,7 @@ class Abyss_Overlord(IController):
     
     
     def available_active_enemies(self, contextDTO):
-        active_enemies = contextDTO.get_ContextDto_InCombat().get_active_enemies()
+        active_enemies = contextDTO.get_contextDTO_InCombat().get_active_enemies()
         temp_enemy_properties = self.__current_scene.get_enemy_properties()
         if active_enemies:
             idx = 0
@@ -158,7 +169,7 @@ class Abyss_Overlord(IController):
         
     def set_current_character(self, contextDTO):
         current_character = contextDTO.get_active_team().get_teammember04()
-        contextDTO.get_ContextDto_InCombat().set_current_selection(current_character)
+        contextDTO.get_contextDTO_InCombat().set_current_selection(current_character)
             
     
     def verify_darken_in_scene_change(self):
@@ -198,21 +209,21 @@ class Abyss_Overlord(IController):
         
         if pressed_mouse[0]:
             
-            if contextDTO.get_ContextDto_InCombat().get_current_cover_skill():
-                temp_skill = contextDTO.get_ContextDto_InCombat().get_current_cover_skill()
-                contextDTO.get_ContextDto_InCombat().set_current_select_skill(temp_skill)
+            if contextDTO.get_contextDTO_InCombat().get_current_cover_skill():
+                temp_skill = contextDTO.get_contextDTO_InCombat().get_current_cover_skill()
+                contextDTO.get_contextDTO_InCombat().set_current_select_skill(temp_skill)
             else:
                 pass
             
-            if contextDTO.get_ContextDto_InCombat().get_current_select_skill() and \
-               contextDTO.get_ContextDto_InCombat().get_current_target():
+            if contextDTO.get_contextDTO_InCombat().get_current_select_skill() and \
+               contextDTO.get_contextDTO_InCombat().get_current_target():
                 # trigger fighting image
-                contextDTO.get_ContextDto_InCombat().set_is_fight_in_round(True)
-                contextDTO.get_ContextDto_InCombat().set_fighting_timer(time.time()*1000.0)
+                contextDTO.get_contextDTO_InCombat().set_is_fight_in_round(True)
+                contextDTO.get_contextDTO_InCombat().set_fighting_timer(time.time()*1000.0)
         
         elif pressed_mouse[2]:
-            if contextDTO.get_ContextDto_InCombat().get_current_select_skill():
-                contextDTO.get_ContextDto_InCombat().set_current_select_skill(None)
+            if contextDTO.get_contextDTO_InCombat().get_current_select_skill():
+                contextDTO.get_contextDTO_InCombat().set_current_select_skill(None)
     
     
     def event_keyboard_keydown(self, move_a, move_d, move_w, move_s, contextDTO):

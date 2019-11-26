@@ -45,9 +45,9 @@ class Bottom_Bar(object):
     
     def render_skills(self, screen_ins, contextDTO=None):
         
-        if not contextDTO or not contextDTO.get_ContextDto_InCombat().get_current_selection():
+        if not contextDTO or not contextDTO.get_contextDTO_InCombat().get_current_selection():
             return False, 'Invalid character, no skills load!'
-        active_skills = contextDTO.get_ContextDto_InCombat().get_current_selection().get_active_skills()
+        active_skills = contextDTO.get_contextDTO_InCombat().get_current_selection().get_active_skills()
         
         # render the skill bar
         idx = 0
@@ -56,13 +56,13 @@ class Bottom_Bar(object):
             temp_pos_y = Image_Util.calculate_skill_in_fight_positionY_by_screen_size(self.__size_h + self.__pos_y)
             temp_size = Image_Util.calculate_skill_in_fight_size_by_screen_size(self.__size_h + self.__pos_y)
             
-            if contextDTO.get_ContextDto_InCombat().get_current_select_skill() and \
-               contextDTO.get_ContextDto_InCombat().get_current_select_skill().get_skill_name() == active_skill.get_skill_name():
+            if contextDTO.get_contextDTO_InCombat().get_current_select_skill() and \
+               contextDTO.get_contextDTO_InCombat().get_current_select_skill().get_skill_name() == active_skill.get_skill_name():
                 
                 active_skill_image = active_skill.get_skill_image_select()
             
-            elif contextDTO.get_ContextDto_InCombat().get_current_cover_skill() and \
-                 contextDTO.get_ContextDto_InCombat().get_current_cover_skill().get_skill_name() == active_skill.get_skill_name():
+            elif contextDTO.get_contextDTO_InCombat().get_current_cover_skill() and \
+                 contextDTO.get_contextDTO_InCombat().get_current_cover_skill().get_skill_name() == active_skill.get_skill_name():
                 
                 active_skill_image = active_skill.get_skill_image_select()
             
@@ -77,10 +77,10 @@ class Bottom_Bar(object):
             
     def get_cover_skill(self, cursor_x, cursor_y, contextDTO):
         
-        if not contextDTO.get_ContextDto_InCombat().get_current_selection() or \
-           not contextDTO.get_ContextDto_InCombat().get_current_selection().get_active_skills():
+        if not contextDTO.get_contextDTO_InCombat().get_current_selection() or \
+           not contextDTO.get_contextDTO_InCombat().get_current_selection().get_active_skills():
             return
-        active_skills = contextDTO.get_ContextDto_InCombat().get_current_selection().get_active_skills()
+        active_skills = contextDTO.get_contextDTO_InCombat().get_current_selection().get_active_skills()
         
         temp_pos_x = []
         idx = 0
@@ -90,18 +90,18 @@ class Bottom_Bar(object):
             temp_size = Image_Util.calculate_skill_in_fight_size_by_screen_size(self.__size_h + self.__pos_y)
             
         if (temp_pos_x[0] < cursor_x < temp_pos_x[0] + temp_size) and (temp_pos_y < cursor_y < temp_pos_y + temp_size) and active_skills[0]:
-            if not contextDTO.get_ContextDto_InCombat().get_current_select_skill():
-                contextDTO.get_ContextDto_InCombat().set_current_cover_skill(active_skills[0])
+            if not contextDTO.get_contextDTO_InCombat().get_current_select_skill():
+                contextDTO.get_contextDTO_InCombat().set_current_cover_skill(active_skills[0])
         elif (temp_pos_x[1] < cursor_x < temp_pos_x[1] + temp_size) and (temp_pos_y < cursor_y < temp_pos_y + temp_size) and active_skills[1]:
-            if not contextDTO.get_ContextDto_InCombat().get_current_select_skill():
-                contextDTO.get_ContextDto_InCombat().set_current_cover_skill(active_skills[1])
+            if not contextDTO.get_contextDTO_InCombat().get_current_select_skill():
+                contextDTO.get_contextDTO_InCombat().set_current_cover_skill(active_skills[1])
         elif (temp_pos_x[2] < cursor_x < temp_pos_x[2] + temp_size) and (temp_pos_y < cursor_y < temp_pos_y + temp_size) and active_skills[2]:
-            if not contextDTO.get_ContextDto_InCombat().get_current_select_skill():
-                contextDTO.get_ContextDto_InCombat().set_current_cover_skill(active_skills[2])
+            if not contextDTO.get_contextDTO_InCombat().get_current_select_skill():
+                contextDTO.get_contextDTO_InCombat().set_current_cover_skill(active_skills[2])
         elif (temp_pos_x[3] < cursor_x < temp_pos_x[3] + temp_size) and (temp_pos_y < cursor_y < temp_pos_y + temp_size) and active_skills[3]:
-            if not contextDTO.get_ContextDto_InCombat().get_current_select_skill():
-                contextDTO.get_ContextDto_InCombat().set_current_cover_skill(active_skills[3])
+            if not contextDTO.get_contextDTO_InCombat().get_current_select_skill():
+                contextDTO.get_contextDTO_InCombat().set_current_cover_skill(active_skills[3])
         else:
-            contextDTO.get_ContextDto_InCombat().set_current_cover_skill(None)
+            contextDTO.get_contextDTO_InCombat().set_current_cover_skill(None)
 
     

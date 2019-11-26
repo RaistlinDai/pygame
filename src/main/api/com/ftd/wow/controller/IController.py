@@ -14,7 +14,7 @@ class IController(object):
         self.__in_hibernation = True
     
     
-    def wake_up_controller(self, contextDto=None, resourceDto=None):
+    def wake_up_controller(self, contextDTO=None, resourceDTO=None):
         self.__in_hibernation = False
     
     

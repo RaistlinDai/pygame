@@ -27,7 +27,7 @@ class Login_Guide(IController):
         self.__current_scene, value
         
     
-    def render_scene(self, screen_ins, contextDTO):
+    def render_scene(self, screen_ins, contextDTO, resourceDTO):
         # clocker
         current_timer = time.time()*1000.0
         

@@ -13,8 +13,8 @@ class Context_DTO(object):
         self.__screen_width = 1280
         self.__screen_height = 720
         
-        self.__contextDto_InMap = Context_DTO_InMap()
-        self.__contextDto_InCombat = Context_DTO_InCombat()
+        self.__contextDTO_InMap = Context_DTO_InMap()
+        self.__contextDTO_InCombat = Context_DTO_InCombat()
         self.__active_team = None
 
 
@@ -42,20 +42,20 @@ class Context_DTO(object):
         del self.__screen_width
 
 
-    def get_ContextDto_InCombat(self):
-        return self.__contextDto_InCombat
+    def get_contextDTO_InCombat(self):
+        return self.__contextDTO_InCombat
 
 
-    def set_ContextDto_InCombat(self, value):
-        self.__contextDto_InCombat = value
+    def set_contextDTO_InCombat(self, value):
+        self.__contextDTO_InCombat = value
 
 
-    def get_ContextDto_InMap(self):
-        return self.__contextDto_InMap
+    def get_contextDTO_InMap(self):
+        return self.__contextDTO_InMap
 
 
-    def set_ContextDto_InMap(self, value):
-        self.__contextDto_InMap = value
+    def set_contextDTO_InMap(self, value):
+        self.__contextDTO_InMap = value
 
 
     def get_active_team(self):

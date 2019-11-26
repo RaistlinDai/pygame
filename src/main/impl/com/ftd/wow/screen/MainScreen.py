@@ -61,7 +61,7 @@ class MainScreen(object):
         
         # generate enemy
         generated_enemies = self.generate_enemy(self.__resource_DTO)
-        self.__context_DTO.get_ContextDto_InCombat().set_active_enemies(Team(generated_enemies[0], generated_enemies[1], generated_enemies[2], generated_enemies[3]))
+        self.__context_DTO.get_contextDTO_InCombat().set_active_enemies(Team(generated_enemies[0], generated_enemies[1], generated_enemies[2], generated_enemies[3]))
         
         # update manager
         self.__manager.update_controller(self.__context_DTO, self.__resource_DTO, SceneMode_Enum.MENU_SCENE)
@@ -82,7 +82,7 @@ class MainScreen(object):
             #               Scene render               #
             #==========================================#
             # render the background
-            self.__manager.render_scene(self._screen, self.__context_DTO)
+            self.__manager.render_scene(self._screen, self.__context_DTO, self.__resource_DTO)
         
             # Mouse cursor event
             self.__manager.event_cursor(cursor_x, cursor_y, self.__context_DTO)

@@ -26,26 +26,26 @@ class Maze_Walker(IController):
         self.__map = None
         
         
-    def wake_up_controller(self, contextDto=None, resourceDto=None):
-        super().wake_up_controller(contextDto, resourceDto)
+    def wake_up_controller(self, contextDTO=None, resourceDTO=None):
+        super().wake_up_controller(contextDTO, resourceDTO)
         # generate map
-        self.generate_map(contextDto.get_ContextDto_InMap().get_map_size())
+        self.generate_map(contextDTO.get_contextDTO_InMap().get_map_size())
         # arrange map background
-        self.arrange_map_background(resourceDto)
+        self.arrange_map_background(resourceDTO)
         
         # backup the map into contextDTO
-        contextDto.get_ContextDto_InMap().set_map(self.__map)
+        contextDTO.get_contextDTO_InMap().set_map(self.__map)
         
         # initial map position
         positionDTO = Position_DTO()
         positionDTO.set_map_cell(self.__map.get_entrence())
         positionDTO.set_cell_position(Map_Util.DEFAULT_CELL_SIZE[0])
         positionDTO.set_move_direction(MoveDirection_Enum.DIRECTION_EAST)
-        contextDto.get_ContextDto_InMap().set_map_position(positionDTO)
+        contextDTO.get_contextDTO_InMap().set_map_position(positionDTO)
         
         # resize character image
-        calc_h = Image_Util.calculate_character_move_height_by_screen_size(contextDto.get_screen_height())
-        for temp_char in contextDto.get_active_team().get_teammembers():
+        calc_h = Image_Util.calculate_character_move_height_by_screen_size(contextDTO.get_screen_height())
+        for temp_char in contextDTO.get_active_team().get_teammembers():
             if temp_char:
                 temp_char.resize_character_images_by_height(calc_h, 1)
         
@@ -59,8 +59,8 @@ class Maze_Walker(IController):
         Arrange the background image index to each cell in map
         @todo: to retrieve the maze type
         '''
-        corridor_list = resourceDTO.get_maze_scene_list_by_type(ForrestScene_Enum.Forrest_Corridors.name)
-        room_list = resourceDTO.get_maze_scene_list_by_type(ForrestScene_Enum.Forrest_Rooms.name)
+        corridor_list = resourceDTO.get_maze_background_list_by_type(ForrestScene_Enum.Forrest_Background_Corridors.name)
+        room_list = resourceDTO.get_maze_background_list_by_type(ForrestScene_Enum.Forrest_Background_Rooms.name)
         
         corridor_list_range = len(corridor_list)
         room_list_range = len(room_list)
@@ -104,7 +104,7 @@ class Maze_Walker(IController):
             '''
             return scene_changing_timer, character_moving_timer, "There's no map available!"
         
-        positionDTO = contextDTO.get_ContextDto_InMap().get_map_position()
+        positionDTO = contextDTO.get_contextDTO_InMap().get_map_position()
         current_cell = positionDTO.get_map_cell()
         current_cell_position = positionDTO.get_cell_position()
         current_direction = positionDTO.get_move_direction()
@@ -180,7 +180,7 @@ class Maze_Walker(IController):
                      next_cell.get_type() == CellType_Enum.TYPE_ROOM:
                     # waiting at the door of room
                     current_cell_position = Map_Util.DEFAULT_CELL_SIZE[1]
-                    contextDTO.get_ContextDto_InMap().set_map_next_room(next_cell)
+                    contextDTO.get_contextDTO_InMap().set_map_next_room(next_cell)
                     character_moving_timer = 0
                 
             elif current_cell_position < Map_Util.DEFAULT_CELL_SIZE[0]:
@@ -192,21 +192,21 @@ class Maze_Walker(IController):
                      next_cell.get_type() == CellType_Enum.TYPE_ROOM:
                     # waiting at the door of room
                     current_cell_position = Map_Util.DEFAULT_CELL_SIZE[0]
-                    contextDTO.get_ContextDto_InMap().set_map_next_room(next_cell)
+                    contextDTO.get_contextDTO_InMap().set_map_next_room(next_cell)
                     character_moving_timer = 0
             
             # enter the room
-            next_room_cell = contextDTO.get_ContextDto_InMap().get_map_next_room()
+            next_room_cell = contextDTO.get_contextDTO_InMap().get_map_next_room()
             if move_w != 0 and next_room_cell and \
                (next_room_cell.get_type() == CellType_Enum.TYPE_ENTRANCE or next_room_cell.get_type() == CellType_Enum.TYPE_ROOM):
                 if current_cell_position == Map_Util.DEFAULT_CELL_SIZE[1]:
                     current_cell_position = Map_Util.DEFAULT_CELL_SIZE[0]
                     current_cell = next_room_cell
-                    contextDTO.get_ContextDto_InMap().set_map_next_room(None)
+                    contextDTO.get_contextDTO_InMap().set_map_next_room(None)
                 elif current_cell_position == Map_Util.DEFAULT_CELL_SIZE[0]:
                     current_cell_position = Map_Util.DEFAULT_CELL_SIZE[1]
                     current_cell = next_room_cell
-                    contextDTO.get_ContextDto_InMap().set_map_next_room(None)
+                    contextDTO.get_contextDTO_InMap().set_map_next_room(None)
                 
                 scene_changing_timer = time.time()*1000.0
             
@@ -215,8 +215,8 @@ class Maze_Walker(IController):
             positionDTO.set_move_direction(current_direction)
             positionDTO.set_map_cell(current_cell)
             
-            # synchronize ContextDTO
-            contextDTO.get_ContextDto_InMap().set_map_position(positionDTO)
+            # synchronize contextDTO
+            contextDTO.get_contextDTO_InMap().set_map_position(positionDTO)
         
         '''
         if move_a != 0 or move_d != 0 or move_w != 0:

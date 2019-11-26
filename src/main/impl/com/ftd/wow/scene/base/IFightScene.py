@@ -3,14 +3,17 @@ Created on Jul 14, 2019
 
 @author: ftd
 '''
-import pygame
-import time
-from src.main.api.com.ftd.wow.scene.IScene import IScene
-from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
-from src.main.impl.com.ftd.wow.util.Fight_Util import Fight_Util
-from src.main.impl.com.ftd.wow.controller.Abyss_Overlord import StatusType_Enum
-from src.main.impl.com.ftd.wow.const.Scene_Constant import Scene_Constant
 import random
+import time
+
+import pygame
+
+from src.main.api.com.ftd.wow.scene.IScene import IScene
+from src.main.impl.com.ftd.wow.const.Scene_Constant import Scene_Constant
+from src.main.impl.com.ftd.wow.controller.Abyss_Overlord import StatusType_Enum
+from src.main.impl.com.ftd.wow.util.Fight_Util import Fight_Util
+from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
+
 
 class IFightScene(IScene):
     '''
@@ -20,6 +23,7 @@ class IFightScene(IScene):
     def __init__(self, scene_image, bottom_bar=None, top_bar=None, size_w=None, size_h=None):
         
         self.__background = None
+        self.__foreground = None
         # size
         self.__size_w = 1280
         self.__size_h = 720
@@ -168,7 +172,7 @@ class IFightScene(IScene):
         characters = contextDTO.get_active_team().get_teammembers()
         
         # character move
-        characters_move = contextDTO.get_ContextDto_InMap().get_characters_move()
+        characters_move = contextDTO.get_contextDTO_InMap().get_characters_move()
         if character_moving_timer > 0:
             if not characters_move:
                 # initialize characters_move
@@ -180,7 +184,7 @@ class IFightScene(IScene):
                     random_pace_idx = random.randint(1,4)
                     characters_move[temp_char.get_character_name()] = random_pace_idx
                 
-                contextDTO.get_ContextDto_InMap().set_characters_move(characters_move)
+                contextDTO.get_contextDTO_InMap().set_characters_move(characters_move)
             else:
                 for temp_char in characters:
                     if not temp_char:
@@ -191,7 +195,7 @@ class IFightScene(IScene):
                         random_pace_idx = random.randint(1,4)
                         characters_move[temp_char.get_character_name()] = random_pace_idx
                         
-                contextDTO.get_ContextDto_InMap().set_characters_move(characters_move)
+                contextDTO.get_contextDTO_InMap().set_characters_move(characters_move)
         
         idx = 0
         for temp_char in characters:
@@ -217,9 +221,9 @@ class IFightScene(IScene):
                     new_moving_timer = current_time
                 
                 characters_move[character_name] = current_pace_idx
-                contextDTO.get_ContextDto_InMap().set_characters_move(characters_move)
+                contextDTO.get_contextDTO_InMap().set_characters_move(characters_move)
             else:
-                contextDTO.get_ContextDto_InMap().set_characters_move(None)
+                contextDTO.get_contextDTO_InMap().set_characters_move(None)
             
             # re-calculate character stand image position
             calc_w, calc_h = character_img.get_size()
@@ -261,19 +265,19 @@ class IFightScene(IScene):
             self.__character_combat_properties[idx]['position'] = (x,y)
             self.__character_combat_properties[idx]['image_size'] = (0, 0, calc_w, calc_h)
             
-            if contextDTO.get_ContextDto_InCombat().get_current_selection() and \
-               contextDTO.get_ContextDto_InCombat().get_current_selection().get_character_name() == temp_char.get_character_name():
+            if contextDTO.get_contextDTO_InCombat().get_current_selection() and \
+               contextDTO.get_contextDTO_InCombat().get_current_selection().get_character_name() == temp_char.get_character_name():
                 # skip the fighting character
-                if contextDTO.get_ContextDto_InCombat().get_is_fight_in_round():
+                if contextDTO.get_contextDTO_InCombat().get_is_fight_in_round():
                     continue
                 
                 new_w, new_h = temp_char.get_stand_select_image().get_size()
                 screen_ins.blit(temp_char.get_stand_select_image(), (x,y), (0, 0, new_w, new_h))
                 
-            elif contextDTO.get_ContextDto_InCombat().get_current_target() and \
-                 contextDTO.get_ContextDto_InCombat().get_current_target().get_character_name() == temp_char.get_character_name():
+            elif contextDTO.get_contextDTO_InCombat().get_current_target() and \
+                 contextDTO.get_contextDTO_InCombat().get_current_target().get_character_name() == temp_char.get_character_name():
                 # skip the fighting character
-                if contextDTO.get_ContextDto_InCombat().get_is_fight_in_round():
+                if contextDTO.get_contextDTO_InCombat().get_is_fight_in_round():
                     continue
             else:
                 new_w, new_h = temp_char.get_stand_image().get_size()
@@ -289,9 +293,9 @@ class IFightScene(IScene):
     
     def render_enemies_in_combat(self, screen_ins, contextDTO):             
         # render the character
-        if not contextDTO.get_ContextDto_InCombat().get_active_enemies():
+        if not contextDTO.get_contextDTO_InCombat().get_active_enemies():
             return
-        enemies = contextDTO.get_ContextDto_InCombat().get_active_enemies().get_teammembers()
+        enemies = contextDTO.get_contextDTO_InCombat().get_active_enemies().get_teammembers()
         target_enemy_position = None
         is_valid_target_enemy = False
         
@@ -305,7 +309,6 @@ class IFightScene(IScene):
             calc_h = Image_Util.calculate_character_combat_height_by_screen_size(self.__size_h)
             calc_w = Image_Util.calculate_character_combat_width_by_height(temp_char.get_stand_image(), calc_h)
             calc_in_fight_h = Image_Util.calculate_character_in_fight_height_by_screen_size(self.__size_h)
-            calc_in_fight_w = Image_Util.calculate_character_combat_width_by_height(temp_char.get_fighting_image(), calc_in_fight_h)
             
             temp_char.resize_character_images_by_height(calc_h, calc_in_fight_h)
             temp_prof_rate = temp_char.get_character_enemy_type_rate()
@@ -315,30 +318,30 @@ class IFightScene(IScene):
             self.__enemy_properties[idx]['position'] = (x,y)
             self.__enemy_properties[idx]['image_size'] = (0, 0, calc_w, calc_h)
             
-            if contextDTO.get_ContextDto_InCombat().get_current_target() and \
-               contextDTO.get_ContextDto_InCombat().get_current_target().get_character_name() == temp_char.get_character_name():
+            if contextDTO.get_contextDTO_InCombat().get_current_target() and \
+               contextDTO.get_contextDTO_InCombat().get_current_target().get_character_name() == temp_char.get_character_name():
                 # skip the fighting character
-                if contextDTO.get_ContextDto_InCombat().get_is_fight_in_round():
+                if contextDTO.get_contextDTO_InCombat().get_is_fight_in_round():
                     continue
                 
                 target_enemy_position = (x,y)
                 is_valid_target_enemy = True
             
-            elif contextDTO.get_ContextDto_InCombat().get_current_selection() and \
-                 contextDTO.get_ContextDto_InCombat().get_current_selection().get_character_name() == temp_char.get_character_name():
+            elif contextDTO.get_contextDTO_InCombat().get_current_selection() and \
+                 contextDTO.get_contextDTO_InCombat().get_current_selection().get_character_name() == temp_char.get_character_name():
                 # skip the fighting character
-                if contextDTO.get_ContextDto_InCombat().get_is_fight_in_round():
+                if contextDTO.get_contextDTO_InCombat().get_is_fight_in_round():
                     continue
             else:
                 new_w, new_h = temp_char.get_stand_image().get_size()
                 screen_ins.blit(temp_char.get_stand_image(), (x,y), (0, 0, new_w, new_h))
         
-        if not contextDTO.get_ContextDto_InCombat().get_is_fight_in_round() and \
-           contextDTO.get_ContextDto_InCombat().get_current_target() and \
+        if not contextDTO.get_contextDTO_InCombat().get_is_fight_in_round() and \
+           contextDTO.get_contextDTO_InCombat().get_current_target() and \
            is_valid_target_enemy == True:
             
-            new_w, new_h = contextDTO.get_ContextDto_InCombat().get_current_target().get_stand_select_image().get_size()
-            screen_ins.blit(contextDTO.get_ContextDto_InCombat().get_current_target().get_stand_select_image(), \
+            new_w, new_h = contextDTO.get_contextDTO_InCombat().get_current_target().get_stand_select_image().get_size()
+            screen_ins.blit(contextDTO.get_contextDTO_InCombat().get_current_target().get_stand_select_image(), \
                             target_enemy_position, \
                             (0, 0, new_w, new_h))
     
@@ -348,18 +351,18 @@ class IFightScene(IScene):
         current_time = time.time()*1000.0
         
         # in fight
-        if contextDTO.get_ContextDto_InCombat().get_is_fight_in_round() and \
-           contextDTO.get_ContextDto_InCombat().get_fighting_timer() > 0 and \
-           current_time - contextDTO.get_ContextDto_InCombat().get_fighting_timer() <= Scene_Constant.FIGHTING_TIMER_MAX:
+        if contextDTO.get_contextDTO_InCombat().get_is_fight_in_round() and \
+           contextDTO.get_contextDTO_InCombat().get_fighting_timer() > 0 and \
+           current_time - contextDTO.get_contextDTO_InCombat().get_fighting_timer() <= Scene_Constant.FIGHTING_TIMER_MAX:
             '''
             Calculate attack result
             @todo: remove self.__is_fighting_in_round for skill calculation testing
             '''
-            if not contextDTO.get_ContextDto_InCombat().get_is_fight_calculate():
-                Fight_Util.calculate_fighting(contextDTO.get_ContextDto_InCombat().get_current_selection(), \
-                                              contextDTO.get_ContextDto_InCombat().get_current_target(), \
-                                              contextDTO.get_ContextDto_InCombat().get_current_select_skill())
-                contextDTO.get_ContextDto_InCombat().set_is_fight_calculate(True)
+            if not contextDTO.get_contextDTO_InCombat().get_is_fight_calculate():
+                Fight_Util.calculate_fighting(contextDTO.get_contextDTO_InCombat().get_current_selection(), \
+                                              contextDTO.get_contextDTO_InCombat().get_current_target(), \
+                                              contextDTO.get_contextDTO_InCombat().get_current_select_skill())
+                contextDTO.get_contextDTO_InCombat().set_is_fight_calculate(True)
                 
             # render the character
             if contextDTO.get_active_team():
@@ -371,27 +374,27 @@ class IFightScene(IScene):
                     if not temp_char:
                         continue
                     
-                    if contextDTO.get_ContextDto_InCombat().get_current_selection() and \
-                       contextDTO.get_ContextDto_InCombat().get_current_selection().get_character_name() == temp_char.get_character_name():
+                    if contextDTO.get_contextDTO_InCombat().get_current_selection() and \
+                       contextDTO.get_contextDTO_InCombat().get_current_selection().get_character_name() == temp_char.get_character_name():
                         
                         temp_prof_rate = temp_char.get_character_profession_rate()
                         (calc_w, calc_h) = Image_Util.calculate_character_in_fight_position_by_screen_size(self.__size_w, self.__size_h, idx, temp_prof_rate)
                 
-                        screen_ins.blit(contextDTO.get_ContextDto_InCombat().get_current_selection().get_fighting_image(), (calc_w,calc_h))
+                        screen_ins.blit(contextDTO.get_contextDTO_InCombat().get_current_selection().get_fighting_image(), (calc_w,calc_h))
                         break
                     
-                    if contextDTO.get_ContextDto_InCombat().get_current_target() and \
-                       contextDTO.get_ContextDto_InCombat().get_current_target().get_character_name() == temp_char.get_character_name():
+                    if contextDTO.get_contextDTO_InCombat().get_current_target() and \
+                       contextDTO.get_contextDTO_InCombat().get_current_target().get_character_name() == temp_char.get_character_name():
                         
                         temp_prof_rate = temp_char.get_character_profession_rate()
                         (calc_w, calc_h) = Image_Util.calculate_character_in_fight_position_by_screen_size(self.__size_w, self.__size_h, idx, temp_prof_rate)
                 
-                        screen_ins.blit(contextDTO.get_ContextDto_InCombat().get_current_target().get_fighting_image(), (calc_w,calc_h))
+                        screen_ins.blit(contextDTO.get_contextDTO_InCombat().get_current_target().get_fighting_image(), (calc_w,calc_h))
                         break
             
             # render the enemy
-            if contextDTO.get_ContextDto_InCombat().get_active_enemies():
-                enemies = contextDTO.get_ContextDto_InCombat().get_active_enemies().get_teammembers()
+            if contextDTO.get_contextDTO_InCombat().get_active_enemies():
+                enemies = contextDTO.get_contextDTO_InCombat().get_active_enemies().get_teammembers()
             
                 idx = 0
                 for temp_char in enemies:
@@ -399,43 +402,43 @@ class IFightScene(IScene):
                     if not temp_char:
                         continue
                 
-                    if contextDTO.get_ContextDto_InCombat().get_current_selection() and \
-                       contextDTO.get_ContextDto_InCombat().get_current_selection().get_character_name() == temp_char.get_character_name():
+                    if contextDTO.get_contextDTO_InCombat().get_current_selection() and \
+                       contextDTO.get_contextDTO_InCombat().get_current_selection().get_character_name() == temp_char.get_character_name():
                         
                         temp_prof_rate = temp_char.get_character_enemy_type_rate()
                         (calc_w, calc_h) = Image_Util.calculate_enemy_in_fight_position_by_screen_size(self.__size_w, self.__size_h, idx, temp_prof_rate)
                 
-                        screen_ins.blit(contextDTO.get_ContextDto_InCombat().get_current_selection().get_fighting_image(), (calc_w,calc_h))
+                        screen_ins.blit(contextDTO.get_contextDTO_InCombat().get_current_selection().get_fighting_image(), (calc_w,calc_h))
                         break
                     
-                    if contextDTO.get_ContextDto_InCombat().get_current_target() and \
-                       contextDTO.get_ContextDto_InCombat().get_current_target().get_character_name() == temp_char.get_character_name():
+                    if contextDTO.get_contextDTO_InCombat().get_current_target() and \
+                       contextDTO.get_contextDTO_InCombat().get_current_target().get_character_name() == temp_char.get_character_name():
                         
                         temp_prof_rate = temp_char.get_character_enemy_type_rate()
                         (calc_w, calc_h) = Image_Util.calculate_enemy_in_fight_position_by_screen_size(self.__size_w, self.__size_h, idx, temp_prof_rate)
                         
-                        screen_ins.blit(contextDTO.get_ContextDto_InCombat().get_current_target().get_fighting_image(), (calc_w,calc_h))
+                        screen_ins.blit(contextDTO.get_contextDTO_InCombat().get_current_target().get_fighting_image(), (calc_w,calc_h))
                         break
             
             # render the skill effect
-            if contextDTO.get_ContextDto_InCombat().get_current_select_skill():
-                effect_img = contextDTO.get_ContextDto_InCombat().get_current_select_skill().get_effect_image()
+            if contextDTO.get_contextDTO_InCombat().get_current_select_skill():
+                effect_img = contextDTO.get_contextDTO_InCombat().get_current_select_skill().get_effect_image()
                 screen_ins.blit(effect_img, Image_Util.calculate_skill_effect_size_by_screen_size(self.__size_w, self.__size_h))
             
         else:
-            if contextDTO.get_ContextDto_InCombat().get_fighting_timer() > 0 and \
-               current_time - contextDTO.get_ContextDto_InCombat().get_fighting_timer() > Scene_Constant.FIGHTING_TIMER_MAX:
+            if contextDTO.get_contextDTO_InCombat().get_fighting_timer() > 0 and \
+               current_time - contextDTO.get_contextDTO_InCombat().get_fighting_timer() > Scene_Constant.FIGHTING_TIMER_MAX:
                 # release select skill
-                contextDTO.get_ContextDto_InCombat().set_current_select_skill(None)
+                contextDTO.get_contextDTO_InCombat().set_current_select_skill(None)
             
             # initialize fighting in round properties
-            contextDTO.get_ContextDto_InCombat().set_is_fight_in_round(False)
-            contextDTO.get_ContextDto_InCombat().set_fighting_timer(0)
-            contextDTO.get_ContextDto_InCombat().set_is_fight_calculate(False)
+            contextDTO.get_contextDTO_InCombat().set_is_fight_in_round(False)
+            contextDTO.get_contextDTO_InCombat().set_fighting_timer(0)
+            contextDTO.get_contextDTO_InCombat().set_is_fight_calculate(False)
             
     
     def get_cover_character(self, cursor_x, cursor_y, contextDTO):
-        if contextDTO.get_ContextDto_InCombat().get_is_fight_in_round():
+        if contextDTO.get_contextDTO_InCombat().get_is_fight_in_round():
             return
         
         for temp_idx in self.__character_combat_properties:
@@ -461,13 +464,13 @@ class IFightScene(IScene):
             if in_x and in_y:
                 if temp_char['enemy']:
                     print(temp_char['enemy'].get_character_name())
-                if contextDTO.get_ContextDto_InCombat().get_current_select_skill():
-                    contextDTO.get_ContextDto_InCombat().set_current_target(temp_char['enemy'])
+                if contextDTO.get_contextDTO_InCombat().get_current_select_skill():
+                    contextDTO.get_contextDTO_InCombat().set_current_target(temp_char['enemy'])
                     break
                 else:
-                    contextDTO.get_ContextDto_InCombat().set_current_target(None)
+                    contextDTO.get_contextDTO_InCombat().set_current_target(None)
             else:
-                contextDTO.get_ContextDto_InCombat().set_current_target(None)
+                contextDTO.get_contextDTO_InCombat().set_current_target(None)
         
     
     def render_font(self, sceneInst):
