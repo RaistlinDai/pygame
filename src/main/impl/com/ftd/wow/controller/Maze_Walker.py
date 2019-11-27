@@ -61,7 +61,6 @@ class Maze_Walker(IController):
         '''
         # set general map background
         general_background_list = map_type.value[0].value
-        print(general_background_list)
         idx = random.randint(0, len(general_background_list)-1)
         self.get_map().set_background_img_idx(idx)
         

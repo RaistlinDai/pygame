@@ -88,7 +88,7 @@ class Big_Boss(object):
         if self.__current_scene_mode:
             if self.__current_scene_mode == SceneMode_Enum.MENU_SCENE:
                 self.__current_scene_mode = SceneMode_Enum.FIGHT_SCENE
-                self.__current_controller = Abyss_Overlord(self.__resource_DTO)
+                self.__current_controller = Abyss_Overlord()
                 '''
                 @todo: set map type and size
                 '''

@@ -26,10 +26,16 @@ class StatusType_Enum(Enum):
     
 class Abyss_Overlord(IController):
     '''
-    
+    The controller of abyss. It would be wake up once player get into the maze.
     '''
     
-    def __init__(self, resourceDTO):
+    def __init__(self):
+        '''
+        Constructor of Abyss_Overlord. There are a few sub-controllers in it. e.g. Maze_Walker, Combat_Judgement, 
+        which will available according to the Abyss Status. 
+        In general, the Abyss_Overlord is in charge of dispatching the sub-controllers in maze, and it is also the manager
+        who determines the current scene rendering. 
+        '''
         super().__init__()
         # maze walker
         self.__maze_walker = Maze_Walker()
@@ -60,6 +66,9 @@ class Abyss_Overlord(IController):
     
     
     def wake_up_controller(self, contextDTO=None, resourceDTO=None):
+        '''
+        Active the sub-controller, and update the current scene.
+        '''
         super().wake_up_controller(contextDTO, resourceDTO)
         # active Maze_Walker
         if contextDTO:
@@ -70,6 +79,9 @@ class Abyss_Overlord(IController):
         
         
     def update_current_scene(self, contextDTO, resourceDTO):
+        '''
+        Update the current scene before rendering.
+        '''
         # load the background
         map_type = contextDTO.get_contextDTO_InMap().get_map_type()
         background_idx = contextDTO.get_contextDTO_InMap().get_map().get_background_img_idx()
@@ -90,7 +102,9 @@ class Abyss_Overlord(IController):
         
     
     def render_scene(self, screen_ins, contextDTO, resourceDTO):
-        
+        '''
+        Render scene, it will call IFightScene to render
+        '''
         # calculate scene changing timer
         gradual_darken, gradual_brighten, darken_rate = self.verify_darken_in_scene_change()
         
@@ -142,11 +156,17 @@ class Abyss_Overlord(IController):
         
         
     def close_combat(self):
+        '''
+        Close the combat
+        '''
         # close the combat judgment
         self.__combat_judgment.set_is_start_as_False()
         
             
     def available_active_team(self, contextDTO):
+        '''
+        Add the active team into current scene
+        '''
         active_team = contextDTO.get_active_team()
         temp_character_properties = self.__current_scene.get_character_properties()
         if active_team:
@@ -160,6 +180,9 @@ class Abyss_Overlord(IController):
     
     
     def available_active_enemies(self, contextDTO):
+        '''
+        Add the active enemies into current scene
+        '''
         active_enemies = contextDTO.get_contextDTO_InCombat().get_active_enemies()
         temp_enemy_properties = self.__current_scene.get_enemy_properties()
         if active_enemies:
@@ -172,6 +195,9 @@ class Abyss_Overlord(IController):
                     
         
     def set_current_character(self, contextDTO):
+        '''
+        Set the selected character
+        '''
         current_character = contextDTO.get_active_team().get_teammember04()
         contextDTO.get_contextDTO_InCombat().set_current_selection(current_character)
             
