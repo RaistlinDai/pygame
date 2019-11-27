@@ -1,7 +1,19 @@
 import random
 from src.main.impl.com.ftd.wow.map.Map_DTO import Cell_DTO, Map_DTO
 from enum import Enum, unique
+from src.main.impl.com.ftd.wow.scene.forrest.ForrestScene_Enum import ForrestScene_Enum
         
+        
+@unique
+class MapType_Enum(Enum):
+    '''
+    classdocs
+    @attention: the value structure: [Corridor list, Room list, Foreground list]
+    '''
+    
+    FORREST = [ForrestScene_Enum.Forrest_Background_Generals, ForrestScene_Enum.Forrest_Background_Rooms, ForrestScene_Enum.Forrest_Foreground_Trees]
+    MOUNTAIN = []
+    
         
 @unique
 class MapSize_Enum(Enum):
@@ -59,7 +71,7 @@ class Map_Util(object):
     DEFAULT_CELL_SIZE = (1, 100)
     
     @staticmethod
-    def generate_random_map(map_size):
+    def generate_random_map(map_type, map_size):
         '''
         Generate a random map
         @param map_size: the size of the random map

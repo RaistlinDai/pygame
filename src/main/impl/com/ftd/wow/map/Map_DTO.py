@@ -7,8 +7,17 @@ class Map_DTO(object):
         self.__map_size = map_size
         self.__cell_list = []
         self.__entrence = None
+        self.__background_img_idx = None
+        
+        
+    def get_map_size(self):
+        return self.__map_size
     
     
+    def set_map_size(self, value):
+        self.__map_size = value
+        
+        
     def get_cell_list(self):
         return self.__cell_list
     
@@ -23,6 +32,14 @@ class Map_DTO(object):
     
     def set_entrence(self, value):
         self.__entrence = value
+
+
+    def get_background_img_idx(self):
+        return self.__background_img_idx
+    
+    
+    def set_background_img_idx(self, value):
+        self.__background_img_idx = value
         
         
 
@@ -40,6 +57,8 @@ class Cell_DTO(object):
         self.__nearby_cells = []
         # cell background
         self.__background_img_idx = None
+        # cell foreground
+        self.__foreground_img_idx = None
         '''
         @todo: in future
         '''
@@ -82,6 +101,14 @@ class Cell_DTO(object):
     
     def append_nearby_cells(self, value):
         self.__nearby_cells.append(value)
+
+
+    def get_foreground_img_idx(self):
+        return self.__foreground_img_idx
+    
+    
+    def set_foreground_img_idx(self, value):
+        self.__foreground_img_idx = value
 
 
     def get_background_img_idx(self):

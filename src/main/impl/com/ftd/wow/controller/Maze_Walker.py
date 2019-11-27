@@ -29,9 +29,9 @@ class Maze_Walker(IController):
     def wake_up_controller(self, contextDTO=None, resourceDTO=None):
         super().wake_up_controller(contextDTO, resourceDTO)
         # generate map
-        self.generate_map(contextDTO.get_contextDTO_InMap().get_map_size())
+        self.generate_map(contextDTO.get_contextDTO_InMap().get_map_type(), contextDTO.get_contextDTO_InMap().get_map_size())
         # arrange map background
-        self.arrange_map_background(resourceDTO)
+        self.arrange_map_background(contextDTO.get_contextDTO_InMap().get_map_type())
         
         # backup the map into contextDTO
         contextDTO.get_contextDTO_InMap().set_map(self.__map)
@@ -48,31 +48,36 @@ class Maze_Walker(IController):
         for temp_char in contextDTO.get_active_team().get_teammembers():
             if temp_char:
                 temp_char.resize_character_images_by_height(calc_h, 1)
-        
-        
-    def generate_map(self, map_size):
-        self.__map = Map_Util.generate_random_map(map_size)
+    
+    
+    def generate_map(self, map_type, map_size):
+        self.__map = Map_Util.generate_random_map(map_type, map_size)
         
     
-    def arrange_map_background(self, resourceDTO):
+    def arrange_map_background(self, map_type):
         '''
         Arrange the background image index to each cell in map
-        @todo: to retrieve the maze type
+        @todo: to retrieve the maze deepth
         '''
-        corridor_list = resourceDTO.get_maze_background_list_by_type(ForrestScene_Enum.Forrest_Background_Corridors.name)
-        room_list = resourceDTO.get_maze_background_list_by_type(ForrestScene_Enum.Forrest_Background_Rooms.name)
+        # set general map background
+        general_background_list = map_type.value[0].value
+        print(general_background_list)
+        idx = random.randint(0, len(general_background_list)-1)
+        self.get_map().set_background_img_idx(idx)
         
-        corridor_list_range = len(corridor_list)
+        # set room background and cell foreground
+        room_list = map_type.value[1].value
         room_list_range = len(room_list)
         
         for map_cell in self.get_map().get_cell_list():
             if map_cell.get_type() == CellType_Enum.TYPE_CORRIDOR:
-                idx = random.randint(0, corridor_list_range-1)
-                map_cell.set_background_img_idx(idx)
+                #idx = random.randint(0, corridor_list_range-1)
+                #map_cell.set_foreground_img_idx(idx)
+                map_cell.set_background_img_idx(None)
             elif map_cell.get_type() == CellType_Enum.TYPE_ROOM or map_cell.get_type() == CellType_Enum.TYPE_ENTRANCE:
                 idx = random.randint(0, room_list_range-1)
                 map_cell.set_background_img_idx(idx)
-
+        
         
     def get_map(self):
         return self.__map

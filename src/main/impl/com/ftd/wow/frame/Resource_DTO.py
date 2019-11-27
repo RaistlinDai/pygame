@@ -85,7 +85,7 @@ class Resource_DTO(object):
         return self.__backgrounds[scene_name]
     
     
-    def get_maze_background_by_index(self, maze_scene_type, maze_scene_idx=None):
+    def get_maze_scene_by_index(self, maze_scene_type, maze_scene_idx=None):
         '''
         get the backgrounds in maze by type and index
         '''
@@ -93,7 +93,7 @@ class Resource_DTO(object):
         return scene_list[maze_scene_idx]
         
     
-    def get_maze_background_list_by_type(self, maze_scene_type):
+    def get_maze_scene_list_by_type(self, maze_scene_type):
         '''
         get the backgrounds in maze by type
         '''

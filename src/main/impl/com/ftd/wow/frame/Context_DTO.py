@@ -70,12 +70,21 @@ class Context_DTO(object):
 class Context_DTO_InMap(object):
     
     def __init__(self):
+        self.__map_type = None # MapType_Enum object
         self.__map_size = None
         self.__map = None
         self.__map_position = None
         self.__map_next_room = None
         " the characters pace index list "
         self.__characters_move = None
+        
+    
+    def get_map_type(self):
+        return self.__map_type
+
+
+    def set_map_type(self, value):
+        self.__map_type = value
         
     
     def get_map_size(self):

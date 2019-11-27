@@ -15,6 +15,6 @@ class ForrestScene_Enum(Enum):
     @attention: the value structure: scene constructor
     '''
     
-    Forrest_Background_Corridors = Materials_Constant.background_Forrest_back_corridor
-    Forrest_Background_Rooms = Materials_Constant.background_Forrest_back_room
-    Forrest_Foreground_Trees = Materials_Constant.background_Forrest_fore
+    Forrest_Background_Generals = Materials_Constant.background_Forrest_general
+    Forrest_Background_Rooms = Materials_Constant.background_Forrest_room
+    Forrest_Foreground_Trees = Materials_Constant.foreground_Forrest_tree

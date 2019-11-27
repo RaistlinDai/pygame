@@ -7,7 +7,7 @@ from src.main.impl.com.ftd.wow.scene.base.SceneMode_Enum import SceneMode_Enum
 from src.main.api.com.ftd.wow.controller.IController import IController
 from src.main.impl.com.ftd.wow.controller.Login_Guide import Login_Guide
 from src.main.impl.com.ftd.wow.controller.Abyss_Overlord import Abyss_Overlord
-from src.main.impl.com.ftd.wow.util.Map_Util import MapSize_Enum
+from src.main.impl.com.ftd.wow.util.Map_Util import MapSize_Enum, MapType_Enum
 
 class Big_Boss(object):
     '''
@@ -90,8 +90,9 @@ class Big_Boss(object):
                 self.__current_scene_mode = SceneMode_Enum.FIGHT_SCENE
                 self.__current_controller = Abyss_Overlord(self.__resource_DTO)
                 '''
-                @todo: set map size
+                @todo: set map type and size
                 '''
+                contextDTO.get_contextDTO_InMap().set_map_type(MapType_Enum.FORREST)
                 contextDTO.get_contextDTO_InMap().set_map_size(MapSize_Enum.SIZE_SMALL)
                 self.__current_controller.wake_up_controller(contextDTO, resourceDTO)
                 

@@ -48,7 +48,7 @@ class Abyss_Overlord(IController):
 
 
     def set_current_scene(self, value):
-        self.__current_scene, value
+        self.__current_scene = value
         
     
     def get_current_scene_bottom_bar(self):
@@ -64,13 +64,17 @@ class Abyss_Overlord(IController):
         # active Maze_Walker
         if contextDTO:
             self.__maze_walker.wake_up_controller(contextDTO, resourceDTO)
-        
+            
         # update current scene
         self.update_current_scene(contextDTO, resourceDTO)
         
         
     def update_current_scene(self, contextDTO, resourceDTO):
         # load the background
+        map_type = contextDTO.get_contextDTO_InMap().get_map_type()
+        background_idx = contextDTO.get_contextDTO_InMap().get_map().get_background_img_idx()
+        self.__current_scene = resourceDTO.get_maze_scene_by_index(map_type.value[0].name, background_idx)
+        
         if contextDTO.get_contextDTO_InMap().get_map_position().get_map_cell():
             
             current_cell = contextDTO.get_contextDTO_InMap().get_map_position().get_map_cell()
@@ -80,10 +84,10 @@ class Abyss_Overlord(IController):
                 return
             
             if current_cell.get_type() == CellType_Enum.TYPE_CORRIDOR:
-                self.__current_scene = resourceDTO.get_maze_background_by_index(ForrestScene_Enum.Forrest_Background_Corridors.name, cell_background_idx)
+                pass
             elif current_cell.get_type() == CellType_Enum.TYPE_ROOM or current_cell.get_type() == CellType_Enum.TYPE_ENTRANCE:
-                self.__current_scene = resourceDTO.get_maze_background_by_index(ForrestScene_Enum.Forrest_Background_Rooms.name, cell_background_idx)
-
+                self.__current_scene = resourceDTO.get_maze_scene_by_index(map_type.value[1].name, cell_background_idx)
+        
     
     def render_scene(self, screen_ins, contextDTO, resourceDTO):
         

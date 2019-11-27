@@ -87,6 +87,14 @@ class IFightScene(IScene):
         self.__top_bar = value
         
         
+    def get_foreground(self):
+        return self.__foreground
+    
+    
+    def set_foreground(self, value):
+        self.__foreground = value
+        
+        
     def darken(self, screen_ins, value):
         "Value is 0 to 255. So 128 would be 50% darken"
         dark = pygame.Surface(screen_ins.get_size(), 32)
