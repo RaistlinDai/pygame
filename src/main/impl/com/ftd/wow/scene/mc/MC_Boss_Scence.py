@@ -3,7 +3,6 @@ Created on Aug 27, 2019
 
 @author: ftd
 '''
-import pygame
 from src.main.impl.com.ftd.wow.scene.base.IFightScene import IFightScene
 from src.main.impl.com.ftd.wow.scene.FightScene_Enum import FightScene_Enum
 

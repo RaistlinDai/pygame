@@ -42,7 +42,6 @@ class Map_DTO(object):
         self.__background_img_idx = value
         
         
-
 class Cell_DTO(object):
     '''
     
@@ -58,7 +57,7 @@ class Cell_DTO(object):
         # cell background
         self.__background_img_idx = None
         # cell foreground
-        self.__foreground_img_idx = None
+        self.__cell_items = []
         '''
         @todo: in future
         '''
@@ -103,20 +102,25 @@ class Cell_DTO(object):
         self.__nearby_cells.append(value)
 
 
-    def get_foreground_img_idx(self):
-        return self.__foreground_img_idx
-    
-    
-    def set_foreground_img_idx(self, value):
-        self.__foreground_img_idx = value
-
-
     def get_background_img_idx(self):
         return self.__background_img_idx
     
     
     def set_background_img_idx(self, value):
         self.__background_img_idx = value
+    
+    
+    def set_cell_items(self, value):
+        self.__cell_items = value
+
+
+    def get_cell_items(self):
+        return self.__cell_items
+    
+    
+    def append_cell_item(self, value):
+        if isinstance(value, Cell_Item_DTO):
+            self.__cell_items.append(value)
 
 
     def get_in_combat(self):
@@ -167,4 +171,52 @@ class Position_DTO(object):
     move_direction = property(get_move_direction, set_move_direction, None, None)
     
     
-    
+class Cell_Item_DTO(object):
+    '''
+    Cell Item DataObject
+    NOTE: the default item size (foreground) is 20, and its position starts from 40 to 60 in cell
+    '''
+    def __init__(self, item_image=None, item_type=None, level_idx=0):
+        self.__item_image = item_image
+        self.__item_type = item_type
+        self.__level_idx = level_idx
+        
+        
+    def get_item_image(self):
+        return self.__item_image
+
+
+    def get_item_type(self):
+        return self.__item_type
+
+
+    def get_level_idx(self):
+        return self.__level_idx
+
+
+    def set_item_image(self, value):
+        self.__item_image = value
+
+
+    def set_item_type(self, value):
+        self.__item_type = value
+
+
+    def set_level_idx(self, value):
+        self.__level_idx = value
+
+
+    def del_item_image(self):
+        del self.__item_image
+
+
+    def del_item_type(self):
+        del self.__item_type
+
+
+    def del_level_idx(self):
+        del self.__level_idx
+
+    item_image = property(get_item_image, set_item_image, del_item_image, "item_image's docstring")
+    item_type = property(get_item_type, set_item_type, del_item_type, "item_type's docstring")
+    level_idx = property(get_level_idx, set_level_idx, del_level_idx, "level_idx's docstring")

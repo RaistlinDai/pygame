@@ -22,8 +22,8 @@ class IFightScene(IScene):
     
     def __init__(self, scene_image, bottom_bar=None, top_bar=None, size_w=None, size_h=None):
         
-        self.__background = None
-        self.__foreground = None
+        self.__background = None   # scene
+        self.__foreground = None   # image
         # size
         self.__size_w = 1280
         self.__size_h = 720
@@ -117,12 +117,26 @@ class IFightScene(IScene):
         
         new_moving_timer = 0
         
+        "render the background"
         if (screen_w and screen_h):
             self.__size_w = screen_w
             self.__size_h = screen_h
             self.__background = pygame.transform.scale(self.__background, (screen_w, screen_h))
-        
         screen_ins.blit(self.__background, (0,0), (0,0,self.__size_w,self.__size_h))
+        
+        "render the foreground"
+        current_position = contextDTO.get_contextDTO_InMap().get_map_position()
+        if current_position:
+            # get all the cell items
+            cell_items = current_position.get_map_cell().get_cell_items()
+            for cell_item_obj in cell_items:
+                
+                cell_item_image = cell_item_obj.get_item_image()
+                current_item_size = cell_item_image.get_size()
+                print(current_item_size)
+                #pygame.transform.scale(img, (round(calc_in_fight_w*rate), round(calc_in_fight_h*rate)))
+            
+            
         
         # gradual darken or brighten
         if gradual_darken:
@@ -136,6 +150,7 @@ class IFightScene(IScene):
         # render the top bar
         self.__top_bar.render_image(screen_ins, self.__size_w, self.__size_h, contextDTO)
         
+        "render the characters & enemies"
         if screen_status == StatusType_Enum.STATUS_MOVE:
             # in move
             new_moving_timer = self.render_characters_in_move(screen_ins, contextDTO, character_moving_timer)
@@ -263,7 +278,6 @@ class IFightScene(IScene):
             calc_h = Image_Util.calculate_character_combat_height_by_screen_size(self.__size_h)
             calc_w = Image_Util.calculate_character_combat_width_by_height(temp_char.get_stand_image(), calc_h)
             calc_in_fight_h = Image_Util.calculate_character_in_fight_height_by_screen_size(self.__size_h)
-            calc_in_fight_w = Image_Util.calculate_character_combat_width_by_height(temp_char.get_fighting_image(), calc_in_fight_h)
 
             temp_char.resize_character_images_by_height(calc_h, calc_in_fight_h)
             temp_prof_rate = temp_char.get_character_profession_rate()

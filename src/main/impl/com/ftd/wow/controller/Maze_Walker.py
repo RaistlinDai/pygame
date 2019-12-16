@@ -5,40 +5,40 @@ Created on Oct 16, 2019
 '''
 
 from src.main.impl.com.ftd.wow.util.Map_Util import Map_Util, MoveDirection_Enum,\
-    CellType_Enum
+    CellType_Enum, CellItemType_Enum, MapType_Enum
 from src.main.api.com.ftd.wow.controller.IController import IController
-from src.main.impl.com.ftd.wow.map.Map_DTO import Position_DTO
+from src.main.impl.com.ftd.wow.map.Map_DTO import Position_DTO, Cell_Item_DTO
 import time
 from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
-from src.main.impl.com.ftd.wow.scene.forrest.ForrestScene_Enum import ForrestScene_Enum
 import random
+from src.main.impl.com.ftd.wow.scene.forrest.ForrestItem_Enum import ForrestItem_Enum
     
     
 class Maze_Walker(IController):
     '''
-    
+    The controller of Maze, and it's a sub-controller of Abyss_Overlord.
+    The main job of Maze_Walker is to maintain the movement of characters in the maze. It could generate the map, calculate the 
+      position of character, and also synchronize these information into Context_DTO.ContextDTO_InMap
     '''
     
-    CELL_SIZE = 10
     
     def __init__(self):
         super().__init__()
-        self.__map = None
-        
+    
         
     def wake_up_controller(self, contextDTO=None, resourceDTO=None):
         super().wake_up_controller(contextDTO, resourceDTO)
         # generate map
-        self.generate_map(contextDTO.get_contextDTO_InMap().get_map_type(), contextDTO.get_contextDTO_InMap().get_map_size())
+        temp_map = self.generate_map(contextDTO.get_contextDTO_InMap().get_map_type(), contextDTO.get_contextDTO_InMap().get_map_size())
         # arrange map background
-        self.arrange_map_background(contextDTO.get_contextDTO_InMap().get_map_type())
+        self.arrange_map_background(temp_map, contextDTO.get_contextDTO_InMap().get_map_type(), resourceDTO)
         
         # backup the map into contextDTO
-        contextDTO.get_contextDTO_InMap().set_map(self.__map)
+        contextDTO.get_contextDTO_InMap().set_map(temp_map)
         
         # initial map position
         positionDTO = Position_DTO()
-        positionDTO.set_map_cell(self.__map.get_entrence())
+        positionDTO.set_map_cell(temp_map.get_entrence())
         positionDTO.set_cell_position(Map_Util.DEFAULT_CELL_SIZE[0])
         positionDTO.set_move_direction(MoveDirection_Enum.DIRECTION_EAST)
         contextDTO.get_contextDTO_InMap().set_map_position(positionDTO)
@@ -51,10 +51,10 @@ class Maze_Walker(IController):
     
     
     def generate_map(self, map_type, map_size):
-        self.__map = Map_Util.generate_random_map(map_type, map_size)
+        return Map_Util.generate_random_map(map_type, map_size)
         
     
-    def arrange_map_background(self, map_type):
+    def arrange_map_background(self, temp_map, map_type, resourceDTO):
         '''
         Arrange the background image index to each cell in map
         @todo: to retrieve the maze deepth
@@ -62,37 +62,43 @@ class Maze_Walker(IController):
         # set general map background
         general_background_list = map_type.value[0].value
         idx = random.randint(0, len(general_background_list)-1)
-        self.get_map().set_background_img_idx(idx)
+
+        temp_map.set_background_img_idx(idx)
         
-        # set room background and cell foreground
-        room_list = map_type.value[1].value
-        room_list_range = len(room_list)
-        
-        for map_cell in self.get_map().get_cell_list():
+        for map_cell in temp_map.get_cell_list():
+            
             if map_cell.get_type() == CellType_Enum.TYPE_CORRIDOR:
-                #idx = random.randint(0, corridor_list_range-1)
-                #map_cell.set_foreground_img_idx(idx)
-                map_cell.set_background_img_idx(None)
+                " cell items "
+                obj_list_range = 0
+                item_type = None
+                item_list = []
+                if map_type == MapType_Enum.FORREST:
+                    item_type = ForrestItem_Enum.Forrest_Foreground_Trees
+                    item_list = resourceDTO.get_map_items_by_type(item_type.name)
+                    obj_list_range = len(item_list)
+                
+                obj_idx = random.randint(-1, obj_list_range-1)
+                if obj_idx >= 0:
+                    temp_item_image = item_list[obj_idx]
+                    temp_cell_item = Cell_Item_DTO(temp_item_image, CellItemType_Enum.TYPE_FOREGROUND) 
+                    map_cell.append_cell_item(temp_cell_item)
+                    
             elif map_cell.get_type() == CellType_Enum.TYPE_ROOM or map_cell.get_type() == CellType_Enum.TYPE_ENTRANCE:
+                " set room background "
+                room_list = map_type.value[1].value
+                room_list_range = len(room_list)
                 idx = random.randint(0, room_list_range-1)
                 map_cell.set_background_img_idx(idx)
-        
-        
-    def get_map(self):
-        return self.__map
-    
-        
-    def set_current_position(self, value):
-        self._current_position = value
-        
-        
-    def get_current_position(self):
-        return self._current_position
     
     
     def manage_characters_move_in_map(self, move_a, move_d, move_w, move_s, contextDTO):
         '''
         The most important function of Maze_Walker, it will maintain the characters' movement in the map. 
+        Normally, the screen takes 30 size of a cell (cell's whole size is 100).
+        
+        |=======|                        -> the screen (30 cell size)
+        |---------------------------|    -> the cell in map (100 cell size)
+        
         @return: scene_changing_timer
         @return: character_moving_timer
         @return: error message
@@ -101,13 +107,13 @@ class Maze_Walker(IController):
         character_moving_timer = 0
         
         # get the current map
-        current_map = self.get_map()
-        if not current_map:
+        if not contextDTO.get_contextDTO_InMap() or not contextDTO.get_contextDTO_InMap().get_map():
             '''
             @todo: error
             '''
             return scene_changing_timer, character_moving_timer, "There's no map available!"
         
+        current_map = contextDTO.get_contextDTO_InMap().get_map()
         positionDTO = contextDTO.get_contextDTO_InMap().get_map_position()
         current_cell = positionDTO.get_map_cell()
         current_cell_position = positionDTO.get_cell_position()

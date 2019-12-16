@@ -14,6 +14,8 @@ from src.main.impl.com.ftd.wow.const.Materials_Constant import Materials_Constan
 from src.main.impl.com.ftd.wow.enemy.mc.Enemy_MC_Enum import Enemy_MC_Enum
 
 from src.main.impl.com.ftd.wow.scene.forrest.ForrestScene_Enum import ForrestScene_Enum
+from src.main.impl.com.ftd.wow.scene.forrest.ForrestItem_Enum import ForrestItem_Enum
+from src.main.impl.com.ftd.wow.scene.base.IMapItem import IMapItem
 
 class Resource_DTO(object):
     '''
@@ -22,6 +24,7 @@ class Resource_DTO(object):
     
     def __init__(self):
         self.__backgrounds = {}       # {"menu_scene": IMenuScene, "combat_scene_corridor: [IFightScene1, IFightScene2]}
+        self.__mapitems = {}
         self.__professions = {}
         self.__enemies = {}
         self.__mouse_cursor = None
@@ -29,6 +32,7 @@ class Resource_DTO(object):
     
     def load_resources(self):
         self._load_backgrounds()
+        self._load_map_items()
         self._load_professions()
         self._load_enemies()
         self._load_mouse_cursor()
@@ -38,7 +42,6 @@ class Resource_DTO(object):
         '''
         load the backgrounds into dict
         '''
-        
         self.__top_bar = Top_Bar()
         self.__bottom_bar = Bottom_Bar()
         
@@ -50,10 +53,18 @@ class Resource_DTO(object):
             for forrest_sce in forrest_sce_list.value:
                 temp_list.append(IFightScene(forrest_sce, self.__bottom_bar, self.__top_bar))
             self.__backgrounds[forrest_sce_list.name] = temp_list
+    
+    
+    def _load_map_items(self):
+        '''
+        load the map items into dict
+        '''
+        for map_item_draw_img in ForrestItem_Enum:
+            mapItems = IMapItem(map_item_draw_img.value)
+            self.__mapitems[map_item_draw_img.name] = mapItems.get_item_images()
             
     
     def _load_professions(self):
-        
         '''
         load the professions into dict
         '''
@@ -62,7 +73,6 @@ class Resource_DTO(object):
     
     
     def _load_enemies(self):
-        
         '''
         load the enemies into dict
         '''
@@ -100,6 +110,22 @@ class Resource_DTO(object):
         scene_list = self.__backgrounds[maze_scene_type]
         return scene_list
     
+    
+    def get_map_items_by_type(self, map_item_type):
+        '''
+        get the map item by map item type and index
+        '''
+        map_items = self.__mapitems[map_item_type]
+        return map_items
+    
+    
+    def get_map_items_by_type_and_index(self, map_item_type, map_item_index):
+        '''
+        get the map item by map item type and index
+        '''
+        map_item = self.__mapitems[map_item_type][map_item_index]
+        return map_item
+        
     
     def get_profession(self, profession_name):
         '''

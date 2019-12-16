@@ -3,7 +3,6 @@ Created on Oct 10, 2019
 
 @author: ftd
 '''
-from src.main.impl.com.ftd.wow.scene.forrest.ForrestScene_Enum import ForrestScene_Enum
 from src.main.api.com.ftd.wow.controller.IController import IController
 import time
 from src.main.impl.com.ftd.wow.controller.Combat_Judgment import Combat_Judgment

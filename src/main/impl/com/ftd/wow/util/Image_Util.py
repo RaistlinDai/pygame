@@ -91,7 +91,7 @@ class Image_Util(object):
     @staticmethod
     def calculate_character_combat_width_by_height(character_image, character_h):
         '''
-        @param character_image: the height of character
+        @param character_image: the image of character
         @param: character_h: the standard height of character 
         '''
         w, h = character_image.get_size()
@@ -240,4 +240,12 @@ class Image_Util(object):
         return (int(standard_w), round(standard_h))
     
     
-    
+    @staticmethod
+    def calculate_map_item_size_by_screen_size(item_image, screen_w, screen_h):
+        '''
+        Calculate the map item's size according to the screen's size
+        @param item_image: the item image
+        @param screen_w: the width of screen
+        @param screen_h: the height of screen
+        '''
+        

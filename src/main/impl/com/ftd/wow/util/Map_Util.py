@@ -11,7 +11,7 @@ class MapType_Enum(Enum):
     @attention: the value structure: [Corridor list, Room list, Foreground list]
     '''
     
-    FORREST = [ForrestScene_Enum.Forrest_Background_Generals, ForrestScene_Enum.Forrest_Background_Rooms, ForrestScene_Enum.Forrest_Foreground_Trees]
+    FORREST = [ForrestScene_Enum.Forrest_Background_Generals, ForrestScene_Enum.Forrest_Background_Rooms]
     MOUNTAIN = []
     
         
@@ -38,6 +38,17 @@ class CellType_Enum(Enum):
     TYPE_CORRIDOR = "Corridor"
     TYPE_ROOM = "Room"
     TYPE_SECRET = "Secret"
+    
+    
+@unique
+class CellItemType_Enum(Enum):
+    '''
+    classdocs
+    @attention: the value structure: scene constructor
+    '''
+    
+    TYPE_FOREGROUND = "Foreground"
+    TYPE_ITEM = "Item"
 
 
 @unique
