@@ -184,7 +184,7 @@ class IFightScene(IScene):
         next_cell = Map_Util.get_next_cell_in_map_by_direction(current_cell, current_direction, current_map)
         
         if current_position:
-            "get all the cell items"
+            "get all the current cell items"
             cell_items = current_cell.get_cell_items()
             for cell_item_obj in cell_items:
                 cell_item_image = cell_item_obj.get_item_image()
@@ -193,16 +193,38 @@ class IFightScene(IScene):
                                                 cell_item_image, cell_item_obj.get_item_size(), self.__size_h)
                 cell_item_image = pygame.transform.scale(cell_item_image, (cell_item_w, cell_item_h))
                 
-                "re-assign the item position"
-                random_item_posx = cell_item_obj.get_item_position()
+                "re-assign the item position of current cell"
+                current_item_posx = cell_item_obj.get_item_position()
                 is_show_item, item_pos_x = \
-                    Image_Util.calculate_map_item_position(random_item_posx, cell_item_w, current_cell_position, self.__size_w)
+                    Image_Util.calculate_map_item_position_in_current_cell(current_item_posx, cell_item_w, current_cell_position, self.__size_w)
                 
                 print(cell_item_w, cell_item_h, is_show_item, item_pos_x)
                 
                 # render the item
                 if is_show_item:
                     screen_ins.blit(cell_item_image, (item_pos_x,0), (0,0,cell_item_w, cell_item_h))
+            
+            " if next cell is in screen's range "
+            if current_cell_position > (100 - Scene_Constant.SCENE_CELL_WIDTH) and next_cell:
+                "get all the next cell items"
+                next_cell_items = next_cell.get_cell_items()
+                for cell_item_obj in next_cell_items:
+                    next_cell_item_image = cell_item_obj.get_item_image()
+                    "recalculate the item size"
+                    cell_item_w, cell_item_h = Image_Util.calculate_map_item_size_by_screen_size( \
+                                                    next_cell_item_image, cell_item_obj.get_item_size(), self.__size_h)
+                    next_cell_item_image = pygame.transform.scale(next_cell_item_image, (cell_item_w, cell_item_h))
+                    
+                    "re-assign the item position of current cell"
+                    next_item_posx = cell_item_obj.get_item_position()
+                    is_show_item, item_pos_x = \
+                        Image_Util.calculate_map_item_position_in_next_cell(next_item_posx, cell_item_w, current_cell_position, self.__size_w)
+                    
+                    print(cell_item_w, cell_item_h, is_show_item, item_pos_x)
+                    
+                    # render the item
+                    if is_show_item:
+                        screen_ins.blit(next_cell_item_image, (item_pos_x,0), (0,0,cell_item_w, cell_item_h))
     
     
     def render_characters_in_move(self, screen_ins, contextDTO, character_moving_timer):

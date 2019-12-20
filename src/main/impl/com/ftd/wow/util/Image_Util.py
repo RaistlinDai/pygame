@@ -265,7 +265,7 @@ class Image_Util(object):
     
     
     @staticmethod
-    def calculate_map_item_position(item_position_in_cell, item_image_w, cell_position, screen_w):
+    def calculate_map_item_position_in_current_cell(item_position_in_cell, item_image_w, cell_position, screen_w):
         '''
         
         '''
@@ -277,4 +277,17 @@ class Image_Util(object):
         else:
             return True, item_cal_pos_x - screen_start_pos_x
         
+    
+    @staticmethod
+    def calculate_map_item_position_in_next_cell(item_position_in_cell, item_image_w, current_cell_position, screen_w):
+        '''
         
+        '''
+        next_cell_width = Scene_Constant.SCENE_CELL_WIDTH - (100 - current_cell_position)
+        screen_next_cell_start_x = (100 - current_cell_position) * screen_w / Scene_Constant.SCENE_CELL_WIDTH
+        item_cal_pos_x = item_position_in_cell * screen_w / Scene_Constant.SCENE_CELL_WIDTH
+        
+        if next_cell_width < item_position_in_cell:
+            return False, 0
+        else:
+            return True, screen_next_cell_start_x + item_cal_pos_x
