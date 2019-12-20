@@ -3,6 +3,8 @@ Created on Sep 11, 2019
 
 @author: ftd
 '''
+from src.main.impl.com.ftd.wow.util.Map_Util import CellItemSize_Enum
+from src.main.impl.com.ftd.wow.const.Scene_Constant import Scene_Constant
 
 class Image_Util(object):
     '''
@@ -54,14 +56,14 @@ class Image_Util(object):
 
     
     @staticmethod
-    def calculate_character_move_height_by_screen_size(character_h):
+    def calculate_character_move_height_by_screen_size(screen_h):
         '''
         Calculate the standard character height according to the screen's height
         The default value is 100 in 1280*720
         @param character_h: the height of screen
         @return: the standard height of character 
         '''
-        standard_h = 180 * character_h / 720
+        standard_h = 180 * screen_h / 720
         return round(standard_h)
     
     
@@ -241,11 +243,38 @@ class Image_Util(object):
     
     
     @staticmethod
-    def calculate_map_item_size_by_screen_size(item_image, screen_w, screen_h):
+    def calculate_map_item_size_by_screen_size(item_image, item_size_type, screen_h):
         '''
         Calculate the map item's size according to the screen's size
+        The default screen is 1280*720, and the default height of each size are B:600,M:300,S:150
         @param item_image: the item image
-        @param screen_w: the width of screen
+        @param item_size_type: the item type (big,mid,small)
         @param screen_h: the height of screen
         '''
+        w, h = item_image.get_size()
+        cal_h = h
+        if item_size_type == CellItemSize_Enum.SIZE_BIG:
+            cal_h = 600 * screen_h / 720
+        elif item_size_type == CellItemSize_Enum.SIZE_MIDDLE:
+            cal_h = 300 * screen_h / 720
+        else:
+            cal_h = 150 * screen_h / 720
+            
+        cal_w = w * cal_h / h
+        return round(cal_w), round(cal_h)
+    
+    
+    @staticmethod
+    def calculate_map_item_position(item_position_in_cell, item_image_w, cell_position, screen_w):
+        '''
+        
+        '''
+        screen_start_pos_x = cell_position * screen_w / Scene_Constant.SCENE_CELL_WIDTH
+        item_cal_pos_x = item_position_in_cell * screen_w / Scene_Constant.SCENE_CELL_WIDTH
+        
+        if item_cal_pos_x + item_image_w < screen_start_pos_x:
+            return False, 0
+        else:
+            return True, item_cal_pos_x - screen_start_pos_x
+        
         

@@ -5,7 +5,7 @@ Created on Oct 16, 2019
 '''
 
 from src.main.impl.com.ftd.wow.util.Map_Util import Map_Util, MoveDirection_Enum,\
-    CellType_Enum, CellItemType_Enum, MapType_Enum
+    CellType_Enum, CellItemType_Enum, MapType_Enum, CellItemSize_Enum
 from src.main.api.com.ftd.wow.controller.IController import IController
 from src.main.impl.com.ftd.wow.map.Map_DTO import Position_DTO, Cell_Item_DTO
 import time
@@ -30,8 +30,8 @@ class Maze_Walker(IController):
         super().wake_up_controller(contextDTO, resourceDTO)
         # generate map
         temp_map = self.generate_map(contextDTO.get_contextDTO_InMap().get_map_type(), contextDTO.get_contextDTO_InMap().get_map_size())
-        # arrange map background
-        self.arrange_map_background(temp_map, contextDTO.get_contextDTO_InMap().get_map_type(), resourceDTO)
+        # arrange map background and items
+        self.arrange_map_background_and_items(temp_map, contextDTO.get_contextDTO_InMap().get_map_type(), resourceDTO)
         
         # backup the map into contextDTO
         contextDTO.get_contextDTO_InMap().set_map(temp_map)
@@ -54,7 +54,7 @@ class Maze_Walker(IController):
         return Map_Util.generate_random_map(map_type, map_size)
         
     
-    def arrange_map_background(self, temp_map, map_type, resourceDTO):
+    def arrange_map_background_and_items(self, temp_map, map_type, resourceDTO):
         '''
         Arrange the background image index to each cell in map
         @todo: to retrieve the maze deepth
@@ -62,7 +62,8 @@ class Maze_Walker(IController):
         # set general map background
         general_background_list = map_type.value[0].value
         idx = random.randint(0, len(general_background_list)-1)
-
+        
+        " set corridor background "
         temp_map.set_background_img_idx(idx)
         
         for map_cell in temp_map.get_cell_list():
@@ -80,7 +81,9 @@ class Maze_Walker(IController):
                 obj_idx = random.randint(-1, obj_list_range-1)
                 if obj_idx >= 0:
                     temp_item_image = item_list[obj_idx]
-                    temp_cell_item = Cell_Item_DTO(temp_item_image, CellItemType_Enum.TYPE_FOREGROUND) 
+                    # random the item position
+                    random_item_posx = random.randint(1,100)
+                    temp_cell_item = Cell_Item_DTO(temp_item_image, CellItemType_Enum.TYPE_FOREGROUND, CellItemSize_Enum.SIZE_BIG, random_item_posx) 
                     map_cell.append_cell_item(temp_cell_item)
                     
             elif map_cell.get_type() == CellType_Enum.TYPE_ROOM or map_cell.get_type() == CellType_Enum.TYPE_ENTRANCE:
@@ -96,8 +99,8 @@ class Maze_Walker(IController):
         The most important function of Maze_Walker, it will maintain the characters' movement in the map. 
         Normally, the screen takes 30 size of a cell (cell's whole size is 100).
         
-        |=======|                        -> the screen (30 cell size)
-        |---------------------------|    -> the cell in map (100 cell size)
+        |=======|                 -> the screen (40 cell size)
+        |--------------------|    -> the cell in map (100 cell size)
         
         @return: scene_changing_timer
         @return: character_moving_timer

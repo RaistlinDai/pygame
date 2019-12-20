@@ -50,6 +50,18 @@ class CellItemType_Enum(Enum):
     TYPE_FOREGROUND = "Foreground"
     TYPE_ITEM = "Item"
 
+    
+@unique
+class CellItemSize_Enum(Enum):
+    '''
+    classdocs
+    @attention: the value is a contrary value in 1280*720
+    '''
+    
+    SIZE_BIG = 800
+    SIZE_MIDDLE = 500
+    SIZE_SMALL = 300
+    
 
 @unique
 class MoveDirection_Enum(Enum):

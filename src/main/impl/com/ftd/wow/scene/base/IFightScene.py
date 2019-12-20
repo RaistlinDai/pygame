@@ -13,6 +13,7 @@ from src.main.impl.com.ftd.wow.const.Scene_Constant import Scene_Constant
 from src.main.impl.com.ftd.wow.controller.Abyss_Overlord import StatusType_Enum
 from src.main.impl.com.ftd.wow.util.Fight_Util import Fight_Util
 from src.main.impl.com.ftd.wow.util.Image_Util import Image_Util
+from src.main.impl.com.ftd.wow.util.Map_Util import Map_Util
 
 
 class IFightScene(IScene):
@@ -40,7 +41,7 @@ class IFightScene(IScene):
         self.__enemy_properties = {1:{'position':(700, 420), 'image_size':(0,0,0,0), 'enemy':None, "merge":None}, 
                                    2:{'position':(830, 420), 'image_size':(0,0,0,0), 'enemy':None, "merge":None}, 
                                    3:{'position':(960, 420), 'image_size':(0,0,0,0), 'enemy':None, "merge":None}, 
-                                   4:{'position':(10900, 420), 'image_size':(0,0,0,0), 'enemy':None, "merge":None}}
+                                   4:{'position':(1090, 420), 'image_size':(0,0,0,0), 'enemy':None, "merge":None}}
         
         # load the scene pictures in order
         self.__background = pygame.image.load(scene_image).convert()
@@ -125,18 +126,7 @@ class IFightScene(IScene):
         screen_ins.blit(self.__background, (0,0), (0,0,self.__size_w,self.__size_h))
         
         "render the foreground"
-        current_position = contextDTO.get_contextDTO_InMap().get_map_position()
-        if current_position:
-            # get all the cell items
-            cell_items = current_position.get_map_cell().get_cell_items()
-            for cell_item_obj in cell_items:
-                
-                cell_item_image = cell_item_obj.get_item_image()
-                current_item_size = cell_item_image.get_size()
-                print(current_item_size)
-                #pygame.transform.scale(img, (round(calc_in_fight_w*rate), round(calc_in_fight_h*rate)))
-            
-            
+        self.render_map_items(screen_ins, contextDTO)
         
         # gradual darken or brighten
         if gradual_darken:
@@ -183,6 +173,36 @@ class IFightScene(IScene):
         self.render_font(screen_ins)
         
         return new_moving_timer
+    
+    
+    def render_map_items(self, screen_ins, contextDTO):
+        current_map = contextDTO.get_contextDTO_InMap().get_map()
+        current_position = contextDTO.get_contextDTO_InMap().get_map_position()
+        current_cell = current_position.get_map_cell()
+        current_cell_position = current_position.get_cell_position()
+        current_direction = current_position.get_move_direction()
+        next_cell = Map_Util.get_next_cell_in_map_by_direction(current_cell, current_direction, current_map)
+        
+        if current_position:
+            "get all the cell items"
+            cell_items = current_cell.get_cell_items()
+            for cell_item_obj in cell_items:
+                cell_item_image = cell_item_obj.get_item_image()
+                "recalculate the item size"
+                cell_item_w, cell_item_h = Image_Util.calculate_map_item_size_by_screen_size( \
+                                                cell_item_image, cell_item_obj.get_item_size(), self.__size_h)
+                cell_item_image = pygame.transform.scale(cell_item_image, (cell_item_w, cell_item_h))
+                
+                "re-assign the item position"
+                random_item_posx = cell_item_obj.get_item_position()
+                is_show_item, item_pos_x = \
+                    Image_Util.calculate_map_item_position(random_item_posx, cell_item_w, current_cell_position, self.__size_w)
+                
+                print(cell_item_w, cell_item_h, is_show_item, item_pos_x)
+                
+                # render the item
+                if is_show_item:
+                    screen_ins.blit(cell_item_image, (item_pos_x,0), (0,0,cell_item_w, cell_item_h))
     
     
     def render_characters_in_move(self, screen_ins, contextDTO, character_moving_timer):

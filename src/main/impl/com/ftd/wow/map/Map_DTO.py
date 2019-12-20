@@ -134,7 +134,7 @@ class Cell_DTO(object):
 class Position_DTO(object):
     '''
     Position DataObject
-    NOTE: the default cell size is 100
+    NOTE: the default cell size is 100, and cell_position starts from 0 to 100
     '''
     def __init__(self, map_cell=None, cell_position=0, move_direction=None):
         self.__map_cell = map_cell
@@ -174,13 +174,26 @@ class Position_DTO(object):
 class Cell_Item_DTO(object):
     '''
     Cell Item DataObject
-    NOTE: the default item size (foreground) is 20, and its position starts from 40 to 60 in cell
     '''
-    def __init__(self, item_image=None, item_type=None, level_idx=0):
+    def __init__(self, item_image=None, item_type=None, item_size=None, item_position=None, level_idx=0):
         self.__item_image = item_image
         self.__item_type = item_type
         self.__level_idx = level_idx
-        
+        self.__item_size = item_size
+        self.__item_position = item_position
+
+
+    def get_item_position(self):
+        return self.__item_position
+
+
+    def set_item_position(self, value):
+        self.__item_position = value
+
+
+    def del_item_position(self):
+        del self.__item_position
+
         
     def get_item_image(self):
         return self.__item_image
@@ -188,6 +201,10 @@ class Cell_Item_DTO(object):
 
     def get_item_type(self):
         return self.__item_type
+
+
+    def get_item_size(self):
+        return self.__item_size
 
 
     def get_level_idx(self):
@@ -200,6 +217,10 @@ class Cell_Item_DTO(object):
 
     def set_item_type(self, value):
         self.__item_type = value
+
+
+    def set_item_size(self, value):
+        self.__item_size = value
 
 
     def set_level_idx(self, value):
@@ -220,3 +241,4 @@ class Cell_Item_DTO(object):
     item_image = property(get_item_image, set_item_image, del_item_image, "item_image's docstring")
     item_type = property(get_item_type, set_item_type, del_item_type, "item_type's docstring")
     level_idx = property(get_level_idx, set_level_idx, del_level_idx, "level_idx's docstring")
+    item_position = property(get_item_position, set_item_position, del_item_position, "item_position's docstring")
