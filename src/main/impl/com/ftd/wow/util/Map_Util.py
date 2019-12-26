@@ -62,6 +62,19 @@ class CellItemSize_Enum(Enum):
     SIZE_MIDDLE = 500
     SIZE_SMALL = 300
     
+    
+@unique
+class CellItemsCount_Enum(Enum):
+    '''
+    classdocs
+    @attention: the count of items in one map cell
+    '''
+    
+    COUNT_SERRIED = 8
+    COUNT_THICK = 5
+    COUNT_THIN = 2
+    COUNT_DESERTED = 0
+    
 
 @unique
 class MoveDirection_Enum(Enum):
@@ -405,6 +418,45 @@ class Map_Util(object):
                 return tempCell
             elif pos_x == temp_x and temp_y - pos_y == 1 and \
                direction == MoveDirection_Enum.DIRECTION_NORTH:
+                return tempCell
+            
+        return None
+    
+    
+    @staticmethod
+    def get_prev_cell_in_map_by_direction(current_cell, direction, mapDTO):
+        '''
+        Retrieve the previous cell according to the move direction
+        '''
+        if not mapDTO or not isinstance(mapDTO, Map_DTO):
+            return None
+        
+        if not current_cell or not isinstance(current_cell, Cell_DTO):
+            return None
+        
+        if not direction or not isinstance(direction, MoveDirection_Enum):
+            return None
+        
+        cell_group = mapDTO.get_cell_list()
+        
+        pos_x = current_cell.get_pos_x()
+        pos_y = current_cell.get_pos_y()
+        
+        for tempCell in cell_group:
+            temp_x = tempCell.get_pos_x()
+            temp_y = tempCell.get_pos_y()
+            
+            if pos_y == temp_y and pos_x - temp_x == 1 and \
+               direction == MoveDirection_Enum.DIRECTION_EAST:
+                return tempCell
+            elif pos_y == temp_y and temp_x - pos_x == 1 and \
+               direction == MoveDirection_Enum.DIRECTION_WEST:
+                return tempCell
+            elif pos_x == temp_x and pos_y - temp_y == 1 and \
+               direction == MoveDirection_Enum.DIRECTION_NORTH:
+                return tempCell
+            elif pos_x == temp_x and temp_y - pos_y == 1 and \
+               direction == MoveDirection_Enum.DIRECTION_SOUTH:
                 return tempCell
             
         return None

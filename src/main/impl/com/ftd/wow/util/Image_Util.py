@@ -265,12 +265,16 @@ class Image_Util(object):
     
     
     @staticmethod
-    def calculate_map_item_position_in_current_cell(item_position_in_cell, item_image_w, cell_position, screen_w):
+    def calculate_map_item_position_in_current_cell(item_position_in_next_cell, item_image_w, cell_position_in_screen, screen_w):
         '''
-        
+        Calculate the map item in the current cell
+        @param item_position_in_next_cell: the item position in the current cell
+        @param item_image_w: the width of item image
+        @param cell_position_in_screen: the current cell position in screen
+        @param screen_w: the width of screen
         '''
-        screen_start_pos_x = cell_position * screen_w / Scene_Constant.SCENE_CELL_WIDTH
-        item_cal_pos_x = item_position_in_cell * screen_w / Scene_Constant.SCENE_CELL_WIDTH
+        screen_start_pos_x = cell_position_in_screen * screen_w / Scene_Constant.SCENE_CELL_WIDTH
+        item_cal_pos_x = item_position_in_next_cell * screen_w / Scene_Constant.SCENE_CELL_WIDTH
         
         if item_cal_pos_x + item_image_w < screen_start_pos_x:
             return False, 0
@@ -279,15 +283,37 @@ class Image_Util(object):
         
     
     @staticmethod
-    def calculate_map_item_position_in_next_cell(item_position_in_cell, item_image_w, current_cell_position, screen_w):
+    def calculate_map_item_position_in_next_cell(item_position_in_cell, cell_position_in_screen, screen_w):
         '''
-        
+        Calculate the map item in the next cell
+        @param item_position_in_cell: the item position in the next cell
+        @param cell_position_in_screen: the current cell position in screen
+        @param screen_w: the width of screen
         '''
-        next_cell_width = Scene_Constant.SCENE_CELL_WIDTH - (100 - current_cell_position)
-        screen_next_cell_start_x = (100 - current_cell_position) * screen_w / Scene_Constant.SCENE_CELL_WIDTH
+        next_cell_width = Scene_Constant.SCENE_CELL_WIDTH - (100 - cell_position_in_screen)
+        screen_next_cell_start_x = (100 - cell_position_in_screen) * screen_w / Scene_Constant.SCENE_CELL_WIDTH
         item_cal_pos_x = item_position_in_cell * screen_w / Scene_Constant.SCENE_CELL_WIDTH
         
         if next_cell_width < item_position_in_cell:
             return False, 0
         else:
             return True, screen_next_cell_start_x + item_cal_pos_x
+        
+    
+    @staticmethod
+    def calculate_map_item_position_in_prev_cell(item_position_in_prev_cell, prev_item_w, cell_position_in_screen, screen_w):
+        '''
+        Calculate the map item in the previous cell
+        @param item_position_in_prev_cell: the item position in the previous cell
+        @param prev_item_w: the width of previous item
+        @param cell_position_in_screen: the current cell position in screen
+        @param screen_w: the width of screen
+        '''
+        prev_cell_left_width = item_position_in_prev_cell + prev_item_w - 100
+        if prev_cell_left_width <= 0:
+            return False, 0
+        elif prev_cell_left_width - cell_position_in_screen <= 0:
+            return False, 0
+        else:
+            screen_prev_cell_start_x = (prev_cell_left_width - cell_position_in_screen - prev_item_w) * screen_w / Scene_Constant.SCENE_CELL_WIDTH
+            return True, screen_prev_cell_start_x

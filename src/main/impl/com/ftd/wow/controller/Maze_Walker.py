@@ -73,18 +73,27 @@ class Maze_Walker(IController):
                 obj_list_range = 0
                 item_type = None
                 item_list = []
+                
+                " forest map - "
                 if map_type == MapType_Enum.FORREST:
                     item_type = ForrestItem_Enum.Forrest_Foreground_Trees
                     item_list = resourceDTO.get_map_items_by_type(item_type.name)
+                    item_count_range = item_type.value[1].value
                     obj_list_range = len(item_list)
                 
-                obj_idx = random.randint(-1, obj_list_range-1)
-                if obj_idx >= 0:
-                    temp_item_image = item_list[obj_idx]
-                    # random the item position
-                    random_item_posx = random.randint(1,100)
-                    temp_cell_item = Cell_Item_DTO(temp_item_image, CellItemType_Enum.TYPE_FOREGROUND, CellItemSize_Enum.SIZE_BIG, random_item_posx) 
-                    map_cell.append_cell_item(temp_cell_item)
+                    " random total items count "
+                    random_item_count = random.randint(0, item_count_range)
+                    while (random_item_count > 0):
+                        " random item "
+                        obj_idx = random.randint(0, obj_list_range-1)
+                        temp_item_image = item_list[obj_idx]
+                        # random the item position
+                        random_item_posx = random.randint(1,100)
+                        temp_cell_item = Cell_Item_DTO(temp_item_image, CellItemType_Enum.TYPE_FOREGROUND, \
+                                                       CellItemSize_Enum.SIZE_BIG, random_item_posx, random_item_count) 
+                        map_cell.append_cell_item(temp_cell_item)
+                        
+                        random_item_count = random_item_count - 1
                     
             elif map_cell.get_type() == CellType_Enum.TYPE_ROOM or map_cell.get_type() == CellType_Enum.TYPE_ENTRANCE:
                 " set room background "

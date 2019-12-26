@@ -60,7 +60,7 @@ class Resource_DTO(object):
         load the map items into dict
         '''
         for map_item_draw_img in ForrestItem_Enum:
-            mapItems = IMapItem(map_item_draw_img.value)
+            mapItems = IMapItem(map_item_draw_img.value[0])
             self.__mapitems[map_item_draw_img.name] = mapItems.get_item_images()
             
     
