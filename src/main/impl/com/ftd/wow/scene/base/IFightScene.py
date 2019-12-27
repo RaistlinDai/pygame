@@ -243,6 +243,7 @@ class IFightScene(IScene):
                     
                     # render the item
                     if is_show_item:
+                        prev_cell_item_image = pygame.transform.scale(prev_cell_item_image, (cell_item_w, cell_item_h))
                         screen_ins.blit(prev_cell_item_image, (item_pos_x,0), (0,0,cell_item_w, cell_item_h))
                 
     

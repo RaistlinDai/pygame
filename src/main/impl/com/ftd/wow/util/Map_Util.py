@@ -70,9 +70,9 @@ class CellItemsCount_Enum(Enum):
     @attention: the count of items in one map cell
     '''
     
-    COUNT_SERRIED = 8
-    COUNT_THICK = 5
-    COUNT_THIN = 2
+    COUNT_SERRIED = 5
+    COUNT_THICK = 3
+    COUNT_THIN = 1
     COUNT_DESERTED = 0
     
 
